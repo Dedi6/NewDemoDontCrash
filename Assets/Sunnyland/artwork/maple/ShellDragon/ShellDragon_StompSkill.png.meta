@@ -1,0 +1,394 @@
+fileFormatVersion: 2
+guid: 3a09cc1a3a9a1bb49bc0a4db9345e6f6
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5941403113290894351
+    second: ShellDragon_StompSkill_0
+  - first:
+      213: -20649822813536830
+    second: ShellDragon_StompSkill_1
+  - first:
+      213: 3425760643419548747
+    second: ShellDragon_StompSkill_2
+  - first:
+      213: 7690655328428666557
+    second: ShellDragon_StompSkill_3
+  - first:
+      213: -6550554966795697171
+    second: ShellDragon_StompSkill_4
+  - first:
+      213: -2587053592475304632
+    second: ShellDragon_StompSkill_5
+  - first:
+      213: -500794983092141528
+    second: ShellDragon_StompSkill_6
+  - first:
+      213: -8857830105376650784
+    second: ShellDragon_StompSkill_7
+  - first:
+      213: -4968028159895762927
+    second: ShellDragon_StompSkill_8
+  - first:
+      213: 1966752666285375780
+    second: ShellDragon_StompSkill_9
+  - first:
+      213: -5087170541024894078
+    second: ShellDragon_StompSkill_10
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 20
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ShellDragon_StompSkill_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 148
+        height: 144
+      alignment: 9
+      pivot: {x: 0.4633618, y: 0.51}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0c8a1317aa147250800000000000000
+      internalID: 5941403113290894351
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShellDragon_StompSkill_1
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 0
+        width: 142
+        height: 144
+      alignment: 9
+      pivot: {x: 0.4862527, y: 0.51}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2cd36867813a6bff0800000000000000
+      internalID: -20649822813536830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShellDragon_StompSkill_2
+      rect:
+        serializedVersion: 2
+        x: 310
+        y: 0
+        width: 151
+        height: 144
+      alignment: 9
+      pivot: {x: 0.48886675, y: 0.51}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b4c298c972fba8f20800000000000000
+      internalID: 3425760643419548747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShellDragon_StompSkill_3
+      rect:
+        serializedVersion: 2
+        x: 473
+        y: 0
+        width: 152
+        height: 144
+      alignment: 9
+      pivot: {x: 0.48366788, y: 0.51}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dbea4fc3642baba60800000000000000
+      internalID: 7690655328428666557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShellDragon_StompSkill_4
+      rect:
+        serializedVersion: 2
+        x: 639
+        y: 0
+        width: 149
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5015279, y: 0.5246474}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de3c87ac6f0c715a0800000000000000
+      internalID: -6550554966795697171
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShellDragon_StompSkill_5
+      rect:
+        serializedVersion: 2
+        x: 801
+        y: 0
+        width: 150
+        height: 144
+      alignment: 9
+      pivot: {x: 0.49536255, y: 0.5325198}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84d7c95e670f81cd0800000000000000
+      internalID: -2587053592475304632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShellDragon_StompSkill_6
+      rect:
+        serializedVersion: 2
+        x: 969
+        y: 0
+        width: 189
+        height: 144
+      alignment: 9
+      pivot: {x: 0.6156225, y: 0.5286003}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 822ce7fbd91dc09f0800000000000000
+      internalID: -500794983092141528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShellDragon_StompSkill_7
+      rect:
+        serializedVersion: 2
+        x: 1175
+        y: 0
+        width: 190
+        height: 144
+      alignment: 9
+      pivot: {x: 0.60613436, y: 0.5396726}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e98340337aa21580800000000000000
+      internalID: -8857830105376650784
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShellDragon_StompSkill_8
+      rect:
+        serializedVersion: 2
+        x: 1383
+        y: 0
+        width: 188
+        height: 144
+      alignment: 9
+      pivot: {x: 0.60793483, y: 0.51}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1188647d5b40e0bb0800000000000000
+      internalID: -4968028159895762927
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShellDragon_StompSkill_9
+      rect:
+        serializedVersion: 2
+        x: 1589
+        y: 0
+        width: 176
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5810866, y: 0.51}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4210ef2312f4b4b10800000000000000
+      internalID: 1966752666285375780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShellDragon_StompSkill_10
+      rect:
+        serializedVersion: 2
+        x: 1784
+        y: 0
+        width: 152
+        height: 144
+      alignment: 9
+      pivot: {x: 0.43398565, y: 0.51}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 283216e885db669b0800000000000000
+      internalID: -5087170541024894078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

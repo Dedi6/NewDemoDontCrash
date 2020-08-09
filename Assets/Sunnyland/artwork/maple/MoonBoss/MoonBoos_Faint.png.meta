@@ -1,0 +1,370 @@
+fileFormatVersion: 2
+guid: ee68cedfe85c1f74ab9eb2cffdeb9051
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6916968216193750328
+    second: MoonBoos_Faint_0
+  - first:
+      213: 8806784553594404617
+    second: MoonBoos_Faint_1
+  - first:
+      213: 9160288622998079170
+    second: MoonBoos_Faint_2
+  - first:
+      213: 6271218699226942789
+    second: MoonBoos_Faint_3
+  - first:
+      213: 5179052938967781841
+    second: MoonBoos_Faint_4
+  - first:
+      213: 1111541552885407682
+    second: MoonBoos_Faint_5
+  - first:
+      213: -2133309493091530454
+    second: MoonBoos_Faint_6
+  - first:
+      213: -6935277087700423344
+    second: MoonBoos_Faint_7
+  - first:
+      213: -3767848696613290126
+    second: MoonBoos_Faint_8
+  - first:
+      213: 4889169142963903839
+    second: MoonBoos_Faint_9
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 11
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: MoonBoos_Faint_0
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 11
+        width: 165
+        height: 134
+      alignment: 9
+      pivot: {x: 0.61344564, y: 0.46873918}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8caaa171e0ef100a0800000000000000
+      internalID: -6916968216193750328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MoonBoos_Faint_1
+      rect:
+        serializedVersion: 2
+        x: 185
+        y: 10
+        width: 177
+        height: 135
+      alignment: 9
+      pivot: {x: 0.5470374, y: 0.508634}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90f346224ebf73a70800000000000000
+      internalID: 8806784553594404617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MoonBoos_Faint_2
+      rect:
+        serializedVersion: 2
+        x: 379
+        y: 9
+        width: 183
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5593347, y: 0.49852163}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c64ad528f1ef1f70800000000000000
+      internalID: 9160288622998079170
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MoonBoos_Faint_3
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 7
+        width: 193
+        height: 138
+      alignment: 9
+      pivot: {x: 0.59267825, y: 0.523373}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54d853c3e28d70750800000000000000
+      internalID: 6271218699226942789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MoonBoos_Faint_4
+      rect:
+        serializedVersion: 2
+        x: 788
+        y: 9
+        width: 188
+        height: 136
+      alignment: 9
+      pivot: {x: 0.595832, y: 0.5344795}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d11e1c4531bfd740800000000000000
+      internalID: 5179052938967781841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MoonBoos_Faint_5
+      rect:
+        serializedVersion: 2
+        x: 989
+        y: 13
+        width: 209
+        height: 91
+      alignment: 9
+      pivot: {x: 0.6542344, y: 0.80506736}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2cf12d4372dfc6f00800000000000000
+      internalID: 1111541552885407682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MoonBoos_Faint_6
+      rect:
+        serializedVersion: 2
+        x: 1211
+        y: 10
+        width: 202
+        height: 91
+      alignment: 9
+      pivot: {x: 0.66299105, y: 0.8399648}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a298f4c9156f462e0800000000000000
+      internalID: -2133309493091530454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MoonBoos_Faint_7
+      rect:
+        serializedVersion: 2
+        x: 1426
+        y: 9
+        width: 197
+        height: 91
+      alignment: 9
+      pivot: {x: 0.65923357, y: 0.8552362}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 05de5b0cb32f0cf90800000000000000
+      internalID: -6935277087700423344
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MoonBoos_Faint_8
+      rect:
+        serializedVersion: 2
+        x: 1642
+        y: 10
+        width: 195
+        height: 91
+      alignment: 9
+      pivot: {x: 0.6535144, y: 0.8436618}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27f32f6c299e5bbc0800000000000000
+      internalID: -3767848696613290126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MoonBoos_Faint_9
+      rect:
+        serializedVersion: 2
+        x: 1852
+        y: 10
+        width: 199
+        height: 91
+      alignment: 9
+      pivot: {x: 0.6308741, y: 0.8472706}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5d1a2d7e61d9d340800000000000000
+      internalID: 4889169142963903839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
