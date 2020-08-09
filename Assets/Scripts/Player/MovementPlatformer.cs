@@ -617,43 +617,14 @@ public class MovementPlatformer : MonoBehaviour
             }
         }
     }
+
     private void TeleportToEnemy()
     {
-
+   
         switch (directionPressedNow)
         {
             case DirectionPressed.Nothing:
-                StartCoroutine(StartSwitchStateToIgnoreInputs(0.1f, false));
-                if (facingRight)
-                {
-                    if (!enemyNearWallRight)
-                    {
-                        rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x + 2, CurrentBulletGameObject.transform.position.y + 0.5f);
-                        StartCoroutine(ChangeBoolAfterSeconds(thrustTimer));
-                        rb.AddForce(Vector2.right * thrustPower, ForceMode2D.Impulse);
-                    }
-                    else
-                    {
-                        rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x, CurrentBulletGameObject.transform.position.y + 0.5f);
-                        StartCoroutine(ChangeBoolAfterSeconds(thrustTimer / 3f));
-                        rb.AddForce(Vector2.right * thrustPower, ForceMode2D.Impulse);
-                    }
-                }
-                else
-                {
-                    if (!enemyNearWallLeft)
-                    {
-                        rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x - 2, CurrentBulletGameObject.transform.position.y + 0.5f);
-                        StartCoroutine(ChangeBoolAfterSeconds(thrustTimer));
-                        rb.AddForce(new Vector2(-1, 0) * thrustPower, ForceMode2D.Impulse);
-                    }
-                    else
-                    {
-                        rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x, CurrentBulletGameObject.transform.position.y + 0.5f);
-                        StartCoroutine(ChangeBoolAfterSeconds(thrustTimer / 3f));
-                        rb.AddForce(Vector2.left * thrustPower, ForceMode2D.Impulse);
-                    }
-                }
+                TeleportToEnemyNoInput();
                 break;
             case DirectionPressed.Right:
                 if (rb.transform.position.x > CurrentBulletGameObject.transform.position.x) // checks if knocking back or not
@@ -705,13 +676,14 @@ public class MovementPlatformer : MonoBehaviour
             case DirectionPressed.Up:
                 StartCoroutine(ChangeBoolAfterSeconds(0.15f));
                 rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x, CurrentBulletGameObject.transform.position.y + 1);
-                rb.AddForce(new Vector2(0, 1) * thrustPower, ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(0, 1) * thrustPower * 0.9f, ForceMode2D.Impulse);
                 break;
             case DirectionPressed.Down:
                 //rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x, CurrentBulletGameObject.transform.position.y - 1);
                 CurrentBulletGameObject.GetComponent<Enemy>().isBeingPulledDown = true;
                 break;
             case DirectionPressed.UpRight:
+                TeleportToEnemyNoInput();
                 /*
                 rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x + 0.8f, CurrentBulletGameObject.transform.position.y + 1.5f);
                 //StartCoroutine(ChangeBoolAfterSeconds(topSidesSkillTime));
@@ -721,14 +693,51 @@ public class MovementPlatformer : MonoBehaviour
                 rb.velocity = new Vector2(15, 30);*/
                 break;
             case DirectionPressed.UpLeft:
+                TeleportToEnemyNoInput();
                 //rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x - 0.5f, CurrentBulletGameObject.transform.position.y + 1);
                 break;
             case DirectionPressed.DownRight:
+                TeleportToEnemyNoInput();
                 break;
             case DirectionPressed.DownLeft:
+                TeleportToEnemyNoInput();
                 break;
         }
+    }
 
+    void TeleportToEnemyNoInput()
+    {
+        StartCoroutine(StartSwitchStateToIgnoreInputs(0.1f, false));
+        if (facingRight)
+        {
+            if (!enemyNearWallRight)
+            {
+                rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x + 2, CurrentBulletGameObject.transform.position.y + 0.5f);
+                StartCoroutine(ChangeBoolAfterSeconds(thrustTimer));
+                rb.AddForce(Vector2.right * thrustPower, ForceMode2D.Impulse);
+            }
+            else
+            {
+                rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x, CurrentBulletGameObject.transform.position.y + 0.5f);
+                StartCoroutine(ChangeBoolAfterSeconds(thrustTimer / 3f));
+                rb.AddForce(Vector2.right * thrustPower, ForceMode2D.Impulse);
+            }
+        }
+        else
+        {
+            if (!enemyNearWallLeft)
+            {
+                rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x - 2, CurrentBulletGameObject.transform.position.y + 0.5f);
+                StartCoroutine(ChangeBoolAfterSeconds(thrustTimer));
+                rb.AddForce(new Vector2(-1, 0) * thrustPower, ForceMode2D.Impulse);
+            }
+            else
+            {
+                rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x, CurrentBulletGameObject.transform.position.y + 0.5f);
+                StartCoroutine(ChangeBoolAfterSeconds(thrustTimer / 3f));
+                rb.AddForce(Vector2.left * thrustPower, ForceMode2D.Impulse);
+            }
+        }
     }
 
     private void TeleportToDoor()
