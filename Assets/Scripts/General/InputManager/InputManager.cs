@@ -17,6 +17,8 @@ public class InputManager : MonoBehaviour
         else if (instance != this)
             Destroy(this);
         DontDestroyOnLoad(this);
+
+        HandleStartingKeybinds();
     }
 
 
@@ -47,5 +49,25 @@ public class InputManager : MonoBehaviour
     public void ChangeKeybindings()
     {
         keybindings = keybindings == keyboardKeybinds ? joyStickKeybind : keyboardKeybinds;
+        if (!PlayerPrefs.HasKey("UsingJoystick") && keybindings == joyStickKeybind)
+            PlayerPrefs.SetInt("UsingJoystick", 1);
+        else if(PlayerPrefs.HasKey("UsingJoystick") && keybindings == joyStickKeybind)
+            PlayerPrefs.DeleteKey("UsingJoystick");
+        PlayerPrefs.Save();
+
+        GameMaster.instance.playerInstance.GetComponent<MovementPlatformer>().SwitchToOrFromJoystick();
+    }
+
+    private void HandleStartingKeybinds()
+    {
+        if (PlayerPrefs.HasKey("UsingJoystick"))
+        {
+            keybindings = joyStickKeybind;
+            GameMaster.instance.playerInstance.GetComponent<MovementPlatformer>().SwitchToOrFromJoystick();
+        }
+        else
+        {
+            keybindings = keyboardKeybinds;
+        }
     }
 }

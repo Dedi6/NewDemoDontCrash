@@ -61,7 +61,8 @@ public class MoonBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
 
     private void Awake()
     {
-        state = State.Waiting;
+        if(state != State.Dead)
+            state = State.Waiting;
     }
 
     void Update()
@@ -164,7 +165,8 @@ public class MoonBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
 
     public void ResetSFXCues()
     {
-        state = State.Waiting;
+        if (state != State.Dead)
+            state = State.Waiting;
         playerDied.Invoke();
     }
 
@@ -373,13 +375,18 @@ public class MoonBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
 
     private void OnDisable()
     {
+        Debug.Log("meow" + state);
         if (state == State.Dead)
+        {
+            GetComponentInParent<RoomManagerOne>().enemiesList = new RoomManagerOne.EnemiesRespawner[0];
             Destroy(gameObject);
+        }
     }
 
     public void PlayerHasRespawned()
     {
-        state = State.Waiting;
+        if(state != State.Dead)
+            state = State.Waiting;
         playerDied.Invoke();
     }
 }

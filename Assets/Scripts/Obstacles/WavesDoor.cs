@@ -56,7 +56,6 @@ public class WavesDoor : MonoBehaviour
 
     public void PlayerHasRespawned(bool b)
     {
-        Debug.Log("b " + b);
         boolValue = b;  
     }
 }

@@ -17,6 +17,7 @@ public class Keybindings : ScriptableObject
 
     //testing joystick name changes
     public Dictionary<string, string> controllerKeys;
+
     public Keybindings()
     {
         controllerKeys = new Dictionary<string, string>();
