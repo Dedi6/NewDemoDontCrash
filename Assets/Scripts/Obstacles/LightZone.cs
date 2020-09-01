@@ -41,7 +41,7 @@ public class LightZone : MonoBehaviour
         }
     }
 
-    private void Shrink()
+    public void Shrink()
     {
         lightController.pointLightOuterRadius -= Time.deltaTime * reduceZoneSpeed;
     }

@@ -66,7 +66,9 @@ public class SkillsUI : MonoBehaviour
     {
         int amountOfSkills = PlayerPrefs.GetInt("skillsPointer");
         PlayerPrefs.SetInt("skillsPointer", 0);
-        unlockedSkillsArray = array;
+        string[] temporary = new string[arrayOfPositions.Length];
+        array.CopyTo(temporary, 0);
+        unlockedSkillsArray = temporary;
         skillAssignFirstButton = true;
         for (int i = 0; i < amountOfSkills; i++)
         {

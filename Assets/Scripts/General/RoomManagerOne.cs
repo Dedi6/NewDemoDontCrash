@@ -14,7 +14,7 @@ public class RoomManagerOne : MonoBehaviour
 
 
     public GameObject virtualCam;
-    private GameObject player;
+    private GameObject player, bullet;
     public EnemiesRespawner[] enemiesList;
     public float spawnEnemiesAfterTime;
     private bool respawnTimerHasStarted = false;
@@ -29,23 +29,28 @@ public class RoomManagerOne : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-
-        for (int i = 0; i < transform.childCount; i++)
-            transform.GetChild(i).gameObject.SetActive(true);
-
-        foreach (EnemiesRespawner eR in enemiesList)
+        if (other.CompareTag("Player"))
         {
-            if (eR.enemy.GetComponent<Enemy>().isDead == true)
-                eR.enemy.GetComponent<Enemy>().animator.SetBool("IsDead", true);
-        }
+            for (int i = 0; i < transform.childCount; i++)
+                transform.GetChild(i).gameObject.SetActive(true);
 
-        if (other.CompareTag("Player") && !other.isTrigger)
-        {
-            virtualCam.SetActive(true);
-        }
+            foreach (EnemiesRespawner eR in enemiesList)
+            {
+                if (eR.enemy.GetComponent<Enemy>().isDead == true)
+                    eR.enemy.GetComponent<Enemy>().animator.SetBool("IsDead", true);
+            }
 
-        player.GetComponent<MovementPlatformer>().currentRoom = this.gameObject;
-        GameMaster.instance.currentRoom = gameObject;
+            if (other.CompareTag("Player") && !other.isTrigger)
+            {
+                virtualCam.SetActive(true);
+            }
+
+            if (bullet != null)
+                bullet.GetComponent<bullet>().SetSpeedNormal();
+
+            player.GetComponent<MovementPlatformer>().currentRoom = this.gameObject;
+            GameMaster.instance.currentRoom = gameObject;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -55,10 +60,16 @@ public class RoomManagerOne : MonoBehaviour
             virtualCam.SetActive(false);
             StartCoroutine(FreezeGame(freezeWhenSwitchingRoomTime));
         }
+        else
+        {
+            bullet = other.gameObject;
+            other.GetComponent<bullet>().SlowBullet(2f);
+        }
     }
 
     private IEnumerator FreezeGame(float timeToWait)
     {
+        yield return new WaitForSeconds(0.1f);
 
         Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
 

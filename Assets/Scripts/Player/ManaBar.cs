@@ -68,7 +68,6 @@ public class ManaBar : MonoBehaviour
         {
             // not enought mana sound or somthing idk
         }
-        Debug.Log(currentManaAmount);
     }
 
     private void UpdateManaBars()

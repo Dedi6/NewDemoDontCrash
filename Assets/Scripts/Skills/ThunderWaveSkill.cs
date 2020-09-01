@@ -25,6 +25,7 @@ public class ThunderWaveSkill : MonoBehaviour
         int sign = facingRight ? 1 : -1;
         Vector2 direction = new Vector2(sign, 0);
         GameMaster.instance.ShakeCamera(stompShakeTime, stompShakeForce);
+        AudioManager.instance.PlaySound(AudioManager.SoundList.MoonBossAttack);
         thunderSpawnPos = new Vector2(attackPoint.position.x, attackPoint.position.y + stompSpawnHeight);
         RaycastHit2D rayToWall = Physics2D.Raycast(attackPoint.transform.position, direction, 100, 1 << 8);
         StartCoroutine(ThunderWave(sign, rayToWall.point.x));

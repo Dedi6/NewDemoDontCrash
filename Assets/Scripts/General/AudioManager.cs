@@ -64,11 +64,25 @@ public class AudioManager : MonoBehaviour
         Fear3,
         Fear4,
         Fear5,
+        RageBossPunch,
+        PlayerTossedIntoWall,
+        MoonBossBreathing,
+        DoorTriggerTriggered,
+        RespawnSound,
+        FallingPlatformFall,
+        MoonBossAttack,
+        RageBossTeleport,
+        RageBossPrep,
+        RageBossPrepPunch,
+        UnlockedSkill,
+        Heal,
+        MoonBossRun,
+        MoonBossZap,
     }
 
     private AudioSource currentTheme;
 
-    public float fadeTime;
+    public float fadeTime, BgMusicVolume;
     public Sounds[] ListOfSounds;
     private AudioClip currentClip;
     
@@ -149,13 +163,13 @@ public class AudioManager : MonoBehaviour
     {
         AudioSource source = GetAudioClip(sound).source;
 
-        while (source.volume < 1f)
+        while (source.volume < BgMusicVolume)
         {
             source.volume += Time.deltaTime / fadeT;
             yield return null;
         }
 
-        source.volume = 1f;
+        source.volume = BgMusicVolume;
     }
 
     private IEnumerator FadeOut(AudioSource source, float fadeT)

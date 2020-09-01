@@ -3,7 +3,7 @@
 public class Action_TriggerHitPlayer : MonoBehaviour
 {
     public Animator animator;
-    public bool useHitEffect;
+    public bool useHitEffect, destroyWhenHit;
 
     private void OnTriggerEnter2D(Collider2D col)
     {
@@ -19,11 +19,22 @@ public class Action_TriggerHitPlayer : MonoBehaviour
                 animator.SetTrigger("HitPlayer");
                 StopMotion();
             }
+            else if(destroyWhenHit)
+            {
+                Destroy(gameObject);
+            }
         }
-        else if(col.gameObject.layer == 8 && useHitEffect) // 8 is ground
+        else if(col.gameObject.layer == 8) // 8 is ground
         {
-            animator.SetTrigger("HitPlayer"); // but actually hit ground kek
-            StopMotion();
+            if (useHitEffect)
+            {
+                animator.SetTrigger("HitPlayer");
+                StopMotion();
+            }
+            else if (destroyWhenHit)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -41,5 +52,12 @@ public class Action_TriggerHitPlayer : MonoBehaviour
     private void OnDisable()
     {
         Destroy(gameObject);
+    }
+
+    public void SetMovement(Vector2 direction, float speed)
+    {
+        GetComponent<Rigidbody2D>().velocity = direction * speed;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 180f;
+        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 }

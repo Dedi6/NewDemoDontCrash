@@ -13,6 +13,11 @@ public class Health : MonoBehaviour
     public Sprite fullHeart;
     public Sprite emptyHeart;
 
+    void Awake()
+    {
+        SetHP();
+    }
+
     void Update()
     {
 
@@ -37,8 +42,6 @@ public class Health : MonoBehaviour
             else
                 hearts[i].enabled = false;
         }
-
-
     }
 
     public bool IsFullHealth()
@@ -62,5 +65,25 @@ public class Health : MonoBehaviour
     public void FullHeal()
     {
         health = numberOfHearts;
+    }
+
+    public void IncreaseHp()
+    {
+        FullHeal();
+        health++;
+        numberOfHearts++;
+        int newHP = numberOfHearts;
+        PlayerPrefs.SetInt("HP", newHP);
+    }
+
+    private void SetHP()
+    {
+        int hp;
+        if (PlayerPrefs.HasKey("HP"))
+            hp = PlayerPrefs.GetInt("HP");
+        else
+            hp = 7;
+        health = hp;
+        numberOfHearts = hp;
     }
 }

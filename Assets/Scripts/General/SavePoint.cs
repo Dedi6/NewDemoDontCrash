@@ -21,7 +21,7 @@ public class SavePoint : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D col)
     {
-        if (!isSaving && col.gameObject.layer == 11 && col.transform.position.y > transform.position.y && playerScript.moveInputVertical < 0) // player collided from above
+        if (!isSaving && col.gameObject.layer == 11 && col.transform.position.y > (transform.position.y + 2f) && playerScript.moveInputVertical < 0) // player collided from above
         {
             isSaving = true;
             StartCoroutine(Save());

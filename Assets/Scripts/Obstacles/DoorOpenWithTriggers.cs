@@ -14,6 +14,8 @@ public class DoorOpenWithTriggers : MonoBehaviour, IRespawnResetable
     void Start()
     {
         numberOfTriggersRemaining = numberOfTriggers;
+        GetComponent<BoxCollider2D>().size = GetComponent<SpriteRenderer>().size;
+       // numberOfTriggers = transform.childCount;
     }
 
     public void ResetTriggersAndDoor()

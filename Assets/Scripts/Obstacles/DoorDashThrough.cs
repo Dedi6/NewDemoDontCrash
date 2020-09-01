@@ -20,11 +20,16 @@ public class DoorDashThrough : MonoBehaviour
         if (col.gameObject.layer == LayerMask.NameToLayer("bullet"))
         {
             Highlight();
-            player.GetComponent<MovementPlatformer>().CurrentBulletGameObject = this.gameObject;
-            player.GetComponent<MovementPlatformer>().didHitAnEnemy = true;
-            player.GetComponent<MovementPlatformer>().bulletHitDoor = true;
+            ResetTeleport();
             Destroy(col.gameObject);
         }
+    }
+
+    void ResetTeleport()
+    {
+        player.GetComponent<MovementPlatformer>().CurrentBulletGameObject = this.gameObject;
+        player.GetComponent<MovementPlatformer>().didHitAnEnemy = true;
+        player.GetComponent<MovementPlatformer>().bulletHitDoor = true;
     }
 
     public void Highlight()
@@ -38,6 +43,8 @@ public class DoorDashThrough : MonoBehaviour
         {
             this.GetComponent<SpriteOutline>().enabled = false;
             outlineOn = false;
+            player.GetComponent<MovementPlatformer>().CurrentBulletGameObject = null;
         }
     }
+
 }

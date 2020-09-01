@@ -248,7 +248,7 @@ MonoBehaviour:
   rayCheckPointGround: {fileID: 7207101603541952758}
   wallCheckDistance: 2.8
   platformCheckDistance: 1
-  attackCheckDistance: 9.7
+  attackCheckDistance: 15
   knockBackTime: 0.3
   turnAroundTimer: 0
   groundCheckDistance: 0.5

@@ -174,6 +174,7 @@ public class Enemy : MonoBehaviour, IRespawnResetable
         GetComponent<ISFXResetable>().SetStateDead();
         gameObject.layer = LayerMask.NameToLayer("DeadEnemy");
         gameObject.tag = "EnemyDead";
+
         if (wasSpawnedBySpawnManager && (GameObject.FindGameObjectsWithTag("EnemyAlive").Length == 0))
         {
             spawnManager.GetComponent<WaveSpawnerManager>().InvokeEnemies();
@@ -221,5 +222,12 @@ public class Enemy : MonoBehaviour, IRespawnResetable
     public void PlayerHasRespawned()
     {
         PlayerRespawned();
+    }
+
+    public void PlayerTeleportedToEnemy()
+    {
+        Highlight();
+        TakeDamage(20);
+        GetComponent<SpriteRenderer>().sortingOrder = 0;
     }
 }

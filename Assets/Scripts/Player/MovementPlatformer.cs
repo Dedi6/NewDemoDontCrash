@@ -20,7 +20,7 @@ public class MovementPlatformer : MonoBehaviour
     public float fHorDmpTurning;
     private float fHorizontalVelocity;
     private float wallSlideMemory;
-    public float speedMulitiplier;
+    public float speedMulitiplier, fallSpeed;
 
 
     private bool facingRight = true;
@@ -146,6 +146,7 @@ public class MovementPlatformer : MonoBehaviour
         //audioManager.PlayTheme(AudioManager.SoundList.FirstTestSong, 0.1f); /////// test song
         //  delete when building!!!!
         gm.savePointPosition = transform.position;
+        //Time.timeScale = 0.9f;
     }
 
     private void Awake()
@@ -205,11 +206,13 @@ public class MovementPlatformer : MonoBehaviour
              Flip();
              Debug.Log("hi");
          }*/
+         /*
 
         if (Input.GetKeyDown(KeyCode.O))
             StartCoroutine(AudioManager.instance.PlayTransitionTheme(AudioManager.SoundList.Fear3, AudioManager.SoundList.Fear4, 0.3f));
         if (Input.GetKeyDown(KeyCode.P))
-            currentRoom.GetComponent<RoomManagerOne>().PlayerRespawnReset2();
+            currentRoom.GetComponent<RoomManagerOne>().PlayerRespawnReset2();*/
+
         if (shouldICheckIsGrounded)
             GroundCheckForShoot();
 
@@ -240,12 +243,30 @@ public class MovementPlatformer : MonoBehaviour
             case State.IgnorePlayerInput:
                 break;
         }
-
+        if(isAirborn && (rb.velocity.y < -fallSpeed))
+        {
+            rb.velocity = new Vector2(rb.velocity.x, -fallSpeed);
+        }
     }
 
     private void SetStateNormal()
     {
         state = State.Normal;
+    }
+
+    private void RayCastsAndChecks()
+    {
+        isGrounded = Physics2D.BoxCast(boxCollider.bounds.center, new Vector2(boxCollider.bounds.size.x - 0.01f, boxCollider.bounds.size.y), 0, Vector2.down, groundCheckDistance, whatIsGround);
+
+        wallCheckHit = Physics2D.Raycast(wallCheck.position, wallCheck.right, wallCheckDistance, whatIsGround);
+
+        if (CurrentBulletGameObject != null && (CurrentBulletGameObject.layer == 12 || CurrentBulletGameObject.layer == 19)) // 12 is enemy 19 is hollow
+        {
+            BoxCollider2D EnemyBoxColl = CurrentBulletGameObject.GetComponent<BoxCollider2D>();
+
+            enemyNearWallRight = Physics2D.BoxCast(EnemyBoxColl.bounds.center, new Vector2(EnemyBoxColl.bounds.size.x - 0.1f, EnemyBoxColl.bounds.size.y - 0.39f), 0, Vector2.right, distanceTest, whatIsGround);
+            enemyNearWallLeft = Physics2D.BoxCast(EnemyBoxColl.bounds.center, new Vector2(EnemyBoxColl.bounds.size.x - 0.1f, EnemyBoxColl.bounds.size.y - 0.39f), 0, Vector2.left, distanceTest, whatIsGround);
+        }
     }
 
     private void HandleMoveInput()
@@ -287,6 +308,7 @@ public class MovementPlatformer : MonoBehaviour
         usingKeyboard = !usingKeyboard;
     }
 
+    
     private void Timers()
     {
         if (canShootTimer > 0)
@@ -306,20 +328,6 @@ public class MovementPlatformer : MonoBehaviour
             atkAnimationCombo -= Time.deltaTime;
     }
 
-    private void RayCastsAndChecks()
-    {
-        isGrounded = Physics2D.BoxCast(boxCollider.bounds.center, new Vector2(boxCollider.bounds.size.x - 0.01f, boxCollider.bounds.size.y), 0, Vector2.down, groundCheckDistance, whatIsGround);
-
-        wallCheckHit = Physics2D.Raycast(wallCheck.position, wallCheck.right, wallCheckDistance, whatIsGround);
-
-        if (CurrentBulletGameObject != null && (CurrentBulletGameObject.layer == 12 || CurrentBulletGameObject.layer == 19)) // 12 is enemy 19 is hollow
-        {
-            BoxCollider2D EnemyBoxColl = CurrentBulletGameObject.GetComponent<BoxCollider2D>();
-
-            enemyNearWallRight = Physics2D.BoxCast(EnemyBoxColl.bounds.center, new Vector2(EnemyBoxColl.bounds.size.x - 0.1f, EnemyBoxColl.bounds.size.y - 0.39f), 0, Vector2.right, distanceTest, whatIsGround);
-            enemyNearWallLeft = Physics2D.BoxCast(EnemyBoxColl.bounds.center, new Vector2(EnemyBoxColl.bounds.size.x - 0.1f, EnemyBoxColl.bounds.size.y - 0.39f), 0, Vector2.left, distanceTest, whatIsGround);
-        }
-    }
 
     public void GotHitByAnEnemy(int damage)
     {
@@ -329,10 +337,11 @@ public class MovementPlatformer : MonoBehaviour
         //Knock back the player
         if (!playerIsInvulnerable)
         {
+            StartCoroutine(MakePlayerInvincible(1.5f));
+            StartCoroutine(PlayerBlinkingAnimation());
             audioManager.PlaySound(AudioManager.SoundList.PlayerHit);
             StartCoroutine(FreezeGameForTime(0.2f));
             GetComponent<Health>().DealDamage(damage);
-            StartCoroutine(MakePlayerInvincible(1.5f));
         }
     }
 
@@ -349,14 +358,7 @@ public class MovementPlatformer : MonoBehaviour
             moveInputVertical = 0;
         }
     }
-    private void FlipStart()
-    {
-        if (facingRight == false && moveInput > 0 && atkAnimationStallTimer <= 0)     //flip the character while switching directions
-            Flip();
 
-        else if (facingRight == true && moveInput < 0 && atkAnimationStallTimer <= 0)
-            Flip();
-    }
 
     private void HandleAnimations()
     {
@@ -370,6 +372,14 @@ public class MovementPlatformer : MonoBehaviour
         animator.SetFloat("Speed", Mathf.Abs(moveInput));
     }
 
+    private void FlipStart()
+    {
+        if (facingRight == false && moveInput > 0 && atkAnimationStallTimer <= 0)     //flip the character while switching directions
+            Flip();
+
+        else if (facingRight == true && moveInput < 0 && atkAnimationStallTimer <= 0)
+            Flip();
+    }
     void Flip()
     {
         if (!thrustHappening)
@@ -473,7 +483,7 @@ public class MovementPlatformer : MonoBehaviour
             CreateDust();
             audioManager.PlaySound(AudioManager.SoundList.PlayerJump);
         }
-    }
+    } 
 
     public Vector2 GetPosition()
     {
@@ -500,23 +510,22 @@ public class MovementPlatformer : MonoBehaviour
 
     }
 
+
     private void HandleWallSlide()
     {
         if (!wallCheckHit && wallSlideMemory > 0)
             wallSlideMemory -= Time.deltaTime;
 
         if (isWallSliding && wallCheckHit)
-        {
             rb.drag = 10f;
-        }
         else if (!isWallSliding || !wallCheckHit)
             rb.drag = 0f;
-
     }
 
     public void SwitchStates()
     {
     }
+    
 
     private void ShootMemory()
     {
@@ -539,7 +548,7 @@ public class MovementPlatformer : MonoBehaviour
         if (canShootTimer <= 0 && isGrounded)
             shouldICheckIsGrounded = true;
 
-    }
+    }           //shoot functions
     private void GroundCheckForShoot()
     {
         if (isGrounded)
@@ -566,7 +575,7 @@ public class MovementPlatformer : MonoBehaviour
         canShootTimer = 0.2f;
         shouldICheckIsGrounded = false;
         shouldCheckForShootMemory = true;
-        if (isGrounded == false)
+        if (!isGrounded)
             canShoot = false;
         CreateDust();
 
@@ -587,9 +596,7 @@ public class MovementPlatformer : MonoBehaviour
             if (!bulletHitDoor)
             {
                 TeleportToEnemy();
-                CurrentBulletGameObject.GetComponent<Enemy>().Highlight();
-                CurrentBulletGameObject.GetComponent<Enemy>().TakeDamage(20);
-                CurrentBulletGameObject.GetComponent<SpriteRenderer>().sortingOrder = 0;
+                CurrentBulletGameObject.GetComponent<Enemy>().PlayerTeleportedToEnemy();
             }
             else
             {
@@ -784,7 +791,6 @@ public class MovementPlatformer : MonoBehaviour
             else if (moveInputVertical < 0)
             {
                 rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x, CurrentBulletGameObject.transform.position.y - 1);
-                rb.AddForce(new Vector2(0, -1) * thrustPower * 0.7f, ForceMode2D.Impulse);
             }
             else if (moveInputVertical == 0)
             {
@@ -796,10 +802,10 @@ public class MovementPlatformer : MonoBehaviour
                 else
                 {
                     rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x, CurrentBulletGameObject.transform.position.y - 1);
-                    rb.AddForce(new Vector2(0, -1) * thrustPower * 0.7f, ForceMode2D.Impulse);
                 }
             }
         }
+
     }
     private void DashToEnemy()
     {
@@ -808,6 +814,29 @@ public class MovementPlatformer : MonoBehaviour
 
     }
 
+    void BulletReset()
+    {
+        if(!didHitAnEnemy)
+            KillBulletObject();
+        else
+        {
+            canTeleport = false;
+            canShoot = true;
+            didHitAnEnemy = false;
+            canShootTimer = 0;
+            shouldCheckForShootMemory = true;
+
+            if(!bulletHitDoor)
+                CurrentBulletGameObject.GetComponent<Enemy>().Highlight();
+            else
+            {
+                bulletHitDoor = false;
+                CurrentBulletGameObject.GetComponent<DoorDashThrough>().Highlight();
+            }
+
+            CurrentBulletGameObject = null;
+        }
+    }
 
     public void KillBulletObject()
     {
@@ -817,7 +846,8 @@ public class MovementPlatformer : MonoBehaviour
                 PrefabManager.instance.PlayVFX(PrefabManager.ListOfVFX.BulletDissapear, CurrentBulletGameObject.transform.position);
             canTeleport = false;
             canShoot = true;
-            Destroy(CurrentBulletGameObject);
+            if(FindObjectsOfType<bullet>().Length > 0)
+                Destroy(CurrentBulletGameObject);
 
             shouldICheckIsGrounded = false;
             shouldCheckForShootMemory = true;
@@ -827,15 +857,18 @@ public class MovementPlatformer : MonoBehaviour
         }
     }
 
+
+
+
     private void AttackMemory()
     {
         if (InputManager.instance.KeyDown(Keybindings.KeyList.Attack))
             regularAttackTimer = 0.1f;
-    }
+    }       // attacking functions
     public void AttackRegular()
     {
         atkAnimationStallTimer = 19;
-        if (moveInputVertical == 0)
+        if (moveInputVertical != 1)
         {
             if (atkAnimationCombo <= 0)
             {
@@ -931,20 +964,27 @@ public class MovementPlatformer : MonoBehaviour
         //    animator.SetTrigger("AttackingRegularDown");
         // }
         audioManager.PlaySound(AudioManager.SoundList.PlayerAttack);
-    }
+    }       // .
+
+
+
 
     public void HealNow()
     {
         manaBar.UseMana(25);
         GetComponent<Health>().health++;
+        AudioManager.instance.PlaySound(AudioManager.SoundList.Heal);
         PrefabManager.instance.PlayVFX(PrefabManager.ListOfVFX.HealParticle, transform.position);
-    }
+    }   //healing
 
     public void FullRestore()
     {
         GetComponent<Health>().FullHeal();
         GetComponent<ManaBar>().SetManaFull();
     }
+
+
+
 
 
     // coroutines are confusing :)
@@ -955,6 +995,28 @@ public class MovementPlatformer : MonoBehaviour
         yield return new WaitForSeconds(time);
         playerIsInvulnerable = false;
     }       // make the player invincible for float time 
+
+    private IEnumerator PlayerBlinkingAnimation()
+    {
+
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+
+        yield return new WaitForSeconds(0.3f);
+
+        sr.enabled = false;
+
+        yield return new WaitForSeconds(0.15f);
+        sr.enabled = true;
+        yield return new WaitForSeconds(0.3f);
+        sr.enabled = false;
+        yield return new WaitForSeconds(0.15f);
+        sr.enabled = true;
+        yield return new WaitForSeconds(0.3f);
+        sr.enabled = false;
+        yield return new WaitForSeconds(0.15f);
+        sr.enabled = true;
+
+    }
 
     private IEnumerator DontRespawnAtCheckpointForTime(float time)
     {
@@ -971,23 +1033,6 @@ public class MovementPlatformer : MonoBehaviour
         rb.constraints = ~RigidbodyConstraints2D.FreezePosition;
     }       // pause only the player's movement for float timeToWait
 
-    public IEnumerator RespawnAtCheckpoint(float timeToWait)
-    {
-        StartCoroutine(TransitionPrep(0.6f));
-        rb.velocity = Vector2.zero;
-        rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
-        
-        //Add here death animation.
-        yield return new WaitForSeconds(timeToWait);
-
-        ResetAxis();
-        rb.constraints = ~RigidbodyConstraints2D.FreezePosition;
-        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        transform.position = gm.lastCheckPointPosition;
-        GetComponent<Health>().DealDamage(1);
-        //currentRoom.GetComponent<RoomManagerOne>().PlayerRespawned.Invoke();
-        currentRoom.GetComponent<RoomManagerOne>().PlayerRespawnReset2();
-    }
 
     private IEnumerator ChangeBoolAfterSeconds(float timeToWait)
     {
@@ -1042,12 +1087,15 @@ public class MovementPlatformer : MonoBehaviour
         state = State.IgnorePlayerInput;
         rb.velocity = Vector2.zero;
 
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.05f);
 
         // manaBar.UseMana(25);
         ResetAxis();
-        canHeal = true;
         state = State.Normal;
+
+        yield return new WaitForSeconds(0.25f);
+
+        canHeal = true;
     }
 
     public IEnumerator SwitchStateIgnore(float time)
@@ -1066,6 +1114,28 @@ public class MovementPlatformer : MonoBehaviour
         moveInput = 0;
     }
 
+
+
+    public IEnumerator RespawnAtCheckpoint(float timeToWait)
+    {
+        audioManager.PlaySound(AudioManager.SoundList.RespawnSound);
+        StartCoroutine(TransitionPrep(0.6f));
+        rb.velocity = Vector2.zero;
+        rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+        
+        //Add here death animation.
+        yield return new WaitForSeconds(timeToWait);
+
+        ResetAxis();
+        rb.constraints = ~RigidbodyConstraints2D.FreezePosition;
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        transform.position = gm.lastCheckPointPosition;
+        GetComponent<Health>().DealDamage(1);
+        BulletReset();
+        //currentRoom.GetComponent<RoomManagerOne>().PlayerRespawned.Invoke();
+        currentRoom.GetComponent<RoomManagerOne>().PlayerRespawnReset2();
+    }   ///respawn and transitions
+
     public void RespawnAtLatestCheckpoint()
     {
         if (!dontRespawn)
@@ -1080,9 +1150,9 @@ public class MovementPlatformer : MonoBehaviour
         transform.position = gm.savePointPosition;
         GetComponent<ManaBar>().SetManaFull();
         GetComponent<Health>().FullHeal();
+        BulletReset();
         currentRoom.GetComponent<RoomManagerOne>().PlayerRespawnReset2();
     }
-
 
     public IEnumerator TransitionStart()
     {
@@ -1109,6 +1179,10 @@ public class MovementPlatformer : MonoBehaviour
 
         tm.animator.SetTrigger("End");
     }
+
+
+
+
     private void CheckDirectionPressed()            //Check which direction is being pressed right now.
     {
         if (directionPressed.Equals(new Vector2(0, 0)))
@@ -1141,10 +1215,10 @@ public class MovementPlatformer : MonoBehaviour
         return directionPressedNow;
     }
 
-    private void SwitchVector(Vector2 preVector, float x, float y)
-    {
 
-    }
+
+
+
 
     // functions for animations starting here
     public void OnLanding()

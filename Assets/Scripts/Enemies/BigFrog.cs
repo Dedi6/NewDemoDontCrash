@@ -175,6 +175,7 @@ public class BigFrog : MonoBehaviour, ISFXResetable, IKnockbackable
         delayHitGroundSFX = true;
         bodyHitGround = false;
         state = State.Normal;
+        Destroy(GetComponentInChildren<FrogEnemyBasic>().gameObject);
     }
 
     private IEnumerator AttackCoroutine(float cooldown)

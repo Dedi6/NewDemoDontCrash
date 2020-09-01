@@ -31,7 +31,8 @@ public class MoonBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
 
     public Animator animator;
     private BoxCollider2D boxCollider;
-    public UnityEngine.Events.UnityEvent bossFightTriggered, bossDied, playerDied; 
+    public UnityEngine.Events.UnityEvent bossFightTriggered, bossDied, playerDied;
+    public GameObject spellUnlockObject;
     GameObject player;
 
     private State state;
@@ -250,6 +251,7 @@ public class MoonBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
         thunderSpawnPos.x += sign * waveSpawnSpacing;
         if ((thunderSpawnPos.x < wallXPos && facingRight) || (thunderSpawnPos.x > wallXPos && !facingRight))
         {
+            AudioManager.instance.PlaySound(AudioManager.SoundList.MoonBossZap);
             yield return new WaitForSeconds(waveSpeed);
             GameObject stompSkill = Instantiate(thunderObject, thunderSpawnPos, Quaternion.identity, transform.parent);
             StartCoroutine(ThunderWave(sign, wallXPos));
@@ -282,7 +284,19 @@ public class MoonBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
     private IEnumerator ThunderWarning(Vector2 pos)
     {
         yield return new WaitForSeconds(warningThunderTime);
+        //AudioManager.instance.PlaySound(AudioManager.SoundList.MoonBossZap);
+        StartCoroutine(StartZapSounds());
         GameObject thunder = Instantiate(thunderObject, new Vector2(pos.x, pos.y + stompSpawnHeight*2), Quaternion.identity, transform.parent);
+    }
+
+    private IEnumerator StartZapSounds()
+    {
+        AudioManager manager = AudioManager.instance;
+        manager.PlaySound(AudioManager.SoundList.MoonBossZap);
+        yield return new WaitForSeconds(0.05f);
+        manager.PlaySound(AudioManager.SoundList.MoonBossZap);
+        yield return new WaitForSeconds(0.05f);
+        manager.PlaySound(AudioManager.SoundList.MoonBossZap);
     }
 
     private void SetPosition()
@@ -375,7 +389,6 @@ public class MoonBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
 
     private void OnDisable()
     {
-        Debug.Log("meow" + state);
         if (state == State.Dead)
         {
             GetComponentInParent<RoomManagerOne>().enemiesList = new RoomManagerOne.EnemiesRespawner[0];
@@ -389,4 +402,26 @@ public class MoonBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
             state = State.Waiting;
         playerDied.Invoke();
     }
+
+    public void SpawnSpellUnlock()
+    {
+        spellUnlockObject.transform.position = transform.position;
+        spellUnlockObject.SetActive(true);
+    }
+
+    public void PlayBreathSFX()
+    {
+        AudioManager.instance.PlaySound(AudioManager.SoundList.MoonBossBreathing);
+    }
+
+    public void PlayStompSFX()
+    {
+        AudioManager.instance.PlaySound(AudioManager.SoundList.MoonBossAttack);
+    }
+
+    public void PlayRunSFX()
+    {
+        AudioManager.instance.PlaySound(AudioManager.SoundList.MoonBossRun);
+    }
+
 }

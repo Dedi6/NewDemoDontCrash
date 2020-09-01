@@ -13,8 +13,19 @@ public class TutorialChatBubbles : MonoBehaviour
     {
         if (col.gameObject.layer == 11)
         {
-            string t = "Press '"  + InputManager.instance.keybindings.CheckKey(key).ToString() + "' " + text;
-            TextBubble.Create(parent, new Vector3(-1, 2), t, appearTime);
+            InputManager im = InputManager.instance;
+            if(im.IsUsingKeyboard())
+            {
+                string t = "Press '" + im.keybindings.CheckKey(key).ToString() + "' " + text;
+                TextBubble.Create(parent, new Vector3(-1, 2), t, appearTime);
+            }
+            else
+            {
+                string name = im.keybindings.CheckKey(key).ToString();
+                string t = "Press '" + im.GetControllerKeyWord(name) + "' " + text;
+                TextBubble.Create(parent, new Vector3(-1, 2), t, appearTime);
+            }
+
             Destroy(gameObject);
         }
     }

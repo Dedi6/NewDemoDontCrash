@@ -38,6 +38,7 @@ public class bullet : MonoBehaviour
         player.GetComponent<MovementPlatformer>().canShoot = false;
     }
 
+    /* insta teleport commented out
     void Update()
     {
         if (hitInfo.collider != null)
@@ -47,7 +48,7 @@ public class bullet : MonoBehaviour
         }
 
 
-    }
+    }*/
    
     private void OnCollisionEnter2D(Collision2D col)
     {
@@ -85,6 +86,11 @@ public class bullet : MonoBehaviour
     public void SetSpeedNormal()
     {
         rb.velocity = originalSpeed;
+    }
+
+    public void DestroyBulletAndReset()
+    {
+        player.GetComponent<MovementPlatformer>().KillBulletObject();
     }
 
 }

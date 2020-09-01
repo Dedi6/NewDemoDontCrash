@@ -158,6 +158,9 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
     {
         state = State.Waiting;
         currentSkillsInt = 60;
+        if(currentPhase == 3)
+            GetComponentInChildren<LightZone>().Shrink();
+        currentPhase = 1;
     }
 
     public void PlayHitGroundSFX()
@@ -195,6 +198,7 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
         if(1 <= i && i <= 40)
         {
             animator.SetTrigger("Enrage");
+            AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossPrep);
             SetEnrageSkill();
         }
         else if (41 <= i && i <= 65)
@@ -206,6 +210,7 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
         else if (66 <= i && i <= 100)
         {
             animator.SetTrigger("PunchStart");
+            AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossPrepPunch);
         }
     }
 
@@ -426,7 +431,6 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
         RaycastHit2D rayToWall = Physics2D.Raycast(player.transform.position, new Vector2(sign, 0), slashAppearDist, 1 << 8); // 1 << 8 is gorund
         if (rayToWall)
         {
-            Debug.Log("ssss");
             sign = -sign;
             Flip();
         }
@@ -449,7 +453,6 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
 
         yield return new WaitForSeconds(0.1f);
 
-        Debug.Log("again");
     }
 
     public void Punch()
@@ -460,13 +463,23 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
         {
             hitEnemies.GetComponent<MovementPlatformer>().KnockBackPlayer(punchKnockbackForce, 1, 0, b);
             hitEnemies.GetComponent<MovementPlatformer>().GotHitByAnEnemy(1);
+            StartCoroutine(PunchHitSFX());
         }
         StartCoroutine(CooldownCoroutine(punchCD));
+    }
+
+    private IEnumerator PunchHitSFX()
+    {
+        AudioManager audio = AudioManager.instance;
+        audio.PlaySound(AudioManager.SoundList.RageBossPunch);
+        yield return new WaitForSeconds(0.25f);
+        audio.PlaySound(AudioManager.SoundList.PlayerTossedIntoWall);
     }
 
     public void Dissapear()
     {
         ToggleColliders();
+        AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossTeleport);
         StartCoroutine(StallAnimationForTime(slashInvisTime));
     }
 
@@ -518,6 +531,7 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
 
     public void Dodge()
     {
+        AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossTeleport);
         transform.position = new Vector2(GetDodgePointX(), transform.position.y);
         ForceFlip();
     }

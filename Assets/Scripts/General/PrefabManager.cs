@@ -36,6 +36,7 @@ public class PrefabManager : MonoBehaviour
         RageBossSummon,
         ChatBubblePrefab,
         SkillsUnlockedPop,
+        ArrowTrap,
     }
 
     public enum ListOfSprites

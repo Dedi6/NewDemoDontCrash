@@ -14,6 +14,9 @@ public class UnlockSpell : MonoBehaviour
         if (col.gameObject.layer == 11) // player
         {
             OnTrigger.Invoke();
+            Destroy(gameObject);
+            AudioManager.instance.PlaySound(AudioManager.SoundList.UnlockedSkill);
+            PrefabManager.instance.PlayVFX(PrefabManager.ListOfVFX.SkillsUnlockedPop, transform.position);
         }
     }
 
@@ -26,7 +29,6 @@ public class UnlockSpell : MonoBehaviour
     }
 
 
-    
     public void SetBulletLocked()
     {
         if (PlayerPrefs.HasKey("BulletUnlocked"))
@@ -34,4 +36,10 @@ public class UnlockSpell : MonoBehaviour
         player.GetComponent<MovementPlatformer>().bulletUnlocked = false;
         Destroy(gameObject);
     }
+
+    public void IncreaseHP()
+    {
+        player.GetComponent<Health>().IncreaseHp();
+    }
+
 }

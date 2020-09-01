@@ -19,14 +19,15 @@ public class FallingPlatform : MonoBehaviour, IRespawnResetable
     }
     private void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.layer == 11 && col.transform.position.y > transform.position.y) // 11 = player
-            StartCoroutine(Fall());
+        if (col.gameObject.layer == 11 && col.transform.position.y > (transform.position.y + 2)) // 11 = player
+            StartCoroutine("Fall");
     }
 
     private IEnumerator Fall()
     {
         yield return new WaitForSeconds(timeBeforeFalling);
 
+        AudioManager.instance.PlaySound(AudioManager.SoundList.FallingPlatformFall);
         animator.SetBool("Fall", true);
 
         rb.isKinematic = false;
@@ -37,6 +38,7 @@ public class FallingPlatform : MonoBehaviour, IRespawnResetable
 
     public void PlayerHasRespawned()
     {
+        StopCoroutine("Fall");
         rb.velocity = Vector2.zero;
         rb.isKinematic = true;
         rb.velocity = Vector2.zero;

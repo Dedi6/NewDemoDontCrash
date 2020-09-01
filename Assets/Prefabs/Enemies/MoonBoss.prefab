@@ -255,17 +255,17 @@ MonoBehaviour:
   fHorDmpBasic: 0.9
   fHorDmpTurning: 0.95
   speedMulitiplier: 1.5
-  pauseBeforeAttack: 0.2
+  pauseBeforeAttack: 0.25
   thunderFallSpawnWidth: 4
-  warningThunderTime: 1
+  warningThunderTime: 1.1
   stompSpawnHeight: 5.3
-  waveCooldown: 1.5
-  scatterCooldown: 3
+  waveCooldown: 2
+  scatterCooldown: 3.5
   stompShakeTime: 0.2
   stompShakeForce: 1
   waveSpawnSpacing: 2.07
   waveSpeed: 0.07
-  runningCooldown: 1
+  runningCooldown: 1.5
   warningThunder: {fileID: 8003380823902757409, guid: ae0954ec37cdc584084a5302c4623379,
     type: 3}
   thunderObject: {fileID: 5084068162658361609, guid: 2334951523efdbc4f9ca725d3939fd11,
@@ -278,6 +278,10 @@ MonoBehaviour:
   bossDied:
     m_PersistentCalls:
       m_Calls: []
+  playerDied:
+    m_PersistentCalls:
+      m_Calls: []
+  spellUnlockObject: {fileID: 0}
 --- !u!95 &5343454648852713851
 Animator:
   serializedVersion: 3

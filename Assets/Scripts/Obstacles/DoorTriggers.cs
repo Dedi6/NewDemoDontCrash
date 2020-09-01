@@ -16,7 +16,7 @@ public class DoorTriggers : MonoBehaviour
         if (col.gameObject.layer == LayerMask.NameToLayer("player") && !isTriggered)
         {
             GameMaster gm = GameMaster.instance;
-            gm.GetComponent<AudioManager>().PlaySound(AudioManager.SoundList.DoorTrigger);
+            AudioManager.instance.PlaySound(AudioManager.SoundList.DoorTriggerTriggered);
             isTriggered = true;
             animator.SetBool("IsTriggered", true);
             doorToOpen.GetComponent<DoorOpenWithTriggers>().OpenDoor();

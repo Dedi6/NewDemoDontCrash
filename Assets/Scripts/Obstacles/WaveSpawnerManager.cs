@@ -28,6 +28,7 @@ public class WaveSpawnerManager : MonoBehaviour, IRespawnResetable
 
     public UnityEngine.Events.UnityEvent ClearedWaves;
     public UnityEngine.Events.UnityEvent WavesTriggered;
+    public bool loopFear = false;
 
     void OnTriggerEnter2D(Collider2D col)
     {
@@ -75,16 +76,36 @@ public class WaveSpawnerManager : MonoBehaviour, IRespawnResetable
 
     public void InvokeEnemies()
     {
-        if (currentWave < Waves.Length)
-            StartCoroutine(StartSpawning(Waves[currentWave].spawnAfterTimer));
+        if(!loopFear)
+        {
+            if (currentWave < Waves.Length)
+                StartCoroutine(StartSpawning(Waves[currentWave].spawnAfterTimer));
+            else
+                ClearedWaves.Invoke();
+        }
         else
-            ClearedWaves.Invoke();
+        {
+            if (currentWave < Waves.Length)
+                StartCoroutine(StartSpawning(Waves[currentWave].spawnAfterTimer));
+            else
+            {
+                currentWave = 0;
+                StartCoroutine(StartSpawning(Waves[0].spawnAfterTimer));
+            }
+        }
     }
 
     public void PlayerHasRespawned()
     {
-        isTriggeredAlready = false;
-        ClearedWaves.Invoke();
-        currentWave = 0;
+        if(!loopFear)
+        {
+            isTriggeredAlready = false;
+            ClearedWaves.Invoke();
+            currentWave = 0;
+        }
+        else
+        {
+            ClearedWaves.Invoke();
+        }
     }
 }
