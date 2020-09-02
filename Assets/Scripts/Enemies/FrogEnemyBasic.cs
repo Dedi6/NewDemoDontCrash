@@ -172,7 +172,7 @@ public class FrogEnemyBasic : MonoBehaviour, ISFXResetable
             enemy.velocity = new Vector2(moveSpeed, jumpForce);
         else
             enemy.velocity = new Vector2(-moveSpeed, jumpForce);
-
+        AudioManager.instance.PlaySound(AudioManager.SoundList.FrogJump);
     }
 
     private void StartGroundCheckTimer()
@@ -191,6 +191,7 @@ public class FrogEnemyBasic : MonoBehaviour, ISFXResetable
         enemy.velocity = new Vector2(0, 0);
         groundCheckTimer = 1;
         checkIfHittingGround = false;
+        AudioManager.instance.PlaySound(AudioManager.SoundList.FrogLand);
     }
 
     private void Attack()
@@ -201,6 +202,8 @@ public class FrogEnemyBasic : MonoBehaviour, ISFXResetable
             Flip();
         if (jumpTimer <= 0 && groundCheckRaycast)
         {
+            checkIfHittingGround = true;
+            AudioManager.instance.PlaySound(AudioManager.SoundList.FrogJump);
             jumpTimer = 2.5f;
             if(facingRight)
                 enemy.velocity = new Vector2(Mathf.Abs(transform.position.x - player.transform.position.x), jumpForce);

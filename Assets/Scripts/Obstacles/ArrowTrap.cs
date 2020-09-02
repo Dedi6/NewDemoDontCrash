@@ -18,6 +18,7 @@ public class ArrowTrap : MonoBehaviour
 
     private IEnumerator ShootArrow()
     {
+        AudioManager.instance.PlaySound(AudioManager.SoundList.ArrowShoot);
         GameObject arrow = Instantiate(arrowPrefab, spawnPoint.position, Quaternion.identity, transform);
         Vector2 dir = isRight ? new Vector2(1, 0) : new Vector2(-1, 0);
         arrow.GetComponent<Action_TriggerHitPlayer>().SetMovement(dir, arrowSpeed);

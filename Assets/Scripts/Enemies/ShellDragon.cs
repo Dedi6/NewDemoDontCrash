@@ -209,6 +209,7 @@ public class ShellDragon : MonoBehaviour, ISFXResetable, IKnockbackable
     }
     public void StompSkill()
     {
+        AudioManager.instance.PlaySound(AudioManager.SoundList.MoonBossAttack);
         int sign = facingRight ? 1 : -1;
         StartCoroutine(GetComponentInParent<RoomManagerOne>().virtualCam.GetComponent<ScreenShake>().ShakeyShakey(stompShakeTime, stompShakeForce));
         stompSpawnPos = enemy.transform.position;
@@ -230,6 +231,7 @@ public class ShellDragon : MonoBehaviour, ISFXResetable, IKnockbackable
     }
     private IEnumerator StompWave(int sign, float wallXPos)
     {
+        AudioManager.instance.PlaySound(AudioManager.SoundList.StompWave);
         stompSpawnPos.x += sign * stompSpawnSpacing;
         if ((stompSpawnPos.x < wallXPos && facingRight) || (stompSpawnPos.x > wallXPos && !facingRight))
         {
@@ -241,6 +243,7 @@ public class ShellDragon : MonoBehaviour, ISFXResetable, IKnockbackable
 
     public void RockFallSkill()
     {
+        AudioManager.instance.PlaySound(AudioManager.SoundList.MoonBossAttack);
         StartCoroutine(GetComponentInParent<RoomManagerOne>().virtualCam.GetComponent<ScreenShake>().ShakeyShakey(stompShakeTime, stompShakeForce));
         int numberOfRocks = Random.Range(15, 25);
         for (int i = numberOfRocks; i > 0; i--)

@@ -211,6 +211,7 @@ public class RedDrake : MonoBehaviour, ISFXResetable, IKnockbackable
         float angleStep = spreadAngle / numOfFireballs;
         float angle = 0f;
         int sign = facingRight ? 1 : -1;
+        AudioManager.instance.PlaySound(AudioManager.SoundList.RedDrakeFireBall);
         for (int i = 0; i < numOfFireballs; i++)
         {
             Vector2 atkPoint = new Vector2(attackPoint.transform.position.x, attackPoint.transform.position.y);

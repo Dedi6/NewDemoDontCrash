@@ -202,6 +202,7 @@ public class BigFrog : MonoBehaviour, ISFXResetable, IKnockbackable
     }
     public void Attack()
     {
+        AudioManager.instance.PlaySound(AudioManager.SoundList.BigFrogLick);
         Collider2D[] hitEnemies = Physics2D.OverlapCapsuleAll(attackPoint.position, new Vector2(6.7f, 2.7f), CapsuleDirection2D.Horizontal, 0, 1 << 11); //11 is player's layermask
         foreach (Collider2D player in hitEnemies)
         {

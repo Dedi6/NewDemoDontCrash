@@ -212,6 +212,7 @@ public class SwordDrake : MonoBehaviour, ISFXResetable, IKnockbackable
         yield return new WaitForSeconds(pauseBeforeAttack);
 
         animator.speed = 1;
+        AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossPrep);
 
         yield return new WaitForSeconds(0.3f);
 
@@ -247,7 +248,10 @@ public class SwordDrake : MonoBehaviour, ISFXResetable, IKnockbackable
     public void SetStateAttacking()
     {
         if (state != State.Dead)
+        {
             state = State.Attack;
+            AudioManager.instance.PlaySound(AudioManager.SoundList.SwordDrakeDash);
+        }
     }
 
     public void SetStateDead()

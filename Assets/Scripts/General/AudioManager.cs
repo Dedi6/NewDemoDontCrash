@@ -89,6 +89,7 @@ public class AudioManager : MonoBehaviour
         StompWave,
         RedDrakeFireBall,
         SummonMinions,
+        ArrowShoot,
     }
 
     private AudioSource currentTheme;

@@ -26,6 +26,7 @@ public class ShockWave : MonoBehaviour
 
     public void MoveWave(int direction, float wallXPos, bool right, float spacing)
     {
+        AudioManager.instance.PlaySound(AudioManager.SoundList.StompWave);
         dir = direction;
         wallXPosition = wallXPos;
         spacingB = spacing;
@@ -34,6 +35,7 @@ public class ShockWave : MonoBehaviour
 
     public void FinishedAnimation()
     {
+        AudioManager.instance.PlaySound(AudioManager.SoundList.StompWave);
         if ((!toRight && transform.position.x > wallXPosition) || (toRight && transform.position.x < wallXPosition))
         {
             transform.position = new Vector3(transform.position.x + spacingB * dir, transform.position.y, 0);

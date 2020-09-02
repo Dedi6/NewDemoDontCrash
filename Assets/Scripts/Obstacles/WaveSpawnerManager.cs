@@ -67,6 +67,7 @@ public class WaveSpawnerManager : MonoBehaviour, IRespawnResetable
         for (int i = 0; i < Waves[currentWave].arrayOfWaves.Length; i++)
         {
             Transform spawnLocation = Waves[currentWave].arrayOfWaves[i].spawnLocations;
+            AudioManager.instance.PlaySound(AudioManager.SoundList.SummonMinions);
             GameObject spawnAnim = Instantiate(spawnAnimation, spawnLocation.transform.position, Quaternion.identity) as GameObject;
             //  Debug.Log(currentWave + " " + Waves[currentWave].arrayOfWaves[i].enemiesToSpawnEachRound + " " + Waves[currentWave].arrayOfWaves[i].spawnLocations);
         }
