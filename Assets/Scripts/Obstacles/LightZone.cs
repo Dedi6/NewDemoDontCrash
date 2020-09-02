@@ -7,7 +7,7 @@ public class LightZone : MonoBehaviour
     public float zoneRadius, bulletChangedSpeed, reduceZoneSpeed;
     private UnityEngine.Experimental.Rendering.Universal.Light2D lightController;
     [HideInInspector]
-    public bool isDead = false, isExpanding = false;
+    public bool isDead = false, isExpanding = false, isShrinking = false;
     [HideInInspector]
     public float expandRadius, expandSpeed;
     void Start()
@@ -22,6 +22,8 @@ public class LightZone : MonoBehaviour
         else if (lightController.pointLightOuterRadius <= 0)
             GetComponent<CircleCollider2D>().enabled = false;
 
+        if (isShrinking)
+            ShrinkNow();
         if (isExpanding)
             Expand();
     }
@@ -39,6 +41,14 @@ public class LightZone : MonoBehaviour
         {
             col.GetComponent<bullet>().SetSpeedNormal();
         }
+    }
+
+    public void ShrinkNow()
+    {
+        Shrink();
+        GetComponent<CircleCollider2D>().radius = 0f;
+        if (lightController.pointLightOuterRadius <= 0)
+            isShrinking = false;
     }
 
     public void Shrink()

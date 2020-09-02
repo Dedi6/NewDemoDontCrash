@@ -172,6 +172,7 @@ public class FrogEnemyBasic : MonoBehaviour, ISFXResetable
             enemy.velocity = new Vector2(moveSpeed, jumpForce);
         else
             enemy.velocity = new Vector2(-moveSpeed, jumpForce);
+
     }
 
     private void StartGroundCheckTimer()

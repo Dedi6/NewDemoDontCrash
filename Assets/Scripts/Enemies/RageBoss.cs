@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable<float>
+public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable<float>, IRespawnResetable
 {
 
     [Header("General")]
@@ -11,7 +11,7 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
     private bool facingRight = false;
     private RaycastHit2D wallCheckRaycast;
     private RaycastHit2D groundCheckRaycast;
-    private Vector2 raycastDirection;
+    private Vector2 raycastDirection, originalPos;
     public float wallCheckDistance = 1, attackCheckDistance, knockBackTime, turnAroundTimer;
     public float groundCheckDistance = 1, stallAnimation, phaseTwoHp, phaseThreeHp;
     private int layerMaskGround = 1 << 8, currentPhase = 1;
@@ -38,6 +38,7 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
     public Animator animator;
     private BoxCollider2D boxCollider;
     public UnityEngine.Events.UnityEvent bossFightTriggered, bossDied;
+    public Transform enemiesParent;
     GameObject player;
 
     private State state;
@@ -61,6 +62,7 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
         bool goRight = GetComponent<Enemy>().goRight;
         if ((goRight && !facingRight) || (!goRight && facingRight))
             Flip();
+        originalPos = transform.position;
     }
 
     private void Awake()
@@ -94,7 +96,9 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
         if (Input.GetKeyDown(KeyCode.Alpha5))
             StartCoroutine(MeteorFall());
         if (Input.GetKeyDown(KeyCode.Alpha6))
-            animator.SetTrigger("Zone"); ;
+            animator.SetTrigger("Zone");
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+            GetComponentInChildren<LightZone>().isShrinking = true;
 
         if (turnAroundTimer > 0)
             turnAroundTimer -= Time.deltaTime;
@@ -173,7 +177,7 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
     {
         yield return new WaitForSeconds(cooldown);
 
-        if (state != State.Dead)
+        if (state != State.Dead && state != State.Waiting)
             state = State.Normal;
     }
 
@@ -290,6 +294,7 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
 
         yield return new WaitForSeconds(0.5f);
 
+        AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossEnrage);
         currentSkill();
     }
 
@@ -298,7 +303,7 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
     {
         GameObject pref = PrefabManager.instance.FindVFX(PrefabManager.ListOfVFX.RedFrog);
         Vector2 pos = new Vector2(summonPoint.position.x, summonPoint.position.y);
-        GameObject redFrog = Instantiate(pref, pos, Quaternion.identity, GameMaster.instance.currentRoom.transform);
+        GameObject redFrog = Instantiate(pref, pos, Quaternion.identity, enemiesParent);
         StartCoroutine(CooldownCoroutine(summonFrogCD));
     }
 
@@ -351,6 +356,7 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
         GameObject pref = PrefabManager.instance.FindVFX(PrefabManager.ListOfVFX.Meteor);
         GameObject proj = Instantiate(pref, atkPoint, Quaternion.identity, transform.parent);
         proj.GetComponent<Meteor>().SetDirection(direction, meteorSpeed);
+        AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossMeteors);
 
         currentAngle += angleStep;
 
@@ -382,6 +388,8 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
             atkPoint = meteorRainPoint2.transform.position;
             currentAngle = currentAngle == interlaceAngle1 + angleStep * interlaceNumber - 90 ? interlaceAngle2 - 90 : interlaceAngle1 - 90;
         }
+
+        AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossMeteors);
 
         for (int i = 0; i < interlaceNumber; i++)
         {
@@ -492,6 +500,7 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
     public IEnumerator SlashStart()
     {
         int sign = facingRight ? 1 : -1;
+        AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossSlash);
         enemy.velocity = new Vector2(slashMoveForce * sign, 0);
 
         yield return new WaitForSeconds(slashTimer);
@@ -624,5 +633,27 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
     {
         if (state == State.Dead)
             Destroy(gameObject);
+    }
+
+    public void PlayScreamSFX()
+    {
+        AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossScream);
+    }
+
+    public void PlayerHasRespawned()
+    {
+        transform.position = originalPos;
+        state = State.Waiting;
+        currentSkillsInt = 60;
+        if (currentPhase == 3)
+            GetComponentInChildren<LightZone>().isShrinking = true;
+        currentPhase = 1;
+        if(enemiesParent.childCount > 0)
+        {
+            for (int i = 0; i < enemiesParent.childCount; i++)
+            {
+                Destroy(enemiesParent.GetChild(i).gameObject);
+            }
+        }
     }
 }

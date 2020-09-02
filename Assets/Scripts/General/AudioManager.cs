@@ -78,6 +78,17 @@ public class AudioManager : MonoBehaviour
         Heal,
         MoonBossRun,
         MoonBossZap,
+        RageBossScream,
+        RageBossSlash,
+        RageBossMeteors,
+        RageBossEnrage,
+        FrogJump,
+        FrogLand,
+        BigFrogLick,
+        SwordDrakeDash,
+        StompWave,
+        RedDrakeFireBall,
+        SummonMinions,
     }
 
     private AudioSource currentTheme;
