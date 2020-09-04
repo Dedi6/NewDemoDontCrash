@@ -30,8 +30,12 @@ public class SavePoint : MonoBehaviour
 
     private IEnumerator Save()
     {
+        playerScript.rb.velocity = Vector2.zero;
+
         yield return new WaitForSeconds(0.1f);
-  
+
+        playerScript.rb.velocity = Vector2.zero;
+
         isSaving = true;
         StartCoroutine(playerScript.SwitchStateIgnore(0.51f));
         playerScript.animator.SetTrigger("Heal");
@@ -55,5 +59,6 @@ public class SavePoint : MonoBehaviour
     {
         gm.ShakeCamera(0.1f, 1f);
         GetComponentInChildren<UnityEngine.Experimental.Rendering.Universal.Light2D>().enabled = true;
+        AudioManager.instance.PlaySound(AudioManager.SoundList.Save);
     }
 }

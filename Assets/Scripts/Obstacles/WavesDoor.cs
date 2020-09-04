@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WavesDoor : MonoBehaviour
+public class WavesDoor : MonoBehaviour, IRespawnResetable
 {
 
     public Animator animator;
-    public bool boolValue = true;
+    public bool boolValue = true, shouldOpenWhenRespawn;
 
     public void OpenDoor()
     {
@@ -57,5 +57,15 @@ public class WavesDoor : MonoBehaviour
     public void PlayerHasRespawned(bool b)
     {
         boolValue = b;  
+    }
+
+    public void PlayerHasRespawned()
+    {
+        if(shouldOpenWhenRespawn)
+        {
+            GetComponent<BoxCollider2D>().enabled = false;
+            animator.SetBool("IsOpen", true);
+            boolValue = true;
+        }
     }
 }

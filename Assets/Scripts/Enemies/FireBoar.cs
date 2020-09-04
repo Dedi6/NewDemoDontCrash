@@ -61,7 +61,7 @@ public class FireBoar : MonoBehaviour, ISFXResetable
         {
             case State.Normal:
                 stunTimer = stunTimerMax;
-                if ((rayFromBack.transform.gameObject.layer == 11 || wallCheckRaycast) && groundCheckRaycast)
+                if (((rayFromBack && rayFromBack.transform.gameObject.layer == 11) || wallCheckRaycast) && groundCheckRaycast)
                     Flip();
                 break;
             case State.Attacking:
@@ -118,7 +118,7 @@ public class FireBoar : MonoBehaviour, ISFXResetable
     }
     private void StateHandler()
     {
-        if(state != State.Dead)
+        if(state != State.Dead && rayToPlayer)
         {
             if (rayToPlayer.transform.gameObject.layer == 11) // 1 << 11 = player
             {

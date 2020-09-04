@@ -16,6 +16,7 @@ public class AudioManager : MonoBehaviour
 
         [HideInInspector]
         public AudioSource source;
+        public AudioManagerList AudioManagerType;
 
     }
 
@@ -90,12 +91,26 @@ public class AudioManager : MonoBehaviour
         RedDrakeFireBall,
         SummonMinions,
         ArrowShoot,
+        MoonBossTheme,
+        MoonBossTransition,
+        FearThemeTransition,
+        FearThemeLoop,
+        FearThemeEnding,
+        Save,
+        Load,
+    }
+
+    public enum AudioManagerList
+    {
+        SFX,
+        Music,
     }
 
     private AudioSource currentTheme;
 
     public float fadeTime, BgMusicVolume;
     public Sounds[] ListOfSounds;
+    public AudioMixer mixer;
     private AudioClip currentClip;
     
     void Awake()
@@ -115,6 +130,7 @@ public class AudioManager : MonoBehaviour
                 currentSound.source = gameObject.AddComponent<AudioSource>();
                 currentSound.source.clip = currentSound.arrayOfClips[i].audioClip;
                 currentSound.source.loop = currentSound.loop;
+                currentSound.source.outputAudioMixerGroup = GetAudioMixerGroup(currentSound.AudioManagerType);
             }
             //currentSound.source.volume = currentSound.volume;
             //currentSound.source.pitch = currentSound.pitch;
@@ -166,11 +182,17 @@ public class AudioManager : MonoBehaviour
         PlayTheme(transition, fadeT);
         AudioClip clip = GetAudioClip(transition).arrayOfClips[0].audioClip;
 
-        yield return new WaitForSeconds(clip.length);
+        yield return new WaitForSecondsRealtime(clip.length);
 
         PlayTheme(theme, 0);
     }
 
+    public void StartTransitionCoroutine(SoundList transition, SoundList theme, float fadeT)
+    {
+        StartCoroutine(PlayTransitionTheme(transition, theme, fadeT));
+    }
+
+    
     private IEnumerator FadeIn(SoundList sound, float fadeT)
     {
         AudioSource source = GetAudioClip(sound).source;
@@ -194,6 +216,36 @@ public class AudioManager : MonoBehaviour
 
         source.volume = 0f;
         source.Stop();
+    }
+
+    public void FadeOutCurrent(float fadeT)
+    {
+        StartCoroutine(FadeOut(currentTheme, fadeT));
+    }
+
+    private AudioMixerGroup GetAudioMixerGroup(AudioManagerList type)
+    {
+        switch(type)
+        {
+            case AudioManagerList.SFX:
+                return mixer.FindMatchingGroups("SFX")[0];
+            case AudioManagerList.Music:
+                return mixer.FindMatchingGroups("Music")[0];
+        }
+        return null;
+    }
+
+    public void SetVolumeMaster(float volume)
+    {
+        mixer.SetFloat("Volume", volume);
+    }
+    public void SetVolumeMusic(float volume)
+    {
+        mixer.SetFloat("MusicVolume", volume);
+    }
+    public void SetVolumeSFX(float volume)
+    {
+        mixer.SetFloat("SFXVolume", volume);
     }
 
 }

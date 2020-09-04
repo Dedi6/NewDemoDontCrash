@@ -8,7 +8,7 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
     [Space]
     public Rigidbody2D enemy;
     public Transform rayCheckPointGround;
-    private bool facingRight = false;
+    private bool facingRight = false, playerRespawned = false;
     private RaycastHit2D wallCheckRaycast;
     private RaycastHit2D groundCheckRaycast;
     private Vector2 raycastDirection, originalPos;
@@ -134,7 +134,7 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
     private void CheckForPlayer()
     {
         waitingCast = Physics2D.OverlapCircle(transform.position, attackCheckDistance, 1 << 11);
-        if (waitingCast != null && waitingCast.transform.gameObject.layer == 11) // 11 is player
+        if (!playerRespawned && waitingCast != null && waitingCast.transform.gameObject.layer == 11) // 11 is player
         {
             state = State.Normal;
             bossFightTriggered.Invoke();
@@ -642,6 +642,12 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
 
     public void PlayerHasRespawned()
     {
+        if (!playerRespawned)
+        {
+            playerRespawned = true;
+            StartCoroutine(SetBack());
+        }
+ 
         transform.position = originalPos;
         state = State.Waiting;
         currentSkillsInt = 60;
@@ -655,5 +661,15 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
                 Destroy(enemiesParent.GetChild(i).gameObject);
             }
         }
+    }
+
+    private IEnumerator SetBack()
+    {
+        playerRespawned = true;
+        AudioManager.instance.PlayTheme(AudioManager.SoundList.Fear2, 10f);
+
+        yield return new WaitForSeconds(.35f);
+
+        playerRespawned = false;
     }
 }

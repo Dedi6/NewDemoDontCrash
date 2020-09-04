@@ -21,6 +21,7 @@ public class RoomManagerOne : MonoBehaviour
     public float freezeWhenSwitchingRoomTime;
     [HideInInspector]
     public bool shouldFreeze = true;
+    public int roomNumber;
     // private Transform
 
     void Start()
@@ -50,6 +51,7 @@ public class RoomManagerOne : MonoBehaviour
 
             player.GetComponent<MovementPlatformer>().currentRoom = this.gameObject;
             GameMaster.instance.currentRoom = gameObject;
+            PrefabManager.instance.roomNumber.GetComponent<UnityEngine.UI.Text>().text = roomNumber.ToString();
         }
     }
 

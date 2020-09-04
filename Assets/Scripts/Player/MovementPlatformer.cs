@@ -143,7 +143,7 @@ public class MovementPlatformer : MonoBehaviour
         audioManager = AudioManager.instance;
         input = InputManager.instance;
         manaBar = GetComponent<ManaBar>();
-        //audioManager.PlayTheme(AudioManager.SoundList.FirstTestSong, 0.1f); /////// test song
+        audioManager.PlayTheme(AudioManager.SoundList.FirstTestSong, 0.1f); /////// test song
         //  delete when building!!!!
         gm.savePointPosition = transform.position;
         //Time.timeScale = 0.9f;
@@ -206,12 +206,7 @@ public class MovementPlatformer : MonoBehaviour
              Flip();
              Debug.Log("hi");
          }*/
-         /*
-
-        if (Input.GetKeyDown(KeyCode.O))
-            StartCoroutine(AudioManager.instance.PlayTransitionTheme(AudioManager.SoundList.Fear3, AudioManager.SoundList.Fear4, 0.3f));
-        if (Input.GetKeyDown(KeyCode.P))
-            currentRoom.GetComponent<RoomManagerOne>().PlayerRespawnReset2();*/
+         
 
         if (shouldICheckIsGrounded)
             GroundCheckForShoot();
@@ -608,6 +603,7 @@ public class MovementPlatformer : MonoBehaviour
             didHitAnEnemy = false;
             canShootTimer = 0;
         }
+        ResetAxis();
         audioManager.PlaySound(AudioManager.SoundList.Teleport);
         StartCoroutine(currentRoom.GetComponent<RoomManagerOne>().virtualCam.GetComponent<ScreenShake>().ShakeyShakey(teleportShakeTime, teleportShakeForce));
     }
@@ -1166,6 +1162,7 @@ public class MovementPlatformer : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
 
         currentRoom.GetComponent<RoomManagerOne>().PlayerRespawnReset2();
+        audioManager.PlaySound(AudioManager.SoundList.Load);
     }
 
     private IEnumerator TransitionPrep(float blackScreenTime)
@@ -1277,4 +1274,5 @@ public class MovementPlatformer : MonoBehaviour
     {
         return i == 1 ? true : false;
     } */
+
 }

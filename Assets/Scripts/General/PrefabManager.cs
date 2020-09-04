@@ -21,7 +21,7 @@ public class PrefabManager : MonoBehaviour
 
     public NamedVFX[] arrayOfVFX;
     public ManageSprites[] arrayOfSprites;
-    public GameObject transitionManager;
+    public GameObject transitionManager, roomNumber;
     public enum ListOfVFX
     {
         BulletDissapear,

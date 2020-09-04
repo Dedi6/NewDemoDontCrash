@@ -57,6 +57,7 @@ public class Health : MonoBehaviour
         health -= dmg;
         if (health <= 0)
         {
+            AudioManager.instance.PlaySound(AudioManager.SoundList.RespawnSound);
             health = numberOfHearts;
             StartCoroutine(GetComponent<MovementPlatformer>().TransitionStart());
         }

@@ -50,7 +50,8 @@ public class FallingPlatform : MonoBehaviour, IRespawnResetable
 
     private void OnEnable()
     {
-        if(GetComponent<BoxCollider2D>().enabled == false)
-            animator.SetBool("Fall", true);
+        if (GetComponent<BoxCollider2D>().enabled == false)
+            PlayerHasRespawned();
+                //animator.SetBool("Fall", true);
     }
 }

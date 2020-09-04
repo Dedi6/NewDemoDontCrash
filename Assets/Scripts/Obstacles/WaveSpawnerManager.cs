@@ -21,7 +21,7 @@ public class WaveSpawnerManager : MonoBehaviour, IRespawnResetable
 
     public int currentWave = 0;
     public WaveArray[] Waves;
-    private bool isTriggeredAlready;
+    private bool isTriggeredAlready, playerRespawning;
     public GameObject spawner;
     public GameObject currentRoom;
     public GameObject spawnAnimation;
@@ -71,7 +71,7 @@ public class WaveSpawnerManager : MonoBehaviour, IRespawnResetable
             GameObject spawnAnim = Instantiate(spawnAnimation, spawnLocation.transform.position, Quaternion.identity) as GameObject;
             //  Debug.Log(currentWave + " " + Waves[currentWave].arrayOfWaves[i].enemiesToSpawnEachRound + " " + Waves[currentWave].arrayOfWaves[i].spawnLocations);
         }
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.9f);
         SpawnEnemies();
     }
 
@@ -98,15 +98,27 @@ public class WaveSpawnerManager : MonoBehaviour, IRespawnResetable
 
     public void PlayerHasRespawned()
     {
-        if(!loopFear)
+        if(!playerRespawning)
         {
-            isTriggeredAlready = false;
-            ClearedWaves.Invoke();
-            currentWave = 0;
+            playerRespawning = true;
+            StartCoroutine(PlayerRespawningCoroutine());
+            if(!loopFear)
+            {
+                isTriggeredAlready = false;
+                ClearedWaves.Invoke();
+                currentWave = 0;
+            }
+            else
+            {
+                ClearedWaves.Invoke();
+            }
         }
-        else
-        {
-            ClearedWaves.Invoke();
-        }
+    }
+
+    private IEnumerator PlayerRespawningCoroutine()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        playerRespawning = true;
     }
 }

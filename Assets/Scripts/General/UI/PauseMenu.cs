@@ -9,12 +9,15 @@ public class PauseMenu : MonoBehaviour
     public GameObject SkillMenuUi;
     public GameObject keyBindsMenu;
     public GameObject spellHandler;
-    private bool keybindsOpen, skillBookOpen, spellHandlerOpen;
+    public GameObject audioMenu;
+    public GameObject controlsMenu;
+    public GameObject cheatsMenu;
+    private bool keybindsOpen, skillBookOpen, spellHandlerOpen, controlsOpen, audioOpen, cheatsOpen;
     void Update()
     {
         if (InputManager.instance.KeyDown(Keybindings.KeyList.PauseMenu))
         {
-            if (keybindsOpen || skillBookOpen || spellHandlerOpen)
+            if (keybindsOpen || skillBookOpen || spellHandlerOpen || controlsOpen || audioOpen || cheatsOpen)
                 HandleActiveMenu();
             else
             { 
@@ -77,12 +80,30 @@ public class PauseMenu : MonoBehaviour
         {
             GoBackFromSpellHandler();
         }
+        else if (controlsOpen)
+        {
+            controlsMenu.SetActive(false);
+            controlsOpen = false;
+            Pause(pauseMenuUI);
+        }
+        else if (audioOpen)
+        {
+            audioMenu.SetActive(false);
+            audioOpen = false;
+            Pause(pauseMenuUI);
+        }
+        else if (cheatsOpen)
+        {
+            cheatsMenu.SetActive(false);
+            cheatsOpen = false;
+            Pause(pauseMenuUI);
+        }
     }
 
 
     public void OpenKeybindsMenu()
     {
-        Resume(pauseMenuUI);
+        Resume(controlsMenu);
         Pause(keyBindsMenu);
         keybindsOpen = true;
     }
@@ -93,6 +114,28 @@ public class PauseMenu : MonoBehaviour
         Pause(SkillMenuUi);
         skillBookOpen = true;
     }
+
+    public void OpenAudioMenu()
+    {
+        Resume(pauseMenuUI);
+        Pause(audioMenu);
+        audioOpen = true;
+    }
+
+    public void OpenControlsMenu()
+    {
+        Resume(pauseMenuUI);
+        Pause(controlsMenu);
+        controlsOpen = true;
+    }
+
+    public void OpenCheatsMenu()
+    {
+        Resume(pauseMenuUI);
+        Pause(cheatsMenu);
+        cheatsOpen = true;
+    }
+
     void GoBackFromSpellHandler()
     {
         spellHandler.SetActive(false);
@@ -100,6 +143,7 @@ public class PauseMenu : MonoBehaviour
         skillBookOpen = true;
         Pause(SkillMenuUi);
     }
+
 
     public void OpenSkillHandler(bool isOpening)
     {

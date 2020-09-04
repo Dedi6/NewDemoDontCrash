@@ -8,7 +8,7 @@ public class MoonBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
     [Space]
     public Rigidbody2D enemy;
     public Transform rayCheckPointGround;
-    private bool facingRight = false;
+    private bool facingRight = false, playerRespawned;
     private RaycastHit2D wallCheckRaycast;
     private RaycastHit2D groundCheckRaycast;
     private Vector2 raycastDirection;
@@ -122,7 +122,7 @@ public class MoonBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
     private void CheckForPlayer()
     {
         waitingCast = Physics2D.OverlapCircle(transform.position, attackCheckDistance, 1 << 11);
-        if (waitingCast != null && waitingCast.transform.gameObject.layer == 11) // 11 is player
+        if (!playerRespawned && waitingCast != null && waitingCast.transform.gameObject.layer == 11) // 11 is player
         {
             state = State.Normal;
             bossFightTriggered.Invoke();
@@ -169,6 +169,7 @@ public class MoonBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
         if (state != State.Dead)
             state = State.Waiting;
         playerDied.Invoke();
+        StartCoroutine(SetBack());
     }
 
     public void PlayHitGroundSFX()
@@ -422,6 +423,15 @@ public class MoonBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
     public void PlayRunSFX()
     {
         AudioManager.instance.PlaySound(AudioManager.SoundList.MoonBossRun);
+    }
+
+    private IEnumerator SetBack()
+    {
+        playerRespawned = true;
+
+        yield return new WaitForSeconds(.35f);
+
+        playerRespawned = false;
     }
 
 }

@@ -14,7 +14,7 @@ public class FearTextPopUp : MonoBehaviour
         {
             text.SetActive(true);
             animator = text.GetComponent<Animator>();
-            StartCoroutine(FadeInAndOut());
+            FadeIn();
         }
     }
 
@@ -28,6 +28,26 @@ public class FearTextPopUp : MonoBehaviour
 
         yield return new WaitForSeconds(fadeOutTime + 1f);
 
+        text.SetActive(false);
+        Destroy(gameObject);
+    }
+
+    private void FadeIn()
+    {
+        animator.SetTrigger("FadeIn");
+
+        Invoke("FadeOut", appearTime);
+    }
+
+    private void FadeOut()
+    {
+        animator.SetTrigger("FadeOut");
+
+        Invoke("DestroyText", fadeOutTime + 1f);
+    }
+
+    private void DestroyText()
+    {
         text.SetActive(false);
         Destroy(gameObject);
     }
