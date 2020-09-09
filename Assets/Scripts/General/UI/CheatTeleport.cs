@@ -46,4 +46,9 @@ public class CheatTeleport : MonoBehaviour
         GameMaster.instance.playerInstance.GetComponent<Health>().health = 10000;
         GameMaster.instance.playerInstance.GetComponent<Health>().numberOfHearts = 10000;
     }
+
+    public void SetHpNormal()
+    {
+        GameMaster.instance.playerInstance.GetComponent<Health>().SetHpAsInt(7);
+    }
 }

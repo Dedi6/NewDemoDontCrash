@@ -66,6 +66,7 @@ public class Keybindings : ScriptableObject
                 currentKey.keyBinding = newKey;
             }
         }
+        GameSaveManager.instance.SaveGame();
     }
 
     public void HandleKeyWords()
@@ -85,4 +86,6 @@ public class Keybindings : ScriptableObject
         controllerKeys.Add("JoystickButton12", "PS");
         controllerKeys.Add("JoystickButton13", "PadPress");
     }
+
+   
 }

@@ -19,49 +19,56 @@ public class SkillsManager : MonoBehaviour
         playerSkills = new PlayerSkills();
         playerSkills.brotherSkills = brother.GetComponent<Follow>();
         playerSkills.playerScript = player.GetComponent<MovementPlatformer>();
-        GameSaveManager.instance.LoadSkills();
+        HandleLoad();
     }
 
     void Update()
     {
-        if (!isUsingSkill && InputManager.instance.KeyDown(Keybindings.KeyList.Skill1) && manaBar.HaveEnoughMana(manaASkill))
+        if (!isUsingSkill && InputManager.instance.KeyDown(Keybindings.KeyList.Skill2) && manaBar.HaveEnoughMana(manaASkill))
         {
             isUsingSkill = true;
             aSkill();
             manaBar.UseMana(manaASkill);
         }
-        if (!isUsingSkill && InputManager.instance.KeyDown(Keybindings.KeyList.Skill2) && manaBar.HaveEnoughMana(manaBSkill))
+        if (!isUsingSkill && InputManager.instance.KeyDown(Keybindings.KeyList.Skill1) && manaBar.HaveEnoughMana(manaBSkill))
         {
             isUsingSkill = true;
             bSkill();
             manaBar.UseMana(manaBSkill);
         }
 
-        if (Input.GetMouseButtonDown(0))
-            Debug.Log(isUsingSkill);
-   
-        if (Input.GetKeyDown(KeyCode.Y))
-            skillsUI.UnlockSkill("ThunderBolt");
-        if (Input.GetKeyDown(KeyCode.T))
-            skillsUI.UnlockSkill("ThunderWave");
-        if (Input.GetKeyDown(KeyCode.R))
-             PlayerPrefs.SetInt("skillsPointer", 0);
     }
 
     public void SetSkill(string actionName, bool settingFirstSkill)
     {
         if(settingFirstSkill)
         {
-            aSkill = playerSkills.skills.Single(s => s.Key == actionName).Value.activateSkill;
-            int manaV = playerSkills.skills.Single(s => s.Key == actionName).Value.mana;
-            manaASkill = manaV;
+            if (actionName != null)
+            {
+                aSkill = playerSkills.skills.Single(s => s.Key == actionName).Value.activateSkill;
+                int manaV = playerSkills.skills.Single(s => s.Key == actionName).Value.mana;
+                manaASkill = manaV;
+            }
+            else
+            {
+                aSkill = null;
+                manaASkill = 0;
+            }
             GameMaster.instance.aSkillString = actionName;
         }
         else
         {
-            bSkill = playerSkills.skills.Single(s => s.Key == actionName).Value.activateSkill;
-            int manaV = playerSkills.skills.Single(s => s.Key == actionName).Value.mana;
-            manaBSkill = manaV;
+            if(actionName != null)
+            {
+                bSkill = playerSkills.skills.Single(s => s.Key == actionName).Value.activateSkill;
+                int manaV = playerSkills.skills.Single(s => s.Key == actionName).Value.mana;
+                manaBSkill = manaV;
+            }
+            else
+            {
+                bSkill = null;
+                manaBSkill = 0;
+            }
             GameMaster.instance.bSkillString = actionName;
         }
     }
@@ -70,6 +77,37 @@ public class SkillsManager : MonoBehaviour
     public Sprite GetImage(string actionName)
     {
         return playerSkills.skills.Single(s => s.Key == actionName).Value.image;
+    }
+
+    private void HandleLoad()
+    {
+        bool firstTimeLogging = IsFirstTimePlaying();
+        if (firstTimeLogging)
+        {
+            skillsUI.SetNewArray();
+            PlayerPrefs.SetInt("skillsPointer", 0);
+            skillsUI.UnlockSkill("ThunderBolt");
+            SetSkill("ThunderBolt", true);
+            SetSkill("ThunderBolt", false);
+            skillsUI.SetStartingSkillsButton();
+            //GameSaveManager.instance.SavePLayerData();
+        }
+        else
+        {
+            GameSaveManager.instance.LoadGame();
+            //GameSaveManager.instance.LoadSkills();
+        }
+    }
+
+    private bool IsFirstTimePlaying()
+    {
+        if (!PlayerPrefs.HasKey("FirstTimePlaying"))
+        {
+            PlayerPrefs.SetInt("FirstTimePlaying", 1);
+            return true;
+        }
+        else
+            return false;
     }
 
 }

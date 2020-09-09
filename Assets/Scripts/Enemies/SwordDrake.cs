@@ -203,6 +203,7 @@ public class SwordDrake : MonoBehaviour, ISFXResetable, IKnockbackable
 
     private IEnumerator PauseBeforeAttack()
     {
+        turnAroundTimer = 1.2f;
         GetComponent<Enemy>().canBeInterrupted = false;
         state = State.Stunned;
         animator.SetTrigger("Attack");

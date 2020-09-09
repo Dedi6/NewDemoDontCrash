@@ -24,7 +24,7 @@ public class PufferFish : MonoBehaviour, ISFXResetable
 
     public void ResetSFXCues()
     {
-
+        transform.position = originalPos;
     }
 
     public void SetStateDead()
@@ -37,4 +37,5 @@ public class PufferFish : MonoBehaviour, ISFXResetable
     {
         transform.Rotate(0.0f, 180.0f, 0.0f);
     }
+
 }

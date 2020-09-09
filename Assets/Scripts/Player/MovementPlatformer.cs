@@ -143,9 +143,11 @@ public class MovementPlatformer : MonoBehaviour
         audioManager = AudioManager.instance;
         input = InputManager.instance;
         manaBar = GetComponent<ManaBar>();
+        currentRoom = GameMaster.instance.firstRoom;
+        RespawnAtSavePoint();
         audioManager.PlayTheme(AudioManager.SoundList.FirstTestSong, 0.1f); /////// test song
         //  delete when building!!!!
-        gm.savePointPosition = transform.position;
+        //gm.savePointPosition = transform.position;
         //Time.timeScale = 0.9f;
     }
 
@@ -206,7 +208,7 @@ public class MovementPlatformer : MonoBehaviour
              Flip();
              Debug.Log("hi");
          }*/
-         
+
 
         if (shouldICheckIsGrounded)
             GroundCheckForShoot();
@@ -215,7 +217,7 @@ public class MovementPlatformer : MonoBehaviour
             canShoot = false;
         else if (canShootTimer <= 0 && isGrounded)
             shouldICheckIsGrounded = true;
-
+        
         if (showPointer)
             RotatePointer();
     }
@@ -474,7 +476,8 @@ public class MovementPlatformer : MonoBehaviour
             groundedMemory = 0;
             jumpMemory = 0;
             //rb.velocity = Vector2.up * jumpV;
-            rb.velocity = new Vector2(rb.velocity.x, 1 * jumpV);
+            float xSpeedBoost = facingRight ? 5f : -5f;
+            rb.velocity = new Vector2(rb.velocity.x + xSpeedBoost, 1 * jumpV);
             CreateDust();
             audioManager.PlaySound(AudioManager.SoundList.PlayerJump);
         }
@@ -574,7 +577,7 @@ public class MovementPlatformer : MonoBehaviour
             canShoot = false;
         CreateDust();
 
-        if (!didHitAnEnemy)
+        if (!didHitAnEnemy && CurrentBulletGameObject != null)
         {
             StartCoroutine(FreezeGame());
             rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x, CurrentBulletGameObject.transform.position.y + 0.5f);
@@ -602,6 +605,11 @@ public class MovementPlatformer : MonoBehaviour
             canShoot = true;
             didHitAnEnemy = false;
             canShootTimer = 0;
+        }
+        if(transform.rotation.z != 0)
+        {
+            float yRot = facingRight ? 0 : -180f;
+            transform.rotation = Quaternion.Euler(transform.rotation.x, yRot, 0);
         }
         ResetAxis();
         audioManager.PlaySound(AudioManager.SoundList.Teleport);
@@ -642,14 +650,12 @@ public class MovementPlatformer : MonoBehaviour
                 if (!enemyNearWallRight)  // checks the currentEnemy isn't close to a wall so the player won't clip through the wall
                 {
                     rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x + 2, CurrentBulletGameObject.transform.position.y + 0.5f);
-                    StartCoroutine(ChangeBoolAfterSeconds(thrustTimer));
-                    rb.AddForce(Vector2.right * thrustPower, ForceMode2D.Impulse);
+                    StartCoroutine(TPDoor(Vector2.right, thrustPower, thrustTimer));
                 }
                 else if (enemyNearWallRight && !isKnockingBack)
                 {
                     rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x, CurrentBulletGameObject.transform.position.y + 0.5f);
-                    StartCoroutine(ChangeBoolAfterSeconds(thrustTimer / 3f));
-                    rb.AddForce(Vector2.right * thrustPower, ForceMode2D.Impulse);
+                    StartCoroutine(TPDoor(Vector2.right, thrustPower, thrustTimer / 3f));
                 }
 
                 break;
@@ -666,20 +672,17 @@ public class MovementPlatformer : MonoBehaviour
                 if (!enemyNearWallLeft)
                 {
                     rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x - 2, CurrentBulletGameObject.transform.position.y + 0.5f);
-                    StartCoroutine(ChangeBoolAfterSeconds(thrustTimer));
-                    rb.AddForce(new Vector2(-1, 0) * thrustPower, ForceMode2D.Impulse);
+                    StartCoroutine(TPDoor(Vector2.left, thrustPower, thrustTimer));
                 }
                 else if (enemyNearWallLeft && !isKnockingBack)
                 {
                     rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x, CurrentBulletGameObject.transform.position.y + 0.5f);
-                    StartCoroutine(ChangeBoolAfterSeconds(thrustTimer / 3f));
-                    rb.AddForce(Vector2.left * thrustPower, ForceMode2D.Impulse);
+                    StartCoroutine(TPDoor(Vector2.left, thrustPower, thrustTimer / 3f));
                 }
                 break;
             case DirectionPressed.Up:
-                StartCoroutine(ChangeBoolAfterSeconds(0.15f));
                 rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x, CurrentBulletGameObject.transform.position.y + 1);
-                rb.AddForce(new Vector2(0, 1) * thrustPower * 0.9f, ForceMode2D.Impulse);
+                StartCoroutine(TPDoor(new Vector2(0, 1), thrustPower * 0.92f, 0.15f));
                 break;
             case DirectionPressed.Down:
                 //rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x, CurrentBulletGameObject.transform.position.y - 1);
@@ -716,14 +719,12 @@ public class MovementPlatformer : MonoBehaviour
             if (!enemyNearWallRight)
             {
                 rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x + 2, CurrentBulletGameObject.transform.position.y + 0.5f);
-                StartCoroutine(ChangeBoolAfterSeconds(thrustTimer));
-                rb.AddForce(Vector2.right * thrustPower, ForceMode2D.Impulse);
+                StartCoroutine(TPDoor(Vector2.right, thrustPower, thrustTimer));
             }
             else
             {
                 rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x, CurrentBulletGameObject.transform.position.y + 0.5f);
-                StartCoroutine(ChangeBoolAfterSeconds(thrustTimer / 3f));
-                rb.AddForce(Vector2.right * thrustPower, ForceMode2D.Impulse);
+                StartCoroutine(TPDoor(Vector2.right, thrustPower, thrustTimer / 3f));
             }
         }
         else
@@ -731,14 +732,12 @@ public class MovementPlatformer : MonoBehaviour
             if (!enemyNearWallLeft)
             {
                 rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x - 2, CurrentBulletGameObject.transform.position.y + 0.5f);
-                StartCoroutine(ChangeBoolAfterSeconds(thrustTimer));
-                rb.AddForce(new Vector2(-1, 0) * thrustPower, ForceMode2D.Impulse);
+                StartCoroutine(TPDoor(Vector2.left, thrustPower, thrustTimer));
             }
             else
             {
                 rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x, CurrentBulletGameObject.transform.position.y + 0.5f);
-                StartCoroutine(ChangeBoolAfterSeconds(thrustTimer / 3f));
-                rb.AddForce(Vector2.left * thrustPower, ForceMode2D.Impulse);
+                StartCoroutine(TPDoor(Vector2.left, thrustPower, thrustTimer / 3f));
             }
         }
     }
@@ -751,38 +750,33 @@ public class MovementPlatformer : MonoBehaviour
             if (moveInput > 0)
             {
                 rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x + 2, CurrentBulletGameObject.transform.position.y + 0.5f);
-                StartCoroutine(ChangeBoolAfterSeconds(thrustTimer));
-                rb.AddForce(Vector2.right * thrustPower, ForceMode2D.Impulse);
+                StartCoroutine(TPDoor(Vector2.right, thrustPower, thrustTimer));
             }
             else if (moveInput < 0)
             {
                 rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x - 2, CurrentBulletGameObject.transform.position.y + 0.5f);
-                StartCoroutine(ChangeBoolAfterSeconds(thrustTimer));
-                rb.AddForce(new Vector2(-1, 0) * thrustPower, ForceMode2D.Impulse);
+                StartCoroutine(TPDoor(new Vector2(-1, 0), thrustPower, thrustTimer));
             }
             else if (moveInput == 0)
             {
                 if (facingRight)
                 {
                     rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x + 2, CurrentBulletGameObject.transform.position.y + 0.5f);
-                    StartCoroutine(ChangeBoolAfterSeconds(thrustTimer));
-                    rb.AddForce(Vector2.right * thrustPower, ForceMode2D.Impulse);
+                    StartCoroutine(TPDoor(Vector2.right, thrustPower, thrustTimer));
                 }
                 else
                 {
                     rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x - 2, CurrentBulletGameObject.transform.position.y + 0.5f);
-                    StartCoroutine(ChangeBoolAfterSeconds(thrustTimer));
-                    rb.AddForce(new Vector2(-1, 0) * thrustPower, ForceMode2D.Impulse);
+                    StartCoroutine(TPDoor(new Vector2(-1, 0), thrustPower, thrustTimer));
                 }
             }
         }
         else
         {
-            StartCoroutine(ChangeBoolAfterSeconds(0.15f));
             if (moveInputVertical > 0)
             {
                 rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x, CurrentBulletGameObject.transform.position.y + 1);
-                rb.AddForce(new Vector2(0, 1) * thrustPower * 0.7f, ForceMode2D.Impulse);
+                StartCoroutine(TPDoor(new Vector2(0, 1), thrustPower * 0.7f, 0.15f));
             }
             else if (moveInputVertical < 0)
             {
@@ -793,7 +787,7 @@ public class MovementPlatformer : MonoBehaviour
                 if (CurrentBulletGameObject.transform.position.y > rb.transform.position.y)
                 {
                     rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x, CurrentBulletGameObject.transform.position.y + 1);
-                    rb.AddForce(new Vector2(0, 1) * thrustPower * 0.7f, ForceMode2D.Impulse);
+                    StartCoroutine(TPDoor(new Vector2(0, 1), thrustPower * 0.7f, 0.15f));
                 }
                 else
                 {
@@ -802,6 +796,16 @@ public class MovementPlatformer : MonoBehaviour
             }
         }
 
+    }
+
+    private IEnumerator TPDoor(Vector2 dir, float speed, float time)
+    {
+        StartCoroutine(ChangeBoolAfterSeconds(time));
+        rb.velocity = Vector2.zero;
+
+        yield return new WaitForSeconds(0.01f);
+
+        rb.AddForce(dir * speed, ForceMode2D.Impulse);
     }
     private void DashToEnemy()
     {
@@ -982,7 +986,6 @@ public class MovementPlatformer : MonoBehaviour
 
 
 
-
     // coroutines are confusing :)
 
     private IEnumerator MakePlayerInvincible(float time)
@@ -1032,7 +1035,14 @@ public class MovementPlatformer : MonoBehaviour
 
     private IEnumerator ChangeBoolAfterSeconds(float timeToWait)
     {
-        rb.velocity = new Vector2(0, 0);
+        thrustHappening = true;
+        yield return new WaitForSeconds(timeToWait);
+        thrustHappening = false;
+    }
+
+    private IEnumerator ChangeBoolAfterSecondsZeroV(float timeToWait)
+    {
+        rb.velocity = Vector2.zero;
         thrustHappening = true;
         yield return new WaitForSeconds(timeToWait);
         thrustHappening = false;
@@ -1143,7 +1153,15 @@ public class MovementPlatformer : MonoBehaviour
 
     public void RespawnAtSavePoint()
     {
-        transform.position = gm.savePointPosition;
+        if(!PlayerPrefs.HasKey("BeginGame"))
+        {
+            transform.position = GameMaster.instance.spawnPoint.position;
+            PlayerPrefs.SetInt("BeginGame", 1);
+        }
+        else
+        {
+            transform.position = gm.savePointPosition;
+        }
         GetComponent<ManaBar>().SetManaFull();
         GetComponent<Health>().FullHeal();
         BulletReset();
@@ -1259,6 +1277,12 @@ public class MovementPlatformer : MonoBehaviour
             bulletPointer.SetActive(false);
             pointerActive = false;
         }
+    }
+
+    public void SetBulletSpeedNormal()
+    {
+        if (CurrentBulletGameObject != null && !didHitAnEnemy && !bulletHitDoor)
+            CurrentBulletGameObject.GetComponent<bullet>().SetSpeedNormal();
     }
 
     /*

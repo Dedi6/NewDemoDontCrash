@@ -77,6 +77,12 @@ public class Health : MonoBehaviour
         PlayerPrefs.SetInt("HP", newHP);
     }
 
+    public void SetHpAsInt(int hp)
+    {
+        health = hp;
+        numberOfHearts = hp;
+    }
+
     private void SetHP()
     {
         int hp;

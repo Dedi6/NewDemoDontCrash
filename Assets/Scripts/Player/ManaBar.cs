@@ -54,7 +54,6 @@ public class ManaBar : MonoBehaviour
             currentManaAmount += amount;
             UpdateManaBars();
         }
-        Debug.Log(currentManaAmount);
     }
 
     public void UseMana(int amount)

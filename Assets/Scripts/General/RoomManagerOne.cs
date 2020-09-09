@@ -49,7 +49,9 @@ public class RoomManagerOne : MonoBehaviour
             if (bullet != null)
                 bullet.GetComponent<bullet>().SetSpeedNormal();
 
-            player.GetComponent<MovementPlatformer>().currentRoom = this.gameObject;
+            MovementPlatformer playerScript = player.GetComponent<MovementPlatformer>();
+            playerScript.currentRoom = this.gameObject;
+            playerScript.SetBulletSpeedNormal();
             GameMaster.instance.currentRoom = gameObject;
             PrefabManager.instance.roomNumber.GetComponent<UnityEngine.UI.Text>().text = roomNumber.ToString();
         }

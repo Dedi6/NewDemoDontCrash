@@ -81,24 +81,6 @@ public class RageBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            animator.SetTrigger("Slash");
-            amountOfSlashes = SetSlashInt();
-            animator.SetBool("FirstSlash", SetSlashBool());
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-            Flip();
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-            ShootInACircle();
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-            StartCoroutine(MetoerInterlace());
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-            StartCoroutine(MeteorFall());
-        if (Input.GetKeyDown(KeyCode.Alpha6))
-            animator.SetTrigger("Zone");
-        if (Input.GetKeyDown(KeyCode.Alpha7))
-            GetComponentInChildren<LightZone>().isShrinking = true;
 
         if (turnAroundTimer > 0)
             turnAroundTimer -= Time.deltaTime;

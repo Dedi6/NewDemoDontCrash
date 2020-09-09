@@ -194,6 +194,7 @@ public class RedDrake : MonoBehaviour, ISFXResetable, IKnockbackable
 
     private IEnumerator PauseBeforeAttack(float pauseTime)
     {
+        turnAroundTimer = 1.2f;
         GetComponent<Enemy>().canBeInterrupted = false;
         if (player.transform.position.x > enemy.transform.position.x && !facingRight)
             Flip();

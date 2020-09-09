@@ -55,6 +55,11 @@ public class SavePoint : MonoBehaviour
         playerScript.FullRestore();
     }
 
+    public void SaveNow()
+    {
+        StartCoroutine(Save());
+    }
+
     public void ShakeTheCamera()
     {
         gm.ShakeCamera(0.1f, 1f);

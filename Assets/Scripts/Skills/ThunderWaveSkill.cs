@@ -29,12 +29,12 @@ public class ThunderWaveSkill : MonoBehaviour
         thunderSpawnPos = new Vector2(attackPoint.position.x, attackPoint.position.y + stompSpawnHeight);
         RaycastHit2D rayToWall = Physics2D.Raycast(attackPoint.transform.position, direction, 100, 1 << 8);
         StartCoroutine(ThunderWave(sign, rayToWall.point.x));
-        Debug.Log(rayToWall.point);
     }
 
 
     private IEnumerator ThunderWave(int sign, float wallXPos)
     {
+        AudioManager.instance.PlaySound(AudioManager.SoundList.MoonBossZap);
         thunderSpawnPos.x += sign * waveSpawnSpacing;
         if ((thunderSpawnPos.x < wallXPos && facingRight) || (thunderSpawnPos.x > wallXPos && !facingRight))
         {
@@ -53,7 +53,6 @@ public class ThunderWaveSkill : MonoBehaviour
 
     private bool SetFacingRightBool()
     {
-        Debug.Log(brotherScript.skillDirection);
         if (brotherScript.skillDirection.Equals(Vector2.zero))
             return brotherScript.playerFacingRight;
         else

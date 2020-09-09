@@ -55,13 +55,11 @@ public class PlayerSkills
 
     public void ThunderBolt()
     {
-        Debug.Log("ThunderBolt");
         brotherSkills.LightningAttackStart();
     }
     
     public void ThunderWave()
     {
-        Debug.Log("ThunderWave");
         brotherSkills.StartSkill(PrefabManager.ListOfVFX.ThunderWave);
     }
 

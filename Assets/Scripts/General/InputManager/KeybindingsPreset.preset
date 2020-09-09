@@ -1,0 +1,136 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!181963792 &2655988077585873504
+Preset:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: KeybindingsPreset
+  m_TargetType:
+    m_NativeTypeID: 114
+    m_ManagedTypePPtr: {fileID: 11500000, guid: d7f1f93b034f2734fb8765477c45c129,
+      type: 3}
+    m_ManagedTypeFallback: 
+  m_Properties:
+  - target: {fileID: 0}
+    propertyPath: m_Enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorHideFlags
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorClassIdentifier
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.size
+    value: 13
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[0].KeyFor
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[0].keyBinding
+    value: 99
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[1].KeyFor
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[1].keyBinding
+    value: 122
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[2].KeyFor
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[2].keyBinding
+    value: 120
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[3].KeyFor
+    value: 3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[3].keyBinding
+    value: 306
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[4].KeyFor
+    value: 4
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[4].keyBinding
+    value: 115
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[5].KeyFor
+    value: 5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[5].keyBinding
+    value: 100
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[6].KeyFor
+    value: 6
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[6].keyBinding
+    value: 107
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[7].KeyFor
+    value: 7
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[7].keyBinding
+    value: 27
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[8].KeyFor
+    value: 12
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[8].keyBinding
+    value: 97
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[9].KeyFor
+    value: 8
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[9].keyBinding
+    value: 273
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[10].KeyFor
+    value: 9
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[10].keyBinding
+    value: 274
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[11].KeyFor
+    value: 11
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[11].keyBinding
+    value: 275
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[12].KeyFor
+    value: 10
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: arrayOfKeys.Array.data[12].keyBinding
+    value: 276
+    objectReference: {fileID: 0}
+  m_ExcludedProperties: []

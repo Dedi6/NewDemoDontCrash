@@ -46,6 +46,12 @@ public class GameSaveManager : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
+    public void ForceCreateFile()
+    {
+        Directory.CreateDirectory(Application.persistentDataPath + "/game_save");
+        Directory.CreateDirectory(Application.persistentDataPath + "/game_save/playerData");
+    }
+
     public void SaveGame()
     {
         if(!IsSaveFile())
@@ -71,10 +77,12 @@ public class GameSaveManager : MonoBehaviour
         SavePLayerData();
     }
 
+
+
     public void SavePLayerData()
     {
         BinaryFormatter binaryF = new BinaryFormatter();
-        FileStream stream = File.Create(Application.persistentDataPath + "/game_save/playerData.txt");
+        FileStream stream = File.Create(Application.persistentDataPath + "/game_save/playerData/playerData.txt");
         PlayerData data = new PlayerData(skillsLoader.unlockedSkillsArray);
         binaryF.Serialize(stream, data);
         stream.Close();
@@ -101,9 +109,9 @@ public class GameSaveManager : MonoBehaviour
                 file.Close();
             }
         }
-        if (File.Exists(Application.persistentDataPath + "/game_save/playerData.txt"))
+        if (File.Exists(Application.persistentDataPath + "/game_save/playerData/playerData.txt"))
         {
-            FileStream file = File.Open(Application.persistentDataPath + "/game_save/playerData.txt", FileMode.Open);
+            FileStream file = File.Open(Application.persistentDataPath + "/game_save/playerData/playerData.txt", FileMode.Open);
             PlayerData data = bf.Deserialize(file) as PlayerData;
             //PlayerData data = JsonUtility.FromJsonOverwrite((string)bf.Deserialize(file), binding.keybindings);
             file.Close();
@@ -115,7 +123,7 @@ public class GameSaveManager : MonoBehaviour
     {
         PlayerData data = LoadPlayerData();
         /*
-        string[] d = new string[2];
+        string[] d = new string[2];  //fix 1
         d[0] = "ThunderBolt";
         d[1] = "ThunderWave";
         skillsLoader.LoadSkills("ThunderBolt", "ThunderWave", d);*/
@@ -126,10 +134,10 @@ public class GameSaveManager : MonoBehaviour
 
     public static PlayerData LoadPlayerData()
     {
-        if (File.Exists(Application.persistentDataPath + "/game_save/playerData.txt"))
+        if (File.Exists(Application.persistentDataPath + "/game_save/playerData/playerData.txt"))
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + "/game_save/playerData.txt", FileMode.Open);
+            FileStream file = File.Open(Application.persistentDataPath + "/game_save/playerData/playerData.txt", FileMode.Open);
 
             PlayerData data = bf.Deserialize(file) as PlayerData;
 

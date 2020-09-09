@@ -157,6 +157,7 @@ public class Follow : MonoBehaviour
     {
         isUsingSkill = false;
         PrefabManager pref = PrefabManager.instance;
+        AudioManager.instance.PlaySound(AudioManager.SoundList.SmokeBomb);
         pref.PlayVFX(PrefabManager.ListOfVFX.SmokeBomb, transform.position);
 
         yield return new WaitForSeconds(smokeBombDelay);

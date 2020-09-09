@@ -257,7 +257,7 @@ MonoBehaviour:
   speedMulitiplier: 10
   attackPoint: {fileID: 7207101604688734440}
   attackCooldown: 3
-  pauseBeforeAttack: 0.3
+  pauseBeforeAttack: 0.5
   spreadAngle: 110
   fireballMoveSpeed: 13
   numOfFireballs: 3

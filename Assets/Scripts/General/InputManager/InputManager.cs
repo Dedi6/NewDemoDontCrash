@@ -8,7 +8,7 @@ public class InputManager : MonoBehaviour
 
     [HideInInspector]
     public Keybindings keybindings;
-    public Keybindings keyboardKeybinds, joyStickKeybind;
+    public Keybindings keyboardKeybinds, joyStickKeybind, defaultKeyboard;
 
     public Dictionary<string, string> joyStickNames;
 
@@ -106,5 +106,13 @@ public class InputManager : MonoBehaviour
             return true;
         else
             return false;
+    }
+
+    public void SetKeyBindingsDefault()
+    {
+        foreach (Keybindings.KeysArray key in keyboardKeybinds.arrayOfKeys)
+        {
+            key.keyBinding = defaultKeyboard.CheckKey(key.KeyFor);
+        }
     }
 }

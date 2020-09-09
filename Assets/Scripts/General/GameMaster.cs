@@ -11,6 +11,8 @@ public class GameMaster : MonoBehaviour
     public string aSkillString, bSkillString;
     [HideInInspector]
     public GameObject currentRoom;
+    public GameObject firstRoom;
+    public Transform spawnPoint;
 
     void Awake()
     {

@@ -98,6 +98,7 @@ public class AudioManager : MonoBehaviour
         FearThemeEnding,
         Save,
         Load,
+        SmokeBomb,
     }
 
     public enum AudioManagerList
@@ -109,6 +110,7 @@ public class AudioManager : MonoBehaviour
     private AudioSource currentTheme;
 
     public float fadeTime, BgMusicVolume;
+    private float mixerMaster, mixerMusic, mixerSFX;
     public Sounds[] ListOfSounds;
     public AudioMixer mixer;
     private AudioClip currentClip;
@@ -135,6 +137,8 @@ public class AudioManager : MonoBehaviour
             //currentSound.source.volume = currentSound.volume;
             //currentSound.source.pitch = currentSound.pitch;
         }
+
+        StartCoroutine(LoadMixerStats());
     }
 
 
@@ -238,15 +242,33 @@ public class AudioManager : MonoBehaviour
     public void SetVolumeMaster(float volume)
     {
         mixer.SetFloat("Volume", volume);
+        mixerMaster = volume;
     }
     public void SetVolumeMusic(float volume)
     {
         mixer.SetFloat("MusicVolume", volume);
+        mixerMusic = volume;
     }
     public void SetVolumeSFX(float volume)
     {
         mixer.SetFloat("SFXVolume", volume);
+        mixerSFX = volume;
     }
 
+    public void SaveMixerStats()
+    {
+        PlayerPrefs.SetFloat("MixerMaster", mixerMaster);
+        PlayerPrefs.SetFloat("MixerMusic", mixerMusic);
+        PlayerPrefs.SetFloat("MixerSFX", mixerSFX);
+    }
+
+
+    private IEnumerator LoadMixerStats()
+    {
+        yield return null;
+        SetVolumeMaster(PlayerPrefs.GetFloat("MixerMaster"));
+        SetVolumeMusic(PlayerPrefs.GetFloat("MixerMusic"));
+        SetVolumeSFX(PlayerPrefs.GetFloat("MixerSFX"));
+    }
 }
 

@@ -186,6 +186,8 @@ public class Enemy : MonoBehaviour, IRespawnResetable
     {
         if (wasSpawnedBySpawnManager)
             Destroy(enemy.gameObject);
+        if (!isDead && (triggerCollider.enabled == false))
+            triggerCollider.enabled = true;
     }
     public IEnumerator StunEnemy(float stunDuration) //Don't forget StartCoroutine.
     {
@@ -230,4 +232,5 @@ public class Enemy : MonoBehaviour, IRespawnResetable
         TakeDamage(20);
         GetComponent<SpriteRenderer>().sortingOrder = 0;
     }
+
 }

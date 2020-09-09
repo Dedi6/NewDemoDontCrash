@@ -20,7 +20,8 @@ public class Hollow : MonoBehaviour, ISFXResetable
     [Space]
     public float speedMulitiplier;
     public float summonCooldown, pauseBeforeAttack, spawnRadius;
-    private bool onCooldown = false, wasTriggered = false, delaySkill = true;
+    private bool wasTriggered = false;
+    //private bool onCooldown = false, delaySkill = true;
     private Vector2 spawnPosition;
 
 
@@ -79,12 +80,14 @@ public class Hollow : MonoBehaviour, ISFXResetable
         switch (state)
         {
             case State.Normal:
+                /*
                 if (wasTriggered && !onCooldown)
-                    StartCoroutine(SummonCoroutine(summonCooldown));
+                    StartCoroutine(SummonCoroutine(summonCooldown));*/
                 break;
             case State.Attack:
+                /*
                 if (wasTriggered && !onCooldown)
-                    StartCoroutine(SummonCoroutine(summonCooldown));
+                    StartCoroutine(SummonCoroutine(summonCooldown));*/
                 Attack();
                 break;
         }
@@ -135,7 +138,7 @@ public class Hollow : MonoBehaviour, ISFXResetable
         animator.SetTrigger("CreatingNew");
     }
 
-
+    /*
     private IEnumerator SummonCoroutine(float cooldown)
     {
         onCooldown = true;
@@ -152,12 +155,12 @@ public class Hollow : MonoBehaviour, ISFXResetable
         yield return new WaitForSeconds(cooldown);
 
         onCooldown = false;
-    }
+    }*/
 
     public void SetStateNormal()
     {
         state = State.Normal;
-        delaySkill = true;
+      //  delaySkill = true;
     }
 
     public void SetStateDead()

@@ -117,7 +117,7 @@ public class KeybindsSetter : MonoBehaviour
         yield return null;
     }   // when adding a new kew, add to set start too.
                                    //  Also, for the script to work, the button's parent need to be the same name as the string.
-    private void SetStartKeys()
+    public void SetStartKeys()
     {
         for (int i = 0; i < menuPanel.childCount; i++)
         {

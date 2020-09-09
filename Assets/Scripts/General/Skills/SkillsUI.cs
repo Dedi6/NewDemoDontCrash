@@ -19,6 +19,10 @@ public class SkillsUI : MonoBehaviour
         if(unlockedSkillsArray == null)
           unlockedSkillsArray = new string[arrayOfPositions.Length]; // remeber to change the length, also change the playerPrefs in of currentTransform so that it will not save itself.
     }
+    public void SetNewArray()
+    {
+        unlockedSkillsArray = new string[arrayOfPositions.Length];
+    }
 
     public void PressedButtonOne()
     {
@@ -49,6 +53,16 @@ public class SkillsUI : MonoBehaviour
         GameSaveManager.instance.SavePLayerData();
     }
 
+    public void SetImageNull(bool firstSkill)
+    {
+        if(firstSkill)
+        {
+            firstButton.GetComponentInChildren<Image>().sprite = null;
+        }
+        else
+            secondButton.GetComponentInChildren<Image>().sprite = null;
+    }
+
     public void LoadSkills(string skillA, string skillB, string[] arrayOfSkills)
     {
         skillManager.SetSkill(skillA, settingFirstSkill);
@@ -57,7 +71,6 @@ public class SkillsUI : MonoBehaviour
         firstButton.GetComponentInChildren<Image>().sprite = skillManager.GetImage(skillA);
         secondButton.GetComponentInChildren<Image>().sprite = skillManager.GetImage(skillB);
         SetSkillsArray(arrayOfSkills);
-        //bool shootUnlocked = PlayerPrefs.GetInt("BulletUnlocked") == 1 ? true : false;
         bool shootUnlocked = PlayerPrefs.HasKey("BulletUnlocked");
         skillManager.player.GetComponent<MovementPlatformer>().bulletUnlocked = shootUnlocked;
     }
@@ -81,6 +94,12 @@ public class SkillsUI : MonoBehaviour
         skillManager.SetSkill(skillName, settingFirstSkill);
     }
 
+    public void SetStartingSkillsButton()
+    {
+        firstButton.GetComponentInChildren<Image>().sprite = skillManager.GetImage("ThunderBolt");
+        secondButton.GetComponentInChildren<Image>().sprite = skillManager.GetImage("ThunderBolt");
+    }
+
     public void UnlockSkill(string skillName)
     {
         currentTransform = PlayerPrefs.GetInt("skillsPointer");
@@ -88,6 +107,7 @@ public class SkillsUI : MonoBehaviour
         {
             if (button.name == skillName)
             {
+                //Debug.Log(unlockedSkillsArray + " " + currentTransform + " " + unlockedSkillsArray[0]);
                 unlockedSkillsArray[currentTransform] = skillName;
                 SetButton(button.gameObject);
                 if (skillAssignFirstButton)
