@@ -66,7 +66,7 @@ public class Keybindings : ScriptableObject
                 currentKey.keyBinding = newKey;
             }
         }
-        GameSaveManager.instance.SaveGame();
+        GameSaveManager.instance.SaveKeybindings();
     }
 
     public void HandleKeyWords()

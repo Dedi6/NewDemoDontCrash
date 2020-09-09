@@ -77,7 +77,26 @@ public class GameSaveManager : MonoBehaviour
         SavePLayerData();
     }
 
-
+    public void SaveKeybindings()
+    {
+        if (!IsSaveFile())
+        {
+            Directory.CreateDirectory(Application.persistentDataPath + "/game_save");
+        }
+        if (!Directory.Exists(Application.persistentDataPath + "/game_save/keybindings")) // create a keybindigs directory
+        {
+            Directory.CreateDirectory(Application.persistentDataPath + "/game_save/keybindings");
+        }
+        foreach (KeybindForPlatforms binding in arrayOfBindings)
+        {
+            BinaryFormatter binaryF = new BinaryFormatter();
+            FileStream stream = File.Create(Application.persistentDataPath + binding.path);
+            var json = JsonUtility.ToJson(binding.keybindings);
+            binaryF.Serialize(stream, json);
+            stream.Close();
+        }
+       // SavePLayerData();
+    }
 
     public void SavePLayerData()
     {

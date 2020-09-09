@@ -36,7 +36,6 @@ public class SkillsManager : MonoBehaviour
             bSkill();
             manaBar.UseMana(manaBSkill);
         }
-
     }
 
     public void SetSkill(string actionName, bool settingFirstSkill)

@@ -1993,7 +1993,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 164100763}
     - target: {fileID: 1188302079458243050, guid: c169cfe6d6a504a448abda96b2351143,
         type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -2002,7 +2002,12 @@ PrefabInstance:
     - target: {fileID: 1188302079458243050, guid: c169cfe6d6a504a448abda96b2351143,
         type: 3}
       propertyPath: m_Value
-      value: -23
+      value: -6.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1188302079458243050, guid: c169cfe6d6a504a448abda96b2351143,
+        type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1188302079458243053, guid: c169cfe6d6a504a448abda96b2351143,
         type: 3}
@@ -2069,7 +2074,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 164100763}
     - target: {fileID: 1188302079994956739, guid: c169cfe6d6a504a448abda96b2351143,
         type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -2195,7 +2200,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 164100763}
     - target: {fileID: 1188302080863809057, guid: c169cfe6d6a504a448abda96b2351143,
         type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -2254,7 +2259,7 @@ PrefabInstance:
     - target: {fileID: 1188302080863809057, guid: c169cfe6d6a504a448abda96b2351143,
         type: 3}
       propertyPath: m_Value
-      value: -23.3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1188302081031957978, guid: c169cfe6d6a504a448abda96b2351143,
         type: 3}
@@ -2810,7 +2815,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b55a863000d78ad4ba440f601e1e492c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuMaster: {fileID: 0}
+  menuMaster: {fileID: 164100761}
 --- !u!1 &1448812092
 GameObject:
   m_ObjectHideFlags: 0
@@ -2909,6 +2914,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 164100763}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: SaveMixerStats
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
