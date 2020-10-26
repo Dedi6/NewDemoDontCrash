@@ -184,7 +184,8 @@ public class RedDrake : MonoBehaviour, ISFXResetable, IKnockbackable
     private IEnumerator AttackCoroutine(float cooldown)
     {
         state = State.Attack;
-        StartCoroutine(PauseBeforeAttack(pauseBeforeAttack));
+        if (state != State.Dead)    
+            StartCoroutine(PauseBeforeAttack(pauseBeforeAttack));
 
         yield return new WaitForSeconds(cooldown);
 

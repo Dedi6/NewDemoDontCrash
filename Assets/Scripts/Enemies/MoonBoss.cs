@@ -400,7 +400,16 @@ public class MoonBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable
     public void PlayerHasRespawned()
     {
         if(state != State.Dead)
+        {
             state = State.Waiting;
+            if (currentPhase != 1)
+            {
+                currentPhase = 1;
+                animator.SetFloat("IdleSpeed", 1f);
+                animator.SetFloat("RunSpeed", 1f);
+                speedMulitiplier = 1.5f;
+            }
+        }
         playerDied.Invoke();
     }
 

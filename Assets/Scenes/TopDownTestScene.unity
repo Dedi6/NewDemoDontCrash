@@ -1,0 +1,1428 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!29 &1
+OcclusionCullingSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_OcclusionBakeSettings:
+    smallestOccluder: 5
+    smallestHole: 0.25
+    backfaceThreshold: 100
+  m_SceneGUID: 00000000000000000000000000000000
+  m_OcclusionCullingData: {fileID: 0}
+--- !u!104 &2
+RenderSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 9
+  m_Fog: 0
+  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_FogMode: 3
+  m_FogDensity: 0.01
+  m_LinearFogStart: 0
+  m_LinearFogEnd: 300
+  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
+  m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
+  m_AmbientIntensity: 1
+  m_AmbientMode: 3
+  m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
+  m_SkyboxMaterial: {fileID: 0}
+  m_HaloStrength: 0.5
+  m_FlareStrength: 1
+  m_FlareFadeSpeed: 3
+  m_HaloTexture: {fileID: 0}
+  m_SpotCookie: {fileID: 10001, guid: 0000000000000000e000000000000000, type: 0}
+  m_DefaultReflectionMode: 0
+  m_DefaultReflectionResolution: 128
+  m_ReflectionBounces: 1
+  m_ReflectionIntensity: 1
+  m_CustomReflection: {fileID: 0}
+  m_Sun: {fileID: 0}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_UseRadianceAmbientProbe: 0
+--- !u!157 &3
+LightmapSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 12
+  m_GIWorkflowMode: 1
+  m_GISettings:
+    serializedVersion: 2
+    m_BounceScale: 1
+    m_IndirectOutputScale: 1
+    m_AlbedoBoost: 1
+    m_EnvironmentLightingMode: 0
+    m_EnableBakedLightmaps: 0
+    m_EnableRealtimeLightmaps: 0
+  m_LightmapEditorSettings:
+    serializedVersion: 12
+    m_Resolution: 2
+    m_BakeResolution: 40
+    m_AtlasSize: 1024
+    m_AO: 0
+    m_AOMaxDistance: 1
+    m_CompAOExponent: 1
+    m_CompAOExponentDirect: 0
+    m_ExtractAmbientOcclusion: 0
+    m_Padding: 2
+    m_LightmapParameters: {fileID: 0}
+    m_LightmapsBakeMode: 1
+    m_TextureCompression: 1
+    m_FinalGather: 0
+    m_FinalGatherFiltering: 1
+    m_FinalGatherRayCount: 256
+    m_ReflectionCompression: 2
+    m_MixedBakeMode: 2
+    m_BakeBackend: 1
+    m_PVRSampling: 1
+    m_PVRDirectSampleCount: 32
+    m_PVRSampleCount: 512
+    m_PVRBounces: 2
+    m_PVREnvironmentSampleCount: 256
+    m_PVREnvironmentReferencePointCount: 2048
+    m_PVRFilteringMode: 1
+    m_PVRDenoiserTypeDirect: 1
+    m_PVRDenoiserTypeIndirect: 1
+    m_PVRDenoiserTypeAO: 1
+    m_PVRFilterTypeDirect: 0
+    m_PVRFilterTypeIndirect: 0
+    m_PVRFilterTypeAO: 0
+    m_PVREnvironmentMIS: 1
+    m_PVRCulling: 1
+    m_PVRFilteringGaussRadiusDirect: 1
+    m_PVRFilteringGaussRadiusIndirect: 5
+    m_PVRFilteringGaussRadiusAO: 2
+    m_PVRFilteringAtrousPositionSigmaDirect: 0.5
+    m_PVRFilteringAtrousPositionSigmaIndirect: 2
+    m_PVRFilteringAtrousPositionSigmaAO: 1
+    m_ExportTrainingData: 0
+    m_TrainingDataDestination: TrainingData
+    m_LightProbeSampleCountMultiplier: 4
+  m_LightingDataAsset: {fileID: 0}
+  m_LightingSettings: {fileID: 0}
+--- !u!196 &4
+NavMeshSettings:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_BuildSettings:
+    serializedVersion: 2
+    agentTypeID: 0
+    agentRadius: 0.5
+    agentHeight: 2
+    agentSlope: 45
+    agentClimb: 0.4
+    ledgeDropHeight: 0
+    maxJumpAcrossDistance: 0
+    minRegionArea: 2
+    manualCellSize: 0
+    cellSize: 0.16666667
+    manualTileSize: 0
+    tileSize: 256
+    accuratePlacement: 0
+    maxJobWorkers: 0
+    preserveTilesOutsideBounds: 0
+    debug:
+      m_Flags: 0
+  m_NavMeshData: {fileID: 0}
+--- !u!1 &109895414
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 109895417}
+  - component: {fileID: 109895416}
+  - component: {fileID: 109895415}
+  - component: {fileID: 109895418}
+  m_Layer: 0
+  m_Name: Main Camera
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!81 &109895415
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109895414}
+  m_Enabled: 1
+--- !u!20 &109895416
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109895414}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 1
+  orthographic size: 11
+  m_Depth: -1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!4 &109895417
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109895414}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &109895418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109895414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+--- !u!1 &1166296197
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1166296199}
+  - component: {fileID: 1166296198}
+  - component: {fileID: 1166296200}
+  - component: {fileID: 1166296201}
+  - component: {fileID: 1166296202}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!212 &1166296198
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166296197}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: a1ee56cf9624d0041a1b1296e653fb33, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 2, y: 2.625}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!4 &1166296199
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166296197}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1374494009}
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &1166296200
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166296197}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 4
+--- !u!114 &1166296201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166296197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48905d9c7a3f78f4b8320afafd9d1d51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 13
+  moveSpeedShoot: 6
+  idleTimerMax: 0.05
+  aimObject: {fileID: 1374494009}
+  cam: {fileID: 109895416}
+--- !u!95 &1166296202
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166296197}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4f21896c06d237149beaa35227d5430f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1 &1374494008
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1374494009}
+  m_Layer: 0
+  m_Name: Aim
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1374494009
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1374494008}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2095730501}
+  m_Father: {fileID: 1166296199}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2095730500
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2095730501}
+  - component: {fileID: 2095730502}
+  m_Layer: 0
+  m_Name: Cursor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2095730501
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2095730500}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.72, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1374494009}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &2095730502
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2095730500}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: f78c27952605fc848bbd880b25aefcc0, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 0.64, y: 0.64}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 1
+--- !u!114 &5775251179994201664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5775251179994201670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97276e4263d395445a5730bf08999e12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrayOfVFX:
+  - vfxName: 0
+    vfxGameObject: {fileID: 6220396275880966040, guid: 089270a9c784c6847ba393cd926259b3,
+      type: 3}
+  - vfxName: 3
+    vfxGameObject: {fileID: 5058502571673433294, guid: 8b9922ac1a5b3974c8964387b6e71ed6,
+      type: 3}
+  - vfxName: 4
+    vfxGameObject: {fileID: 7772967964808977005, guid: e86d82eb266246a4db7b230b5e3f86d7,
+      type: 3}
+  - vfxName: 6
+    vfxGameObject: {fileID: 2345108725815064783, guid: 5ec99ea1b755b2c4085c04782ec49ba7,
+      type: 3}
+  - vfxName: 5
+    vfxGameObject: {fileID: 5712330410880325955, guid: 71d5739de5a302245b1efd85b718b9e0,
+      type: 3}
+  - vfxName: 7
+    vfxGameObject: {fileID: 4837341740618559273, guid: b9ee41fb691a1e54e86541a6eb3c5326,
+      type: 3}
+  - vfxName: 8
+    vfxGameObject: {fileID: 1126003101426457101, guid: 2188b47d8df98a74c9ee7c7ddcaba2f2,
+      type: 3}
+  - vfxName: 9
+    vfxGameObject: {fileID: 4003571801619070448, guid: 545e992483c945540ac65e20a0444a0d,
+      type: 3}
+  - vfxName: 11
+    vfxGameObject: {fileID: 5829624815046751344, guid: 948e538f38b179a4796a99106e90dc9c,
+      type: 3}
+  - vfxName: 10
+    vfxGameObject: {fileID: 2815069511257131028, guid: 7142c56957286a24784e1322ecce7d43,
+      type: 3}
+  arrayOfSprites:
+  - spriteName: 0
+    sprite: {fileID: 21300000, guid: 3807b5f02ac58e546a2d74070e4da813, type: 3}
+  - spriteName: 1
+    sprite: {fileID: 21300000, guid: 622d4066508dc804a8b6b80027ac5960, type: 3}
+  transitionManager: {fileID: 0}
+  roomNumber: {fileID: 0}
+--- !u!114 &5775251179994201665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5775251179994201670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb281456cb1b80d4581cf65616fb813a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrayOfBindings:
+  - keybindings: {fileID: 11400000, guid: 4a1c5a9aab96cfd4db80bdffa8ddde86, type: 2}
+    path: /game_save/keybindings/keyboard_binding_save.txt
+  - keybindings: {fileID: 11400000, guid: 8bad714fcd4bcc241aae8b676d7b58c0, type: 2}
+    path: /game_save/keybindings/joystick_binding_save.txt
+  skillsLoader: {fileID: 0}
+--- !u!114 &5775251179994201666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5775251179994201670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc33e1d74aaf26a4d86e6409c8560846, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isTopDown: 1
+  keybindings: {fileID: 11400000, guid: 4a1c5a9aab96cfd4db80bdffa8ddde86, type: 2}
+  keyboardKeybinds: {fileID: 11400000, guid: 4a1c5a9aab96cfd4db80bdffa8ddde86, type: 2}
+  joyStickKeybind: {fileID: 11400000, guid: 8bad714fcd4bcc241aae8b676d7b58c0, type: 2}
+  defaultKeyboard: {fileID: 11400000, guid: 2bdfcf0b542a6ab44a5baafdca628a3b, type: 2}
+--- !u!114 &5775251179994201667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5775251179994201670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d56a2101f4e296e49be8548e9a9c90d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadeTime: 0.2
+  BgMusicVolume: 0.32
+  ListOfSounds:
+  - SoundFor: 6
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 7af0d02506d2d854aa2cf4dc8d777b47, type: 3}
+      volume: 1
+      pitch: 1.91
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0
+      randomPitchRate: 0
+    - audioClip: {fileID: 8300000, guid: fb8b19a8b2ea5fc49ad8c631e8e0c9d4, type: 3}
+      volume: 1
+      pitch: 1.73
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0
+      randomPitchRate: 0
+    - audioClip: {fileID: 8300000, guid: 29b8115164e3d5b4d866a3eef9757a62, type: 3}
+      volume: 1
+      pitch: 1.39
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0
+      randomPitchRate: 0
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 2
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: cc68cd9f9dac9bc43856819aabc0e491, type: 3}
+      volume: 0.435
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0
+      randomPitchRate: 0
+    - audioClip: {fileID: 8300000, guid: 0fd94161139308948b1b7afff6bb55f9, type: 3}
+      volume: 0.42
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0
+      randomPitchRate: 0
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 0
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: b230de1d0f9908e458c803b35e0bd08b, type: 3}
+      volume: 1
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.1
+      randomPitchRate: 0.2
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 8
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 1242833a229644249b423703e2c8bfc5, type: 3}
+      volume: 0.528
+      pitch: 1.34
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.1
+      randomPitchRate: 0.2
+    - audioClip: {fileID: 8300000, guid: 9887e23be7e58d342b57d6c74fd79a77, type: 3}
+      volume: 0.501
+      pitch: 1.4
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.1
+      randomPitchRate: 0.2
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 16
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 2679970962513d94d914cf3765702cf7, type: 3}
+      volume: 0.174
+      pitch: 1.4
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0
+      randomPitchRate: 0
+    - audioClip: {fileID: 8300000, guid: 0cb26a383c52053448505d458ac971d0, type: 3}
+      volume: 0.233
+      pitch: 1.45
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0
+      randomPitchRate: 0
+    - audioClip: {fileID: 8300000, guid: 2679970962513d94d914cf3765702cf7, type: 3}
+      volume: 0.227
+      pitch: 1.45
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0
+      randomPitchRate: 0
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 9
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: c972635c8880a6047962540c3ff09732, type: 3}
+      volume: 0.359
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.1
+      randomPitchRate: 0.22
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 7
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: e9c19d00f5381e24a8b820f6a9cf58fb, type: 3}
+      volume: 1
+      pitch: 2.79
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.1
+      randomPitchRate: 0.25
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 17
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 43c03f2ac29ab674da7d35929f2d33fd, type: 3}
+      volume: 0.2
+      pitch: 0.85
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.15
+    - audioClip: {fileID: 8300000, guid: 532cccae1944ed54e8bc0aaaf34922ed, type: 3}
+      volume: 0.23
+      pitch: 0.9
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.15
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 18
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: e9a2b2c27f76c7143a15435df5bd1bd9, type: 3}
+      volume: 0.442
+      pitch: 1.4
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.1
+      randomPitchRate: 0.2
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 19
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 02f053b080326e34ea6caed75b31983a, type: 3}
+      volume: 0.388
+      pitch: 1.27
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.1
+      randomPitchRate: 0.2
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 13
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: f0cdcf3302e1aad45808a9d2fd6e7675, type: 3}
+      volume: 0.442
+      pitch: 1.4
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.2
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 10
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 2996aa378a982f74db67bfcdb3c09d26, type: 3}
+      volume: 0.716
+      pitch: 0.79
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.2
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 12
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 93a2d56c5e1e2da43b5684fbb38deb7c, type: 3}
+      volume: 0.558
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.2
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 11
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 4ea303c2c7b6b3341bec90e2d7664270, type: 3}
+      volume: 0.522
+      pitch: 1.18
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.2
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 3
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: c6ecf37edf765c3448a0e71cd78e5598, type: 3}
+      volume: 0.642
+      pitch: 0.82
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.15
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 14
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 2020a6e4aaedfa04d8b7ad4b80536e14, type: 3}
+      volume: 0.455
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.15
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 15
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: b2f25ff7f39de094380062fa0a1ee321, type: 3}
+      volume: 0.6
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.15
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 20
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 5086ff3744d6bad42b542c3cdab6c248, type: 3}
+      volume: 0.388
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.15
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 21
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: e9909844d59773643af77794f4f72e24, type: 3}
+      volume: 0.3
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.15
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 22
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 0aec5b4f326f4fd40974a8513654a68c, type: 3}
+      volume: 0.25
+      pitch: 1.5
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.15
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 23
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: a51e595c4eb2b4b4d91bca2fc1bb4ef4, type: 3}
+      volume: 0
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.15
+    loop: 1
+    source: {fileID: 0}
+    AudioManagerType: 1
+  - SoundFor: 24
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 412d491d75347ef4aafb3eca3c5f66c6, type: 3}
+      volume: 0
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.15
+    loop: 1
+    source: {fileID: 0}
+    AudioManagerType: 1
+  - SoundFor: 25
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 2d331bd615e0ef743928360d7f4cdf6d, type: 3}
+      volume: 0
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.15
+    loop: 1
+    source: {fileID: 0}
+    AudioManagerType: 1
+  - SoundFor: 26
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: e96927219e221aa459bcdba789db91d7, type: 3}
+      volume: 0
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.15
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 1
+  - SoundFor: 27
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: e7fc3364a43f6d949857b089f9c08fa4, type: 3}
+      volume: 0
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.15
+    loop: 1
+    source: {fileID: 0}
+    AudioManagerType: 1
+  - SoundFor: 28
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 59c4c4a95f1ba544a8e99b243300a1af, type: 3}
+      volume: 0
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.15
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 1
+  - SoundFor: 29
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 31ec43378c9b27e4f930434778340997, type: 3}
+      volume: 0.21
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.15
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 30
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: cb4f7c00f53c54d42aa128d991972a6e, type: 3}
+      volume: 0.145
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.1
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 31
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 330b6be09ca42714f82b966685519e33, type: 3}
+      volume: 0.209
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.02
+      randomPitchRate: 0.05
+    - audioClip: {fileID: 8300000, guid: aa841c329f2ce964ca8c6b26e5fb9fe7, type: 3}
+      volume: 0.231
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.02
+      randomPitchRate: 0.05
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 32
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 6d985593a7e542f48963701e5b445bbc, type: 3}
+      volume: 0.081
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.1
+      randomPitchRate: 0.1
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 33
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 0049c079522c9d6499594e3eeadc7c8a, type: 3}
+      volume: 0.11
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.1
+      randomPitchRate: 0.1
+    - audioClip: {fileID: 8300000, guid: 4024c4acb55b5384a825465d2cd2f4d0, type: 3}
+      volume: 0.11
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.1
+      randomPitchRate: 0.1
+    - audioClip: {fileID: 8300000, guid: aa841c329f2ce964ca8c6b26e5fb9fe7, type: 3}
+      volume: 0.11
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.1
+      randomPitchRate: 0.1
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 34
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: a8a86383b9de88a4fa594ab73a2dfcc6, type: 3}
+      volume: 0.087
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.1
+      randomPitchRate: 0.1
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 35
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: cb4f7c00f53c54d42aa128d991972a6e, type: 3}
+      volume: 0.233
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.05
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 36
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 003925cb560ee2f40a8ed4853f3f7139, type: 3}
+      volume: 0.11
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.1
+    - audioClip: {fileID: 8300000, guid: 659d0ebfc454be24fa92c38979a9a9ee, type: 3}
+      volume: 0.11
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.1
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 37
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 35cf1f48e8c87ac4d9cea51398ed73fd, type: 3}
+      volume: 0.208
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.1
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 38
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 5309c106ed9b4b0468bb5b179ed99c76, type: 3}
+      volume: 0.197
+      pitch: 0.54
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.1
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 39
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 4db3e9a930b36d341a444141193b3c5d, type: 3}
+      volume: 0.11
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.1
+      randomPitchRate: 0.1
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 40
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: fcdf3918183bed14687ae168f8c1dc6b, type: 3}
+      volume: 0.063
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.1
+      randomPitchRate: 0.1
+    - audioClip: {fileID: 8300000, guid: b4764720eb2466f429ad988292b8cabd, type: 3}
+      volume: 0.063
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.1
+      randomPitchRate: 0.1
+    - audioClip: {fileID: 8300000, guid: 0866200dc4aa1754d84f93e61ab681d9, type: 3}
+      volume: 0.063
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.1
+      randomPitchRate: 0.1
+    - audioClip: {fileID: 8300000, guid: 4457a7f9251eb8b4c83c701d0c818728, type: 3}
+      volume: 0.063
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.1
+      randomPitchRate: 0.1
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 41
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 1ae5c8f4d08edaa4b9a6eff00035591e, type: 3}
+      volume: 0.163
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.1
+    - audioClip: {fileID: 8300000, guid: d9cd99b8236769f4ea29f3a61771e003, type: 3}
+      volume: 0.175
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.1
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 42
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 3259548979ac15f43b3b4cd9210a3fdd, type: 3}
+      volume: 0.093
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.03
+      randomPitchRate: 0.05
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 43
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 1231a2472f8a95a40b8b01d26f246167, type: 3}
+      volume: 0.254
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.03
+      randomPitchRate: 0.05
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 44
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 2c033cab7a3955447a65af25141e6d7b, type: 3}
+      volume: 0.303
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.03
+      randomPitchRate: 0.05
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 45
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 83471627d6bc35e44b934da409f665a5, type: 3}
+      volume: 0.256
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.03
+      randomPitchRate: 0.05
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 46
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 2dea503c37dfc2e4d83a2cfdd15e6ef3, type: 3}
+      volume: 0.145
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.03
+      randomPitchRate: 0.05
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 47
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 0983c7dd1eb6ef54994ebbecdc874679, type: 3}
+      volume: 0.116
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.03
+      randomPitchRate: 0.05
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 48
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 169c6f19a993a524d8f4707f0a01ba0b, type: 3}
+      volume: 0.116
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.03
+      randomPitchRate: 0.05
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 49
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: d068712f0bc53384ba5f82f2688e48a5, type: 3}
+      volume: 0.151
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.03
+      randomPitchRate: 0.05
+    - audioClip: {fileID: 8300000, guid: d74075c0d1052c54fa7ccca6a79a4373, type: 3}
+      volume: 0.116
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.03
+      randomPitchRate: 0.05
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 50
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: e8b5b1e65d3eb4f4ea19d92841f9a325, type: 3}
+      volume: 0.156
+      pitch: 1
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.03
+      randomPitchRate: 0.05
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 51
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: c214108adcee4494893713942f7287e7, type: 3}
+      volume: 0.116
+      pitch: 0.78
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.03
+      randomPitchRate: 0.05
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 52
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 83471627d6bc35e44b934da409f665a5, type: 3}
+      volume: 0.204
+      pitch: 0.56
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.05
+    - audioClip: {fileID: 8300000, guid: 476bb1fdcd65ccf4e812857ef131beb8, type: 3}
+      volume: 0.116
+      pitch: 0.66
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.05
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 53
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: a188bba572125764b8bd1672946481fe, type: 3}
+      volume: 0.08
+      pitch: 0.64
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.05
+      randomPitchRate: 0.1
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 54
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 09f7e18b46a67e049819dcb0818d6131, type: 3}
+      volume: 0.1
+      pitch: 1.13
+      randomizeVolumeAndPitch: 1
+      randomVolumeRate: 0.03
+      randomPitchRate: 0.05
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  - SoundFor: 55
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 6757dc1f65262504ba7c39b4919a0b36, type: 3}
+      volume: 0.151
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.03
+      randomPitchRate: 0.05
+    loop: 1
+    source: {fileID: 0}
+    AudioManagerType: 1
+  - SoundFor: 56
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: e4a18bd90f8a9b246adf90d8a327b653, type: 3}
+      volume: 0.157
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.03
+      randomPitchRate: 0.05
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 1
+  - SoundFor: 57
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 1f33072e45f3d5d4a82886b34684e11a, type: 3}
+      volume: 0.157
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.03
+      randomPitchRate: 0.05
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 1
+  - SoundFor: 58
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: bde83e49978da01458327daac5ab382a, type: 3}
+      volume: 0.157
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.03
+      randomPitchRate: 0.05
+    loop: 1
+    source: {fileID: 0}
+    AudioManagerType: 1
+  - SoundFor: 59
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: cf670ce46c6fbb1419188f93516cd565, type: 3}
+      volume: 0.157
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.03
+      randomPitchRate: 0.05
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 1
+  - SoundFor: 60
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 05cb82ed3bd1c884cbcf91f940963615, type: 3}
+      volume: 0.157
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.03
+      randomPitchRate: 0.05
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 1
+  - SoundFor: 61
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: a3934d6a5f2734546aab8506107f77f7, type: 3}
+      volume: 0.157
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.03
+      randomPitchRate: 0.05
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 1
+  - SoundFor: 62
+    arrayOfClips:
+    - audioClip: {fileID: 8300000, guid: 848eb4a50cbea0b4db2d990d24a5f071, type: 3}
+      volume: 0.25
+      pitch: 1
+      randomizeVolumeAndPitch: 0
+      randomVolumeRate: 0.03
+      randomPitchRate: 0.05
+    loop: 0
+    source: {fileID: 0}
+    AudioManagerType: 0
+  mixer: {fileID: 24100000, guid: f3ff675c5509d264fb339c5c288dbe5a, type: 2}
+--- !u!4 &5775251179994201668
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5775251179994201670}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 11.42718, y: 0.26422542, z: -3478.503}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5775251179994201669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5775251179994201670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e79fa0ad9055784db75218c7a942a70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lastCheckPointPosition: {x: 0, y: 0}
+  savePointPosition: {x: -406, y: -151}
+  playerInstance: {fileID: 1166296197}
+  aSkillString: 
+  bSkillString: 
+  currentRoom: {fileID: 0}
+  firstRoom: {fileID: 0}
+  spawnPoint: {fileID: 0}
+--- !u!1 &5775251179994201670
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5775251179994201668}
+  - component: {fileID: 5775251179994201669}
+  - component: {fileID: 5775251179994201667}
+  - component: {fileID: 5775251179994201666}
+  - component: {fileID: 5775251179994201665}
+  - component: {fileID: 5775251179994201664}
+  - component: {fileID: 5775251179994201679}
+  m_Layer: 0
+  m_Name: GameMaster
+  m_TagString: GM
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &5775251179994201679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5775251179994201670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3da85bb848517a459600dd1e2f90e63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

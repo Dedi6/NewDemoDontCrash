@@ -32,13 +32,13 @@ TagManager:
   - EnemyHollow
   - LightZone
   - PlayerSkills
+  - BulletGoThrough
   - 
   - 
   - 
   - 
-  - 
-  - 
-  - 
+  - black
+  - Mask
   - FallZone
   - SecretDoor
   - RoomTriggers

@@ -73,7 +73,7 @@ public class PauseMenu : MonoBehaviour
         gameIsPaused = true;
     }
 
-    private void HandleActiveMenu()
+    public void HandleActiveMenu()
     {
         if (keybindsOpen)
         {

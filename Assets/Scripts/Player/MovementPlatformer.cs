@@ -33,7 +33,7 @@ public class MovementPlatformer : MonoBehaviour
     public float groundCheckDistance;
     private RaycastHit2D wallCheckHit;
     [HideInInspector]
-    public LayerMask whatIsGround;          // !
+    public int whatIsGround = (1 << 8) | (1 << 22);          // !
 
     [Header("Shooting & Teleporting")]
     [Space]
@@ -144,10 +144,10 @@ public class MovementPlatformer : MonoBehaviour
         input = InputManager.instance;
         manaBar = GetComponent<ManaBar>();
         currentRoom = GameMaster.instance.firstRoom;
-        RespawnAtSavePoint();
+        //RespawnAtSavePoint();
+        gm.savePointPosition = transform.position; // for testing :D
         audioManager.PlayTheme(AudioManager.SoundList.FirstTestSong, 0.1f); /////// test song
         //  delete when building!!!!
-        //gm.savePointPosition = transform.position;
         //Time.timeScale = 0.9f;
     }
 
@@ -182,7 +182,7 @@ public class MovementPlatformer : MonoBehaviour
                 CheckDirectionPressed();
                 AttackMemory();
                 if (input.KeyDown(Keybindings.KeyList.ResetBullet))
-                    KillBulletObject();
+                    BulletReset();
                 if (regularAttackTimer > 0 && Time.time >= nextAttackTime)
                 {
                     AttackRegular();
@@ -469,6 +469,19 @@ public class MovementPlatformer : MonoBehaviour
 
     }       // preparing the conditions to the jump
 
+    public void FallingGroundCheck()
+    {
+        if(isGrounded)
+        {
+            isAirborn = false;
+            groundedMemory = 0.05f;
+            animator.SetBool("IsFalling", false);
+            GetComponent<Footsteps>().PlayerLanded();
+            CreateDust();
+            OnLandEvent.Invoke();
+        }
+    }
+
     public void JumpNow()  // the action of jumping
     {
         if ((jumpMemory > 0) && (groundedMemory > 0))
@@ -613,6 +626,7 @@ public class MovementPlatformer : MonoBehaviour
         }
         ResetAxis();
         audioManager.PlaySound(AudioManager.SoundList.Teleport);
+        CurrentBulletGameObject = null;
         StartCoroutine(currentRoom.GetComponent<RoomManagerOne>().virtualCam.GetComponent<ScreenShake>().ShakeyShakey(teleportShakeTime, teleportShakeForce));
     }
 
@@ -853,7 +867,6 @@ public class MovementPlatformer : MonoBehaviour
             shouldCheckForShootMemory = true;
             if (isGrounded == false)
                 canShoot = false;
-
         }
     }
 

@@ -14,15 +14,25 @@ public class PufferFish : MonoBehaviour, ISFXResetable
         if (GetComponent<Enemy>().goRight)
             Flip();
     }
-    public IEnumerator RespawnCoroutine()
+    public void RespawnCoroutine()
     {
-        yield return new WaitForSeconds(respawnTime);
+        Invoke("SpawnAnimation", respawnTime);
+        GetComponent<Enemy>().Invoke("PlayerRespawned", respawnTime + 0.5f);
+    }
+
+
+
+    private void SpawnAnimation()
+    {
         GameObject spawnAnimation = Instantiate(spawnAnim, originalPos, Quaternion.identity);
-        yield return new WaitForSeconds(0.5f);
-        GetComponent<Enemy>().PlayerRespawned();
     }
 
     public void ResetSFXCues()
+    {
+        transform.position = originalPos;
+    }
+
+    private void OnDisable()
     {
         transform.position = originalPos;
     }

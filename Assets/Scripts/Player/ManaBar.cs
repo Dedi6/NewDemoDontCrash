@@ -17,14 +17,6 @@ public class ManaBar : MonoBehaviour
         currentManaAmount = maxManaAmount;
     }
 
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-            FillUpMana(15);
-        if (Input.GetMouseButtonDown(1))
-            UseMana(15);
-    }
-
     public void SetManaBars()
     {
         for (int i = 0; i < numberOfBars; i++)

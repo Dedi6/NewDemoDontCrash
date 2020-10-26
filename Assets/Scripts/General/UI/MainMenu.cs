@@ -8,7 +8,6 @@ public class MainMenu : MonoBehaviour
     public GameObject menuMaster;
     public void PlayGame()
     {
-        //StartCoroutine(Test());
         Destroy(menuMaster);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }

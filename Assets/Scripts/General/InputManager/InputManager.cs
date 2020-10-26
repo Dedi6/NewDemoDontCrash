@@ -5,6 +5,7 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     public static InputManager instance;
+    public bool isTopDown;
 
     [HideInInspector]
     public Keybindings keybindings;
@@ -20,6 +21,10 @@ public class InputManager : MonoBehaviour
             Destroy(this);
         DontDestroyOnLoad(this);
 
+    }
+
+    private void Start()
+    {
         HandleStartingKeybinds();
     }
 
@@ -57,7 +62,15 @@ public class InputManager : MonoBehaviour
             PlayerPrefs.DeleteKey("UsingJoystick");
         PlayerPrefs.Save();
 
-        GameMaster.instance.playerInstance.GetComponent<MovementPlatformer>().SwitchToOrFromJoystick();
+        ChangeMovementInScript();
+    }
+
+    void ChangeMovementInScript()
+    {
+        if (!isTopDown)
+            GameMaster.instance.playerInstance.GetComponent<MovementPlatformer>().SwitchToOrFromJoystick();
+        else
+            GameMaster.instance.playerInstance.GetComponent<TopDownMovement>().SwitchToOrFromJoystick();
     }
 
     private void HandleStartingKeybinds()
@@ -65,7 +78,7 @@ public class InputManager : MonoBehaviour
         if (PlayerPrefs.HasKey("UsingJoystick"))
         {
             keybindings = joyStickKeybind;
-            GameMaster.instance.playerInstance.GetComponent<MovementPlatformer>().SwitchToOrFromJoystick();
+            ChangeMovementInScript();
         }
         else
         {

@@ -65,7 +65,7 @@ public class FireBoar : MonoBehaviour, ISFXResetable
                     Flip();
                 break;
             case State.Attacking:
-
+                StunIfHitWall();
                 break;
             case State.Dead:
                 if (delayHitGroundSFX)
@@ -77,7 +77,6 @@ public class FireBoar : MonoBehaviour, ISFXResetable
 
         StateHandler();
         HandleEnemyClassObjects();
-        StunIfHitWall();
     }
 
     void FixedUpdate()
@@ -106,6 +105,7 @@ public class FireBoar : MonoBehaviour, ISFXResetable
         rayToPlayer = Physics2D.Raycast(transform.position, raycastDirection, playerCheckDistance, layerMaskPlayerAndGround); // 11 is player's layermask
         rayFromBack = Physics2D.Raycast(transform.position, new Vector2(-raycastDirection.x, 0), playerCheckDistance, layerMaskPlayerAndGround);
     }
+
     private void HandleEnemyClassObjects()
     {
         if (groundCheckRaycast)
@@ -114,8 +114,8 @@ public class FireBoar : MonoBehaviour, ISFXResetable
             enemy.GetComponent<Enemy>().isEnemyGrounded = false;
 
         enemy.GetComponent<Enemy>().facingRight = facingRight;
-
     }
+
     private void StateHandler()
     {
         if(state != State.Dead && rayToPlayer)

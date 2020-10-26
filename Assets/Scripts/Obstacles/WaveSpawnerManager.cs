@@ -98,11 +98,11 @@ public class WaveSpawnerManager : MonoBehaviour, IRespawnResetable
 
     public void PlayerHasRespawned()
     {
-        if(!playerRespawning)
+        if (!playerRespawning)
         {
             playerRespawning = true;
-            StartCoroutine(PlayerRespawningCoroutine());
-            if(!loopFear)
+            Invoke("PlayerRespawningCoroutine", 0.5f);
+            if (!loopFear)
             {
                 isTriggeredAlready = false;
                 ClearedWaves.Invoke();
@@ -115,10 +115,8 @@ public class WaveSpawnerManager : MonoBehaviour, IRespawnResetable
         }
     }
 
-    private IEnumerator PlayerRespawningCoroutine()
+    private void PlayerRespawningCoroutine()
     {
-        yield return new WaitForSeconds(0.5f);
-
-        playerRespawning = true;
+        playerRespawning = false;
     }
 }
