@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class TopDownMovement : MonoBehaviour
 {
-    public float moveSpeed, moveSpeedShoot, idleTimerMax = 0.05f;
-    private float moveX, moveY, idleTimer, aimAngle;
+    public float moveSpeed, moveSpeedShoot, idleTimerMax = 0.05f, waterGunTime;
+    public int waterFillAmount, waterUseAmount;
+    [HideInInspector]
+    public float moveX, moveY;
+    private float idleTimer, aimAngle, startParticleV;
     private Rigidbody2D rb;
     private State state;
-    private bool usingKeyboard, facingRight = true;
+    private bool usingKeyboard, facingRight = true, isShooting;
     private int lastDirection;
     private Vector2 dirPressedAbs, mousePos;
 
@@ -20,6 +23,8 @@ public class TopDownMovement : MonoBehaviour
     public Camera cam;
     private Animator animator;
     private InputManager input;
+    public ParticleSystem particles;
+    public GameObject waterGunObject;
 
     private enum State
     {
@@ -38,6 +43,13 @@ public class TopDownMovement : MonoBehaviour
         usingKeyboard = input.IsUsingKeyboard();
         GetCurrentClip(Vector2.down);
         SetDirection(Vector2.down);
+        if(canShoot)
+            state = State.NormalButCanShoot;
+        else
+            state = State.Normal;
+
+        var main = particles.main;  // Set Default lifetime for waterGun
+        main.startLifetime = waterGunTime;
     }
 
     void Update()
@@ -46,23 +58,26 @@ public class TopDownMovement : MonoBehaviour
         {
             case State.Normal:
                 FlipStart();
-                ShootStart();
+                break;
+            case State.NormalButCanShoot:
+                FlipStart();
+               // ShootStart();
+                AimCursor();
+                HandleCursorInput();
+                RefillWater();
+                break;
+            case State.Attacking:
+                AimCursor();
+                HandleCursorInput();
                 break;
         }
 
+        ShootStart();
+
         HandleMoveInputs();
-        AimCursor();
 
         if (idleTimer > 0)
             idleTimer -= Time.deltaTime;
-
-        if (usingKeyboard)
-            mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
-        else
-        {
-            Vector2 inputDir = new Vector2(Input.GetAxis("rightStickHor"), Input.GetAxis("rightStickVert"));
-            mousePos = inputDir;
-        }
 
         if (Input.GetKeyDown(KeyCode.L))
             input.ChangeKeybindings();
@@ -77,7 +92,23 @@ public class TopDownMovement : MonoBehaviour
                 break;
             case State.Attacking:
                 MoveWhileShooting();
+                if (isShooting)
+                    ShootDirectKeyOrController();
                 break;
+            case State.NormalButCanShoot:
+                Move();
+                break;
+        }
+    }
+
+    private void HandleCursorInput()
+    {
+        if (usingKeyboard)
+            mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+        else
+        {
+            Vector2 inputDir = new Vector2(Input.GetAxis("rightStickHor"), Input.GetAxis("rightStickVert"));
+            mousePos = inputDir;
         }
     }
 
@@ -170,6 +201,8 @@ public class TopDownMovement : MonoBehaviour
         int f = facingRight ? 1 : -1;
         transform.localScale = new Vector3(f, transform.localScale.y, transform.localScale.z);
         aimAngle += 180f;
+        int y = facingRight ? 0 : 180;
+        waterGunObject.transform.rotation = new Quaternion(0, y, 0, 0);
     }
 
     private void SetDirection(Vector2 direction)
@@ -255,15 +288,48 @@ public class TopDownMovement : MonoBehaviour
         if(usingKeyboard)
         {
             if (Input.GetMouseButtonDown(0))
+            {
                 Shoot();
+                isShooting = true;
+                var main = particles.main;  // Set Default lifetime for waterGun
+                main.startLifetime = waterGunTime;
+            }
+            if(Input.GetMouseButtonUp(0))
+            {
+                SetStateNormalButCanShoot();
+                isShooting = false;
+                var main = particles.main;  // Set Default lifetime for waterGun
+                main.startLifetime = 0;
+            }
         }
         else
         {
-            if (input.GetKey(Keybindings.KeyList.Skill2))
-                ShootController();
+            if (input.GetKey(Keybindings.KeyList.Skill2) && !isShooting)
+            {
+                Shoot();
+                isShooting = true;
+                var main = particles.main;  // Set Default lifetime for waterGun
+                main.startLifetime = waterGunTime;
+            }
+            if (input.KeyUp(Keybindings.KeyList.Skill2))
+            {
+                SetStateNormalButCanShoot();
+                isShooting = false;
+                var main = particles.main;  // Set Default lifetime for waterGun
+                main.startLifetime = 0;
+            }
+
         }
     }
     
+    void ShootDirectKeyOrController()
+    {
+        if (usingKeyboard)
+            Shoot();
+        else
+            ShootController();
+    }
+
     void Shoot()
     {
         state = State.Attacking;
@@ -271,7 +337,8 @@ public class TopDownMovement : MonoBehaviour
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg + 180f;
         GetCurrentClipMouse(angle);
         SetDirection(lookDir); // change to animator.play(AttackArray[lastDirection]);
-        Invoke("SetStateNormal", 0.2f); // for now, later use animation event
+        GetComponent<ManaBar>().UseMana(waterUseAmount);
+      //  Invoke("SetStateNormalButCanShoot", 0.2f); // for now, later use animation event
     }
 
     void ShootController()
@@ -282,8 +349,16 @@ public class TopDownMovement : MonoBehaviour
             angle += 360f;
         GetCurrentClipMouse(angle);
         SetDirection(mousePos); // change to animator.play(AttackArray[lastDirection]);
-        Invoke("SetStateNormal", 0.2f); // for now, later use animation event
+        GetComponent<ManaBar>().UseMana(waterUseAmount);
+        //Invoke("SetStateNormalButCanShoot", 0.2f); // for now, later use animation event
     }
+
+    private void RefillWater()
+    {
+        if(Input.GetMouseButtonDown(1) || input.GetKey(Keybindings.KeyList.Heal))
+             GetComponent<ManaBar>().FillUpMana(waterFillAmount);
+    }
+
 
     private void MoveWhileShooting()
     {
@@ -294,6 +369,10 @@ public class TopDownMovement : MonoBehaviour
     public void SetStateNormal()
     {
         state = State.Normal;
+    }
+    public void SetStateNormalButCanShoot()
+    {
+        state = State.NormalButCanShoot;
     }
 
     public void SwitchToOrFromJoystick()
@@ -321,6 +400,11 @@ public class TopDownMovement : MonoBehaviour
         }
 
         aimObject.rotation = Quaternion.Euler(0, 0, aimAngle);
+        var shape = particles.shape;
+        if(facingRight)
+            shape.rotation = new Vector3(0, 0, aimAngle + 180f);
+        else
+            shape.rotation = new Vector3(0, 0, aimAngle);
     }
 
 }
