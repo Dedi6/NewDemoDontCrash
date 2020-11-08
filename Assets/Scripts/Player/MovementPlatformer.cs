@@ -567,6 +567,13 @@ public class MovementPlatformer : MonoBehaviour
     }
     public void ShootStart()
     {
+        StartCoroutine(DelayShoot());   // was added in 3.11 after tal told me a delay was neccesasaeasry :)
+    }
+
+    private IEnumerator DelayShoot()
+    {
+        yield return new WaitForSeconds(0.05f);
+
         if (shootMemoryTimer > 0 && !canTeleport && canShootTimer <= 0 && canShoot)
         {
             shootMemoryTimer = 0;

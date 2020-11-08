@@ -89,4 +89,9 @@ public class ManaBar : MonoBehaviour
         else
             return true;
     }
+
+    public int GetCurrentMana()
+    {
+        return currentManaAmount;
+    }
 }

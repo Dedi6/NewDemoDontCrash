@@ -23,6 +23,7 @@ public class TopDownMovement : MonoBehaviour
     public Camera cam;
     private Animator animator;
     private InputManager input;
+    private ManaBar manaBar;
     public ParticleSystem particles;
     public GameObject waterGunObject;
 
@@ -43,6 +44,7 @@ public class TopDownMovement : MonoBehaviour
         usingKeyboard = input.IsUsingKeyboard();
         GetCurrentClip(Vector2.down);
         SetDirection(Vector2.down);
+        manaBar = GetComponent<ManaBar>();
         if(canShoot)
             state = State.NormalButCanShoot;
         else
@@ -92,8 +94,10 @@ public class TopDownMovement : MonoBehaviour
                 break;
             case State.Attacking:
                 MoveWhileShooting();
-                if (isShooting)
+                if (isShooting && manaBar.HaveEnoughMana(waterUseAmount))
                     ShootDirectKeyOrController();
+                else if (!manaBar.HaveEnoughMana(waterUseAmount))
+                    StopShooting();
                 break;
             case State.NormalButCanShoot:
                 Move();
@@ -296,10 +300,7 @@ public class TopDownMovement : MonoBehaviour
             }
             if(Input.GetMouseButtonUp(0))
             {
-                SetStateNormalButCanShoot();
-                isShooting = false;
-                var main = particles.main;  // Set Default lifetime for waterGun
-                main.startLifetime = 0;
+                StopShooting();
             }
         }
         else
@@ -313,15 +314,20 @@ public class TopDownMovement : MonoBehaviour
             }
             if (input.KeyUp(Keybindings.KeyList.Skill2))
             {
-                SetStateNormalButCanShoot();
-                isShooting = false;
-                var main = particles.main;  // Set Default lifetime for waterGun
-                main.startLifetime = 0;
+                StopShooting();
             }
 
         }
     }
     
+    void StopShooting()
+    {
+        SetStateNormalButCanShoot();
+        isShooting = false;
+        var main = particles.main;  // Set Default lifetime for waterGun
+        main.startLifetime = 0;
+    }
+
     void ShootDirectKeyOrController()
     {
         if (usingKeyboard)
@@ -338,7 +344,28 @@ public class TopDownMovement : MonoBehaviour
         GetCurrentClipMouse(angle);
         SetDirection(lookDir); // change to animator.play(AttackArray[lastDirection]);
         GetComponent<ManaBar>().UseMana(waterUseAmount);
+
+        RaycastHit2D ray = Physics2D.Raycast(transform.position, lookDir, 12, 1 << 12);
+        if (ray)
+        {
+            float distance = Vector2.Distance(transform.position, ray.transform.position);
+            float time = distance / 12f;
+            StartCoroutine(ShootHit(time * 0.36f, ray.transform.gameObject));
+        }
       //  Invoke("SetStateNormalButCanShoot", 0.2f); // for now, later use animation event
+    }
+
+    private IEnumerator ShootHit(float time, GameObject enemy)
+    {
+        yield return new WaitForSeconds(time);
+
+        ManaBar enemySoakPoints = enemy.GetComponent<ManaBar>();
+        enemySoakPoints.UseMana(1);
+        float currentPoints = enemySoakPoints.GetCurrentMana();
+
+        if (currentPoints <= 0)
+            Debug.Log("Soaked");
+
     }
 
     void ShootController()
