@@ -349,23 +349,34 @@ public class TopDownMovement : MonoBehaviour
         if (ray)
         {
             float distance = Vector2.Distance(transform.position, ray.transform.position);
-            float time = distance / 12f;
-            StartCoroutine(ShootHit(time * 0.36f, ray.transform.gameObject));
+            float time = distance / 12f * 0.36f;
+            StartCoroutine(ShootHit(time, ray.transform.gameObject, lookDir));
+            var main = particles.main;
+            main.startLifetime = time;
         }
       //  Invoke("SetStateNormalButCanShoot", 0.2f); // for now, later use animation event
     }
 
-    private IEnumerator ShootHit(float time, GameObject enemy)
+    private IEnumerator ShootHit(float time, GameObject enemy, Vector2 dir)
     {
         yield return new WaitForSeconds(time);
 
-        ManaBar enemySoakPoints = enemy.GetComponent<ManaBar>();
-        enemySoakPoints.UseMana(1);
-        float currentPoints = enemySoakPoints.GetCurrentMana();
+        if (IsHittingTarget(dir))
+        {
+            ManaBar enemySoakPoints = enemy.GetComponent<ManaBar>();
+            enemySoakPoints.UseMana(1);
+            float currentPoints = enemySoakPoints.GetCurrentMana();
 
-        if (currentPoints <= 0)
-            Debug.Log("Soaked");
+            if (currentPoints <= 0)
+                Debug.Log("Soaked");
+        }
 
+    }
+
+    private bool IsHittingTarget(Vector2 direction)
+    {
+        RaycastHit2D ray = Physics2D.Raycast(transform.position, direction, 12, 1 << 11);
+        return ray ? true : false;
     }
 
     void ShootController()
