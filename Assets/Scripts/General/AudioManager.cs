@@ -1,6 +1,7 @@
 ﻿using UnityEngine.Audio;
 using UnityEngine;
 using System.Collections;
+using MyBox;
 
 public class AudioManager : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class AudioManager : MonoBehaviour
     [System.Serializable]
     public class Sounds
     {
+        [SearchableEnum]
         public SoundList SoundFor;
         public ClipsHelper[] arrayOfClips;
 
@@ -30,8 +32,9 @@ public class AudioManager : MonoBehaviour
         [Range(.1f, 3f)]
         public float pitch;
         public bool randomizeVolumeAndPitch;
-        public float randomVolumeRate; // the float is the number to either go up or down.
-        public float randomPitchRate; // same ^here
+        [ConditionalField("randomizeVolumeAndPitch")] public float randomVolumeRate; // the float is the number to either go up or down.
+        [ConditionalField("randomizeVolumeAndPitch")] public float randomPitchRate;
+
     }
 
     public enum SoundList
