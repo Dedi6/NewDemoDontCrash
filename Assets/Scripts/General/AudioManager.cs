@@ -10,6 +10,7 @@ public class AudioManager : MonoBehaviour
     [System.Serializable]
     public class Sounds
     {
+        public string title;
         [SearchableEnum]
         public SoundList SoundFor;
         public ClipsHelper[] arrayOfClips;
@@ -102,6 +103,9 @@ public class AudioManager : MonoBehaviour
         Save,
         Load,
         SmokeBomb,
+        PlayerSpeak,
+        BrotherSpeak,
+        DefaultDialogueSpeak,
     }
 
     public enum AudioManagerList

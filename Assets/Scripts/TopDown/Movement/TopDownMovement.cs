@@ -11,7 +11,7 @@ public class TopDownMovement : MonoBehaviour
     private float idleTimer, aimAngle, startParticleV;
     private Rigidbody2D rb;
     private State state;
-    private bool usingKeyboard, facingRight = true, isShooting;
+    private bool usingKeyboard, facingRight = true, isShooting, isCurouRunning;
     private int lastDirection;
     private Vector2 dirPressedAbs, mousePos;
 
@@ -26,12 +26,14 @@ public class TopDownMovement : MonoBehaviour
     private ManaBar manaBar;
     public ParticleSystem particles;
     public GameObject waterGunObject;
+    Coroutine waterGunCorou;
 
     private enum State
     {
         Normal,
         Attacking,
         NormalButCanShoot,
+        IgnoreInput,
     }
 
    
@@ -45,13 +47,8 @@ public class TopDownMovement : MonoBehaviour
         GetCurrentClip(Vector2.down);
         SetDirection(Vector2.down);
         manaBar = GetComponent<ManaBar>();
-        if(canShoot)
-            state = State.NormalButCanShoot;
-        else
-            state = State.Normal;
+        HandleShoot();
 
-        var main = particles.main;  // Set Default lifetime for waterGun
-        main.startLifetime = waterGunTime;
     }
 
     void Update()
@@ -59,30 +56,30 @@ public class TopDownMovement : MonoBehaviour
         switch(state)
         {
             case State.Normal:
+                HandleMoveInputs();
                 FlipStart();
                 break;
             case State.NormalButCanShoot:
+                HandleMoveInputs();
                 FlipStart();
                // ShootStart();
                 AimCursor();
                 HandleCursorInput();
                 RefillWater();
+                ShootStart();
                 break;
             case State.Attacking:
+                HandleMoveInputs();
                 AimCursor();
                 HandleCursorInput();
+                ShootStart();
                 break;
         }
 
-        ShootStart();
-
-        HandleMoveInputs();
 
         if (idleTimer > 0)
             idleTimer -= Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.L))
-            input.ChangeKeybindings();
     }
 
     void FixedUpdate()
@@ -319,9 +316,20 @@ public class TopDownMovement : MonoBehaviour
 
         }
     }
+
+    private IEnumerator DissableWaterGun()
+    {
+        isCurouRunning = true;
+
+        yield return new WaitForSeconds(0.36f);
+
+        waterGunObject.SetActive(false);
+        isCurouRunning = false;
+    }
     
     void StopShooting()
     {
+        waterGunCorou = StartCoroutine(DissableWaterGun());
         SetStateNormalButCanShoot();
         isShooting = false;
         var main = particles.main;  // Set Default lifetime for waterGun
@@ -338,6 +346,9 @@ public class TopDownMovement : MonoBehaviour
 
     void Shoot()
     {
+        if(isCurouRunning)
+            StopCoroutine(waterGunCorou);
+        waterGunObject.SetActive(true);
         state = State.Attacking;
         Vector2 lookDir = mousePos - rb.position;
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg + 180f;
@@ -445,4 +456,32 @@ public class TopDownMovement : MonoBehaviour
             shape.rotation = new Vector3(0, 0, aimAngle);
     }
 
+    public void StartIgnoreInput()
+    {
+        ResetAxis();
+        state = State.IgnoreInput;
+    }
+
+    public void EndIgnoreInput()
+    {
+        HandleShoot();
+    }
+
+    void HandleShoot()
+    {
+        if (canShoot)
+        {
+            state = State.NormalButCanShoot;
+        }
+        else
+        {
+            state = State.Normal;
+        }
+    }
+
+    void ResetAxis()
+    {
+        moveY = 0;
+        moveX = 0;
+    }
 }

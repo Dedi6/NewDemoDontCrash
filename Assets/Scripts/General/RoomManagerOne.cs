@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using MyBox;
 
 public class RoomManagerOne : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class RoomManagerOne : MonoBehaviour
         public bool spawnAfterTime;
     }
 
-
+    public bool respawnEnemiesOnRespawn = true;
     public GameObject virtualCam;
     private GameObject player, bullet;
     public EnemiesRespawner[] enemiesList;
@@ -22,6 +23,8 @@ public class RoomManagerOne : MonoBehaviour
     [HideInInspector]
     public bool shouldFreeze = true;
     public int roomNumber;
+    public bool changeRenderer;
+    [ConditionalField("changeRenderer")] public int rendererIndex;
     // private Transform
 
     void Start()
@@ -49,6 +52,8 @@ public class RoomManagerOne : MonoBehaviour
             if (bullet != null)
                 bullet.GetComponent<bullet>().SetSpeedNormal();
 
+            ChangeRendererIndex();      // set the correct renderer data index
+                        
             MovementPlatformer playerScript = player.GetComponent<MovementPlatformer>();
             playerScript.currentRoom = this.gameObject;
             playerScript.SetBulletSpeedNormal();
@@ -123,10 +128,22 @@ public class RoomManagerOne : MonoBehaviour
 
     public void PlayerRespawnReset2()
     {
-        var objects = FindObjectsOfType<MonoBehaviour>().OfType<IRespawnResetable>();
-        foreach (IRespawnResetable o in objects)
+        if(respawnEnemiesOnRespawn)
         {
-            o.PlayerHasRespawned();
+            var objects = FindObjectsOfType<MonoBehaviour>().OfType<IRespawnResetable>();
+            foreach (IRespawnResetable o in objects)
+            {
+                o.PlayerHasRespawned();
+            }
         }
+    }
+
+    void ChangeRendererIndex()
+    {
+        UnityEngine.Rendering.Universal.UniversalAdditionalCameraData additionalCameraData = Camera.main.transform.GetComponent<UnityEngine.Rendering.Universal.UniversalAdditionalCameraData>();
+        if (changeRenderer)
+            additionalCameraData.SetRenderer(rendererIndex);
+        else
+            additionalCameraData.SetRenderer(1);
     }
 }

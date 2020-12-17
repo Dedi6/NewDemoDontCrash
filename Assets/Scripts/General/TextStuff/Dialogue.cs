@@ -8,43 +8,10 @@ using UnityEngine.UI;
 public class Dialogue
 {
     public string name;
+    public bool addDecision;
+    [ConditionalField("addDecision")] public string choiceA, choiceB;
+    [ConditionalField("addDecision")] public DialogueTrigger dialogueA, dialogueB;
 
-    /// <summary>
-    // add enum for emotion, image, add editor edits for booleans
-    /// </summary>
-
-    /*
-[TextArea(3, 10)]  // editor text box size
-public string[] sentences;
-
-public bool showImage;
-[ConditionalField("showImage")] [SearchableEnum] public Characters character;
-
-
-public enum Characters
-{
-    Player,
-    Brother,
-
-}
-/*
-[System.Serializable]
-public class DialogueHelper
-{
-    public string sentence;
-
-    public bool showImage;
-    [ConditionalField("showImage")] Characters character;
-
-
-    private enum Characters
-    {
-        Player,
-        Brother,
-
-    }
-}
-*/
 
     public DialogueHelper[] sentences;
 
@@ -57,7 +24,7 @@ public class DialogueHelper
         public bool showImage;
         [ConditionalField("showImage")] [SearchableEnum] public Characters character;
         [ConditionalField("showImage")] [SearchableEnum] public Mood mood;
-
+ 
 
         public enum Characters
         {
@@ -73,7 +40,29 @@ public class DialogueHelper
             Mad,
             Laughing,
             Serious,
+            Normal,
         }
 
+    }
+
+    public DialogueHelper.Characters GetCurrentChar(int currentI)
+    {
+        DialogueHelper dH;
+        dH = sentences[currentI];
+        return dH.character;
+    }
+
+    public DialogueHelper.Mood GetMood(int currentI)
+    {
+        DialogueHelper dH;
+        dH = sentences[currentI];
+        return dH.mood;
+    }
+
+    public bool ShouldShowImage(int currentI)
+    {
+        DialogueHelper dH;
+        dH = sentences[currentI];
+        return dH.showImage;
     }
 }

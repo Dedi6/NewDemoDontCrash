@@ -15,6 +15,9 @@ namespace Febucci.UI
 
         protected override float WaitTimeOf(char character)
         {
+            if (textAnimator.allLettersShown) //all letters have been shown, which means we're on the very last letter
+                return 0;
+
             //avoids waiting for multiple times if there are puntuactions near each other
             if (avoidMultiplePunctuactionWait && char.IsPunctuation(character))
             {

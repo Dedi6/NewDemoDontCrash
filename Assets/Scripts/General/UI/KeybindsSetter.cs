@@ -12,6 +12,7 @@ public class KeybindsSetter : MonoBehaviour
     KeyCode newKey;
     private Keybindings keys;
     private EventSystem evt;
+    Coroutine lastCoroutine;
 
     bool waitingForKey;
 
@@ -40,7 +41,12 @@ public class KeybindsSetter : MonoBehaviour
         string name = button.transform.parent.name;
         buttonText = button.GetComponentInChildren<Text>();
         if (!waitingForKey)
-            StartCoroutine(AssignKey(name));
+            lastCoroutine = StartCoroutine(AssignKey(name));
+        else
+        {
+            StopCoroutine(lastCoroutine);
+            lastCoroutine = StartCoroutine(AssignKey(name));
+        }
     }
 
 

@@ -27,7 +27,6 @@ public class RedDrake : MonoBehaviour, ISFXResetable, IKnockbackable
     public int numOfFireballs;
     public GameObject fireball;
 
-
     public Animator animator;
     private BoxCollider2D boxCollider;
     GameObject player;
@@ -203,9 +202,13 @@ public class RedDrake : MonoBehaviour, ISFXResetable, IKnockbackable
             Flip();
         animator.SetTrigger("Attacking");
         animator.speed = 0;
+
         yield return new WaitForSeconds(pauseTime);
+
         animator.speed = 1;
+
         yield return new WaitForSeconds(0.3f);
+
         GetComponent<Enemy>().canBeInterrupted = true;
     }
     public void Attack()
@@ -241,6 +244,8 @@ public class RedDrake : MonoBehaviour, ISFXResetable, IKnockbackable
     public void SetStateDead()
     {
         state = State.Dead;
+        StopAllCoroutines();
+        animator.speed = 1;
         CancelInvoke();
     }
     void OnEnable()

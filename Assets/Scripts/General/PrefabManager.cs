@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class PrefabManager : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class PrefabManager : MonoBehaviour
     public NamedVFX[] arrayOfVFX;
     public ManageSprites[] arrayOfSprites;
     public GameObject transitionManager, roomNumber;
+    public PlayableDirector currentDirector;
     public enum ListOfVFX
     {
         BulletDissapear,

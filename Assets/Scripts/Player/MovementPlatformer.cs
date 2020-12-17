@@ -220,6 +220,7 @@ public class MovementPlatformer : MonoBehaviour
         
         if (showPointer)
             RotatePointer();
+
     }
 
     void FixedUpdate()
@@ -1130,6 +1131,16 @@ public class MovementPlatformer : MonoBehaviour
 
         yield return new WaitForSeconds(time);
 
+        ResetAxis();
+        state = State.Normal;
+    }
+
+    public void StartIgnoreInput()
+    {
+        state = State.IgnorePlayerInput;
+    }
+    public void EndIgnoreInput()
+    {
         ResetAxis();
         state = State.Normal;
     }
