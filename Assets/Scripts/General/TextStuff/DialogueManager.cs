@@ -100,7 +100,8 @@ public class DialogueManager : MonoBehaviour
 
     public void FinishedSpeaking()
     {
-        dialogueAnimator.Play(charString + moodString + "Idle");
+        if(dialogueAnimator.isActiveAndEnabled)
+            dialogueAnimator.Play(charString + moodString + "Idle");
         typeFinished = true;
         //  Debug.Log("Done");
     }
@@ -296,4 +297,5 @@ public class DialogueManager : MonoBehaviour
     {
         HandleInputResume();
     }
+
 }

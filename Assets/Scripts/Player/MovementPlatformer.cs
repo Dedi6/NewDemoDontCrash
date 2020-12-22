@@ -144,11 +144,11 @@ public class MovementPlatformer : MonoBehaviour
         input = InputManager.instance;
         manaBar = GetComponent<ManaBar>();
         currentRoom = GameMaster.instance.firstRoom;
-        //RespawnAtSavePoint();
+       // RespawnAtSavePoint();
         gm.savePointPosition = transform.position; // for testing :D
         audioManager.PlayTheme(AudioManager.SoundList.FirstTestSong, 0.1f); /////// test song
         //  delete when building!!!!
-        //Time.timeScale = 0.9f;
+        //SetForBuilding(); /// this is only active once before building
     }
 
     private void Awake()
@@ -1199,6 +1199,7 @@ public class MovementPlatformer : MonoBehaviour
         currentRoom.GetComponent<RoomManagerOne>().PlayerRespawnReset2();
     }
 
+
     public IEnumerator TransitionStart()
     {
         StartCoroutine(TransitionPrep(1f));
@@ -1330,4 +1331,8 @@ public class MovementPlatformer : MonoBehaviour
         return i == 1 ? true : false;
     } */
 
+    void SetForBuilding()
+    {
+        PlayerPrefs.DeleteKey("BeginGame");
+    }
 }

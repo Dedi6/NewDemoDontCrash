@@ -10,7 +10,7 @@ public class CheatTeleport : MonoBehaviour
     public void TeleportToRoom(string roomNumber)
     {
         int number = System.Convert.ToInt32(roomNumber);
-        if(1 <= number && number <= 47)
+        if(1 <= number && number <= 62)
         {
             RoomManagerOne[] rooms = FindObjectsOfType<RoomManagerOne>();
             foreach (RoomManagerOne r in rooms)
