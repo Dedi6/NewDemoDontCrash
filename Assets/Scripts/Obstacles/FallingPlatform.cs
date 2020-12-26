@@ -9,7 +9,6 @@ public class FallingPlatform : MonoBehaviour, IRespawnResetable
     public Animator animator;
     private Vector2 originalPos;
     private Rigidbody2D rb;
-    Coroutine coroutine;
 
     private void Start()
     {
@@ -34,7 +33,6 @@ public class FallingPlatform : MonoBehaviour, IRespawnResetable
         rb.isKinematic = false;
         GetComponent<BoxCollider2D>().enabled = false;
 
-        coroutine = StartCoroutine(ResetPlatform());
         //Destroy(gameObject ,waitTimeDestroy);
     }
 
@@ -55,7 +53,7 @@ public class FallingPlatform : MonoBehaviour, IRespawnResetable
         if (GetComponent<BoxCollider2D>().enabled == false)
             PlayerHasRespawned();
 
-        StopCoroutine(coroutine);       // stop the reset platform coroutine
+       // stop the reset platform coroutine
     }
 
     private IEnumerator ResetPlatform()

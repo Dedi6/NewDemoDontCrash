@@ -110,6 +110,9 @@ public class MovementPlatformer : MonoBehaviour
     [Space]
 
     public UnityEvent OnLandEvent;
+    [HideInInspector]
+    public delegate void CustomEvent();
+    public CustomEvent teleportedNow;
 
     [System.Serializable]
     public class BoolEvent : UnityEvent<bool> { }
@@ -261,6 +264,7 @@ public class MovementPlatformer : MonoBehaviour
         if (CurrentBulletGameObject != null && (CurrentBulletGameObject.layer == 12 || CurrentBulletGameObject.layer == 19)) // 12 is enemy 19 is hollow
         {
             BoxCollider2D EnemyBoxColl = CurrentBulletGameObject.GetComponent<BoxCollider2D>();
+
 
             enemyNearWallRight = Physics2D.BoxCast(EnemyBoxColl.bounds.center, new Vector2(EnemyBoxColl.bounds.size.x - 0.1f, EnemyBoxColl.bounds.size.y - 0.39f), 0, Vector2.right, distanceTest, whatIsGround);
             enemyNearWallLeft = Physics2D.BoxCast(EnemyBoxColl.bounds.center, new Vector2(EnemyBoxColl.bounds.size.x - 0.1f, EnemyBoxColl.bounds.size.y - 0.39f), 0, Vector2.left, distanceTest, whatIsGround);
@@ -636,6 +640,8 @@ public class MovementPlatformer : MonoBehaviour
         audioManager.PlaySound(AudioManager.SoundList.Teleport);
         CurrentBulletGameObject = null;
         StartCoroutine(currentRoom.GetComponent<RoomManagerOne>().virtualCam.GetComponent<ScreenShake>().ShakeyShakey(teleportShakeTime, teleportShakeForce));
+
+        teleportedNow?.Invoke();
     }
 
     public void UnHightLightEnemies()
@@ -836,7 +842,7 @@ public class MovementPlatformer : MonoBehaviour
 
     }
 
-    void BulletReset()
+    public void BulletReset()
     {
         if(!didHitAnEnemy)
             KillBulletObject();
@@ -858,6 +864,16 @@ public class MovementPlatformer : MonoBehaviour
 
             CurrentBulletGameObject = null;
         }
+    }
+
+    public void SetCanShootAgain()
+    {
+        canTeleport = false;
+        canShoot = true;
+        didHitAnEnemy = false;
+        canShootTimer = 0;
+        shouldICheckIsGrounded = false;
+        shouldCheckForShootMemory = true;
     }
 
     public void KillBulletObject()
