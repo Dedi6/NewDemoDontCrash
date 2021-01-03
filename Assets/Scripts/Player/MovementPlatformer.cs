@@ -874,6 +874,8 @@ public class MovementPlatformer : MonoBehaviour
         canShootTimer = 0;
         shouldICheckIsGrounded = false;
         shouldCheckForShootMemory = true;
+        if (!didHitAnEnemy)
+            Destroy(CurrentBulletGameObject);
     }
 
     public void KillBulletObject()

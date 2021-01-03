@@ -12,7 +12,7 @@ public class DoorDashThrough : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.Find("Dirt");
+        player = GameMaster.instance.playerInstance;
     }
 
     void OnCollisionEnter2D(Collision2D col)
@@ -27,7 +27,7 @@ public class DoorDashThrough : MonoBehaviour
 
     void ResetTeleport()
     {
-        player.GetComponent<MovementPlatformer>().CurrentBulletGameObject = this.gameObject;
+        player.GetComponent<MovementPlatformer>().CurrentBulletGameObject = gameObject;
         player.GetComponent<MovementPlatformer>().didHitAnEnemy = true;
         player.GetComponent<MovementPlatformer>().bulletHitDoor = true;
     }
@@ -36,12 +36,12 @@ public class DoorDashThrough : MonoBehaviour
     {
         if (!outlineOn)
         {
-            this.GetComponent<SpriteOutline>().enabled = true;
+            GetComponent<SpriteOutline>().enabled = true;
             outlineOn = true;
         }
         else
         {
-            this.GetComponent<SpriteOutline>().enabled = false;
+            GetComponent<SpriteOutline>().enabled = false;
             outlineOn = false;
             player.GetComponent<MovementPlatformer>().CurrentBulletGameObject = null;
         }

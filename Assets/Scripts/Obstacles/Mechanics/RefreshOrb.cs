@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RefreshOrb : MonoBehaviour
+public class RefreshOrb : MonoBehaviour, IRespawnResetable
 {
     MovementPlatformer player;
     public float respawnTime;
@@ -38,5 +38,15 @@ public class RefreshOrb : MonoBehaviour
     {
         GetComponent<CircleCollider2D>().enabled = true;
         animator.SetTrigger("Reset");
+    }
+
+    private void OnEnable()
+    {
+        GetComponent<CircleCollider2D>().enabled = true;
+    }
+
+    public void PlayerHasRespawned()
+    {
+        Respawn();
     }
 }

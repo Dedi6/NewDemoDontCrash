@@ -15,13 +15,22 @@ public class SwitchingPlatforms : MonoBehaviour
     private MovementPlatformer mp;
     private Transform player;
 
-    void Start()
+    void Awake()
     {
         player = GameMaster.instance.playerInstance.transform;
         mp = GameMaster.instance.playerInstance.GetComponent<MovementPlatformer>();
+    }
 
+    private void OnEnable()
+    {
         mp.teleportedNow += SwitchPlatforms;
     }
+
+    private void OnDisable()
+    {
+        mp.teleportedNow -= SwitchPlatforms;
+    }
+
     public void SwitchPlatforms()
     {
         holderA.SetActive(!holderA.activeSelf);

@@ -7,6 +7,7 @@ public class PufferFish : MonoBehaviour, ISFXResetable
     public float respawnTime;
     public GameObject spawnAnim;
     private Vector2 originalPos;
+    Coroutine corou;
 
     private void Start()
     {
@@ -16,11 +17,16 @@ public class PufferFish : MonoBehaviour, ISFXResetable
     }
     public void RespawnCoroutine()
     {
-        Invoke("SpawnAnimation", respawnTime);
-        GetComponent<Enemy>().Invoke("PlayerRespawned", respawnTime + 0.5f);
+        corou = StartCoroutine(StartRespawn());
     }
 
+    private IEnumerator StartRespawn()
+    {
+        GetComponent<Enemy>().Invoke("PlayerRespawned", respawnTime + 0.5f);
+        yield return new WaitForSeconds(respawnTime);
 
+        GameObject spawnAnimation = Instantiate(spawnAnim, originalPos, Quaternion.identity);
+    }
 
     private void SpawnAnimation()
     {
@@ -30,6 +36,7 @@ public class PufferFish : MonoBehaviour, ISFXResetable
     public void ResetSFXCues()
     {
         transform.position = originalPos;
+        StopCoroutine(corou);
     }
 
     private void OnDisable()
