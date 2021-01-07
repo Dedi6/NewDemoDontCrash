@@ -265,14 +265,5 @@ public class BigFrog : MonoBehaviour, ISFXResetable, IKnockbackable
     private void OnDisable()
     {
         Destroy(frogParent.gameObject);
-        /*
-        Transform t = frogParent.transform;
-        if(t.childCount > 0)
-        {
-            for (int i = 0; i < t.childCount; i++)
-            {
-                Destroy(t.GetChild(i).gameObject);
-            }
-        }*/
     }
 }

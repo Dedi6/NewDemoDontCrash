@@ -22,7 +22,7 @@ public class PufferFish : MonoBehaviour, ISFXResetable
 
     private IEnumerator StartRespawn()
     {
-        GetComponent<Enemy>().Invoke("PlayerRespawned", respawnTime + 0.5f);
+        GetComponent<Enemy>().Invoke("PlayerRespawned", respawnTime + 1f);
         yield return new WaitForSeconds(respawnTime);
 
         GameObject spawnAnimation = Instantiate(spawnAnim, originalPos, Quaternion.identity);
