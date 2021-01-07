@@ -9,23 +9,21 @@ public class MovingPlatform_Jump : MonoBehaviour
     private Vector2 targetPos;
     public Transform endPos;
     private bool shouldMove = false, goReverse = false;
-    private GameObject player;
+    private MovementPlatformer mp;
 
     void Start()
     {
         originalPos = transform.position;
         targetPos = endPos.position;
         GetComponent<BoxCollider2D>().size = GetComponent<SpriteRenderer>().size;
-        player = GameMaster.instance.playerInstance;
+
+        mp = GameMaster.instance.playerInstance.GetComponent<MovementPlatformer>();
+
+        mp.jumpedNow += SwitchBool;
     }
 
     void Update()
     {
-        if(InputManager.instance.KeyDown(Keybindings.KeyList.Jump) && !shouldMove)
-        {
-            if (player.GetComponent<MovementPlatformer>().groundedMemory > 0)
-                shouldMove = true;
-        }
 
         if(shouldMove)
         {
@@ -48,5 +46,11 @@ public class MovingPlatform_Jump : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void SwitchBool()
+    {
+        if (mp.groundedMemory >= 0)
+            shouldMove = true;
     }
 }

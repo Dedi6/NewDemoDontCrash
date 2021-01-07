@@ -112,7 +112,7 @@ public class MovementPlatformer : MonoBehaviour
     public UnityEvent OnLandEvent;
     [HideInInspector]
     public delegate void CustomEvent();
-    public CustomEvent teleportedNow;
+    public CustomEvent teleportedNow, jumpedNow;
 
     [System.Serializable]
     public class BoolEvent : UnityEvent<bool> { }
@@ -140,6 +140,17 @@ public class MovementPlatformer : MonoBehaviour
 
     void Start()
     {
+        CashComponents();   // get all the components ready.
+
+       // RespawnAtSavePoint();                     
+        gm.savePointPosition = transform.position; // for testing :D
+        audioManager.PlayTheme(AudioManager.SoundList.FirstTestSong, 0.1f); /////// test song
+        //  delete when building!!!!
+        //SetForBuilding(); /// this is only active once before building
+    }
+
+    void CashComponents()
+    {
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
         gm = GameMaster.instance;
@@ -147,11 +158,6 @@ public class MovementPlatformer : MonoBehaviour
         input = InputManager.instance;
         manaBar = GetComponent<ManaBar>();
         currentRoom = GameMaster.instance.firstRoom;
-       // RespawnAtSavePoint();
-        gm.savePointPosition = transform.position; // for testing :D
-        audioManager.PlayTheme(AudioManager.SoundList.FirstTestSong, 0.1f); /////// test song
-        //  delete when building!!!!
-        //SetForBuilding(); /// this is only active once before building
     }
 
     private void Awake()
@@ -498,6 +504,7 @@ public class MovementPlatformer : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x + xSpeedBoost, 1 * jumpV);
             CreateDust();
             audioManager.PlaySound(AudioManager.SoundList.PlayerJump);
+            jumpedNow?.Invoke();
         }
     } 
 
