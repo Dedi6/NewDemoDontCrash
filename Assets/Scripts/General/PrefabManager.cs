@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
+using MyBox;
 
 public class PrefabManager : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class PrefabManager : MonoBehaviour
     [System.Serializable]
     public struct NamedVFX
     {
+        public string name;
+        [SearchableEnum]
         public ListOfVFX vfxName;
         public GameObject vfxGameObject;
     }
@@ -16,13 +19,14 @@ public class PrefabManager : MonoBehaviour
     [System.Serializable]
     public struct ManageSprites
     {
+        [SearchableEnum]
         public ListOfSprites spriteName;
         public Sprite sprite;
     }
 
     public NamedVFX[] arrayOfVFX;
     public ManageSprites[] arrayOfSprites;
-    public GameObject transitionManager, roomNumber;
+    public GameObject transitionManager, roomNumber, ghostBullet, defaultBulletPrefab;
     public PlayableDirector currentDirector;
     public enum ListOfVFX
     {
@@ -39,6 +43,7 @@ public class PrefabManager : MonoBehaviour
         ChatBubblePrefab,
         SkillsUnlockedPop,
         ArrowTrap,
+        GhostBulletTrail,
     }
 
     public enum ListOfSprites

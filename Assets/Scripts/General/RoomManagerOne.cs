@@ -18,7 +18,7 @@ public class RoomManagerOne : MonoBehaviour
     private GameObject player, bullet;
     public EnemiesRespawner[] enemiesList;
     public float spawnEnemiesAfterTime;
-    private bool respawnTimerHasStarted = false;
+    private bool respawnTimerHasStarted = false, delayingNow;
     public float freezeWhenSwitchingRoomTime;
     [HideInInspector]
     public bool shouldFreeze = true;
@@ -26,6 +26,7 @@ public class RoomManagerOne : MonoBehaviour
     public bool changeRenderer;
     [ConditionalField("changeRenderer")] public int rendererIndex;
     // private Transform
+    private Coroutine corou;
 
     void Start()
     {
@@ -47,6 +48,8 @@ public class RoomManagerOne : MonoBehaviour
             if (other.CompareTag("Player") && !other.isTrigger)
             {
                 virtualCam.SetActive(true);
+                if (delayingNow)
+                    StopCoroutine(corou);
             }
 
             if (bullet != null)
@@ -67,18 +70,25 @@ public class RoomManagerOne : MonoBehaviour
         if (other.CompareTag("Player") && !other.isTrigger)
         {
             virtualCam.SetActive(false);
-            StartCoroutine(FreezeGame(freezeWhenSwitchingRoomTime));
+            corou = StartCoroutine(FreezeGame(freezeWhenSwitchingRoomTime));
         }
         else
         {
             bullet = other.gameObject;
-            other.GetComponent<bullet>().SlowBullet(2f);
+
+            if (other.TryGetComponent(out bullet b))
+                b.SlowBullet(2f);
+            else if(other.TryGetComponent(out BulletGhost bG))
+                bG.DestroyBulletAndReset();
         }
     }
 
     private IEnumerator FreezeGame(float timeToWait)
     {
+        delayingNow = true;
+
         yield return new WaitForSeconds(0.1f);
+        delayingNow = false;
 
         Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
 
@@ -109,6 +119,7 @@ public class RoomManagerOne : MonoBehaviour
 
     }
 
+   
     private IEnumerator RespawnEnemiesAfterTime(float time)
     {
         respawnTimerHasStarted = true;

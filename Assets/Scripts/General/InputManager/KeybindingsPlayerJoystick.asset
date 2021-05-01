@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arrayOfKeys:
   - KeyFor: 0
-    keyBinding: 332
-  - KeyFor: 1
-    keyBinding: 333
-  - KeyFor: 2
     keyBinding: 331
+  - KeyFor: 1
+    keyBinding: 330
+  - KeyFor: 2
+    keyBinding: 332
   - KeyFor: 3
     keyBinding: 336
   - KeyFor: 4

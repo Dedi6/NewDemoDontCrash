@@ -65,6 +65,10 @@ public class MovementPlatformer : MonoBehaviour
     public float skillTimer, teleportShakeTime, teleportShakeForce;
     private bool isKnockingBack = false;
 
+    private OrbType orbType;
+    private Coroutine orbCoroutine;
+    private GameObject defaultOrb;
+
     // !
     public float distanceTest;
 
@@ -117,12 +121,19 @@ public class MovementPlatformer : MonoBehaviour
     [System.Serializable]
     public class BoolEvent : UnityEvent<bool> { }
 
+
     private enum State              // all of the states available for the character
     {
         Normal,
         WallJumping,
         DashingToEnemy,
         IgnorePlayerInput,
+    }
+
+    public enum OrbType
+    {
+        Normal,
+        Ghost,
     }
 
     public enum DirectionPressed
@@ -158,6 +169,9 @@ public class MovementPlatformer : MonoBehaviour
         input = InputManager.instance;
         manaBar = GetComponent<ManaBar>();
         currentRoom = GameMaster.instance.firstRoom;
+
+        orbType = OrbType.Normal;
+        defaultOrb = PrefabManager.instance.defaultBulletPrefab;
     }
 
     private void Awake()
@@ -170,6 +184,10 @@ public class MovementPlatformer : MonoBehaviour
 
     void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.L))
+            SwitchOrbType(OrbType.Ghost, 3.5f);
+
 
         if (Time.timeScale == 0)
             return;
@@ -612,7 +630,12 @@ public class MovementPlatformer : MonoBehaviour
         if (!didHitAnEnemy && CurrentBulletGameObject != null)
         {
             StartCoroutine(FreezeGame());
-            rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x, CurrentBulletGameObject.transform.position.y + 0.5f);
+            if (orbType == OrbType.Normal)
+                rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x, CurrentBulletGameObject.transform.position.y + 0.5f);
+            else
+            {
+               CurrentBulletGameObject.GetComponent<BulletGhost>().TeleportGhost();
+            }
             //rb.transform.rotation = new Quaternion(0, 0, 0, 0);
             rb.velocity = new Vector2(0, 0);
         }
@@ -893,13 +916,16 @@ public class MovementPlatformer : MonoBehaviour
                 PrefabManager.instance.PlayVFX(PrefabManager.ListOfVFX.BulletDissapear, CurrentBulletGameObject.transform.position);
             canTeleport = false;
             canShoot = true;
-            if(FindObjectsOfType<bullet>().Length > 0)
+            if(FindObjectsOfType<bullet>().Length > 0 || FindObjectsOfType<BulletGhost>().Length > 0)
                 Destroy(CurrentBulletGameObject);
 
             shouldICheckIsGrounded = false;
             shouldCheckForShootMemory = true;
             if (isGrounded == false)
                 canShoot = false;
+
+
+            ResetOrb();
         }
     }
 
@@ -1160,6 +1186,43 @@ public class MovementPlatformer : MonoBehaviour
         state = State.Normal;
     }
 
+    private IEnumerator SwitchOrbCorou(float timeActive, OrbType newType)
+    {
+        orbType = newType;
+        PrefabManager manageP = PrefabManager.instance;
+        switch(orbType)
+        {
+            case OrbType.Normal:
+                bulletPrefab = defaultOrb;
+                break;
+            case OrbType.Ghost:
+                bulletPrefab = manageP.ghostBullet;
+                break;
+        }
+
+        yield return new WaitForSeconds(timeActive);
+
+        ResetOrb();
+    }
+
+    void ResetOrb()
+    {
+        orbType = OrbType.Normal;
+        bulletPrefab = defaultOrb;
+        if(orbCoroutine != null)
+            StopCoroutine(orbCoroutine);
+    }
+
+    public void SwitchOrbType(OrbType newType, float time)      // intiates the coroutine
+    {
+        orbCoroutine = StartCoroutine(SwitchOrbCorou(time, newType));
+    }
+
+    public OrbType GetCurrentOrbType()
+    {
+        return orbType;
+    }
+
     public void StartIgnoreInput()
     {
         state = State.IgnorePlayerInput;
@@ -1252,7 +1315,10 @@ public class MovementPlatformer : MonoBehaviour
         tm.animator.SetTrigger("End");
     }
 
-
+    public bool IsStunned()
+    {
+        return state == State.IgnorePlayerInput ? true : false;
+    }
 
 
     private void CheckDirectionPressed()            //Check which direction is being pressed right now.
@@ -1286,8 +1352,6 @@ public class MovementPlatformer : MonoBehaviour
     {
         return directionPressedNow;
     }
-
-
 
 
 
@@ -1354,10 +1418,11 @@ public class MovementPlatformer : MonoBehaviour
     private bool BoolToInt(int i)
     {
         return i == 1 ? true : false;
-    } */
+    } */ // save pointer
 
     void SetForBuilding()
     {
         PlayerPrefs.DeleteKey("BeginGame");
     }
+
 }

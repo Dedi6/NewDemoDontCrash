@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7734560748192934329}
   - component: {fileID: 7734560748192934331}
   - component: {fileID: 7734560748192934324}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: RefreshOrb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,6 +61,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   respawnTime: 3.5
   animator: {fileID: 7734560748192934329}
+  functionToDo:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7734560748192934330}
+        m_TargetAssemblyTypeName: RefreshOrb, Assembly-CSharp
+        m_MethodName: RefreshCanShoot
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!95 &7734560748192934329
 Animator:
   serializedVersion: 3
