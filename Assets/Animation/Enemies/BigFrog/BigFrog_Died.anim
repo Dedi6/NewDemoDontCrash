@@ -20,25 +20,29 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: -5148618882585282658, guid: 59ceba229e8a9ac4a876e460c565a8ae,
-        type: 3}
+      value: {fileID: 21300000, guid: a2f20bdc8d0125a4e9b66adf4055f56c, type: 3}
     - time: 0.083333336
-      value: {fileID: -4986223337556055591, guid: 59ceba229e8a9ac4a876e460c565a8ae,
-        type: 3}
+      value: {fileID: 21300000, guid: 6f7360d039ad1494da67e295fbb46434, type: 3}
     - time: 0.16666667
-      value: {fileID: 2986200402272807206, guid: 59ceba229e8a9ac4a876e460c565a8ae,
-        type: 3}
+      value: {fileID: 21300000, guid: 35affdaf084514048ab5f655f82d301b, type: 3}
     - time: 0.25
-      value: {fileID: -6386400204435234083, guid: 59ceba229e8a9ac4a876e460c565a8ae,
-        type: 3}
+      value: {fileID: 21300000, guid: 2e8d306ac5eea294e86f6d82b16bfb43, type: 3}
     - time: 0.33333334
-      value: {fileID: 6095068927588020094, guid: 59ceba229e8a9ac4a876e460c565a8ae,
-        type: 3}
+      value: {fileID: 21300000, guid: 1843548a144a10442adfcaea25dc5f70, type: 3}
     - time: 0.41666666
-      value: {fileID: 4545814707902158638, guid: 59ceba229e8a9ac4a876e460c565a8ae,
-        type: 3}
+      value: {fileID: 21300000, guid: e58fc76e4d890d14494912b5a882102a, type: 3}
     - time: 0.5
-      value: {fileID: 21300000, guid: 61b44187460d7da43aca835ab78308ab, type: 3}
+      value: {fileID: 21300000, guid: 60c66b072a2e4c349989f3d709cdadb4, type: 3}
+    - time: 0.5833333
+      value: {fileID: 21300000, guid: b60d8060546e1f64ca2ba04d259d2bc1, type: 3}
+    - time: 0.6666667
+      value: {fileID: 21300000, guid: 4ee590d3f292d614087bdf55f2118dd6, type: 3}
+    - time: 0.75
+      value: {fileID: 21300000, guid: 7e4a0858ab52db14eb11017adef2ef19, type: 3}
+    - time: 0.8333333
+      value: {fileID: 21300000, guid: f7ac3be31e50c7642ba1762a300e2e30, type: 3}
+    - time: 0.9166667
+      value: {fileID: 21300000, guid: b1e4762382f7cb34fb7b258defbc22fa, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -58,19 +62,24 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: -5148618882585282658, guid: 59ceba229e8a9ac4a876e460c565a8ae, type: 3}
-    - {fileID: -4986223337556055591, guid: 59ceba229e8a9ac4a876e460c565a8ae, type: 3}
-    - {fileID: 2986200402272807206, guid: 59ceba229e8a9ac4a876e460c565a8ae, type: 3}
-    - {fileID: -6386400204435234083, guid: 59ceba229e8a9ac4a876e460c565a8ae, type: 3}
-    - {fileID: 6095068927588020094, guid: 59ceba229e8a9ac4a876e460c565a8ae, type: 3}
-    - {fileID: 4545814707902158638, guid: 59ceba229e8a9ac4a876e460c565a8ae, type: 3}
-    - {fileID: 21300000, guid: 61b44187460d7da43aca835ab78308ab, type: 3}
+    - {fileID: 21300000, guid: a2f20bdc8d0125a4e9b66adf4055f56c, type: 3}
+    - {fileID: 21300000, guid: 6f7360d039ad1494da67e295fbb46434, type: 3}
+    - {fileID: 21300000, guid: 35affdaf084514048ab5f655f82d301b, type: 3}
+    - {fileID: 21300000, guid: 2e8d306ac5eea294e86f6d82b16bfb43, type: 3}
+    - {fileID: 21300000, guid: 1843548a144a10442adfcaea25dc5f70, type: 3}
+    - {fileID: 21300000, guid: e58fc76e4d890d14494912b5a882102a, type: 3}
+    - {fileID: 21300000, guid: 60c66b072a2e4c349989f3d709cdadb4, type: 3}
+    - {fileID: 21300000, guid: b60d8060546e1f64ca2ba04d259d2bc1, type: 3}
+    - {fileID: 21300000, guid: 4ee590d3f292d614087bdf55f2118dd6, type: 3}
+    - {fileID: 21300000, guid: 7e4a0858ab52db14eb11017adef2ef19, type: 3}
+    - {fileID: 21300000, guid: f7ac3be31e50c7642ba1762a300e2e30, type: 3}
+    - {fileID: 21300000, guid: b1e4762382f7cb34fb7b258defbc22fa, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.5833333
+    m_StopTime: 1
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -90,7 +99,7 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.41666666
+  - time: 0.8333333
     functionName: SpawnFrog
     data: 
     objectReferenceParameter: {fileID: 0}

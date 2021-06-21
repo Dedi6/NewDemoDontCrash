@@ -9,7 +9,7 @@ public class BigFrog : MonoBehaviour, ISFXResetable, IKnockbackable
     [Space]
     public Rigidbody2D enemy;
     public Transform rayCheckPointGround;
-    private bool facingRight = false, bodyHitGround = false, delayHitGroundSFX = true, frogSpawnedAlready;
+    private bool facingRight = true, bodyHitGround = false, delayHitGroundSFX = true, frogSpawnedAlready;
     private RaycastHit2D wallCheckRaycast;
     private RaycastHit2D groundCheckRaycast, endPlatformCheck, rayToAttack;
     private Vector2 raycastDirection;
@@ -46,7 +46,7 @@ public class BigFrog : MonoBehaviour, ISFXResetable, IKnockbackable
     void Start()
     {
         enemy = GetComponent<Rigidbody2D>();
-        raycastDirection = new Vector2(-1, 0);
+        raycastDirection = new Vector2(1, 0);
         boxCollider = GetComponent<BoxCollider2D>();
         player = GameObject.Find("Dirt");
         speedMulitiplier += Random.Range(-1f, 1f);

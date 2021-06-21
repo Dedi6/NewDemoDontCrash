@@ -12,7 +12,7 @@ public class FrogEnemyBasic : MonoBehaviour, ISFXResetable
     public float moveSpeed = 10;
     public int amountOfJumpsBeforeTurningMax = 3;
     public int amountOfJumpsCurrent;
-    private bool facingRight = false;
+    private bool facingRight = true;
     private bool checkIfHittingGround = false, bodyHitGround = false, delayHitGroundSFX = true;
     private RaycastHit2D wallCheckRaycast;
     private RaycastHit2D groundCheckRaycast;
@@ -36,7 +36,7 @@ public class FrogEnemyBasic : MonoBehaviour, ISFXResetable
         enemy = GetComponent<Rigidbody2D>();
         player = GameObject.Find("Dirt");
         amountOfJumpsCurrent = amountOfJumpsBeforeTurningMax;
-        raycastDirection = new Vector2(-1, 0);
+        raycastDirection = new Vector2(1, 0);
         boxCollider = GetComponent<BoxCollider2D>();
         InvokeRepeating("StateHandler", 0, 0.2f);
         bool goRight = GetComponent<Enemy>().goRight;

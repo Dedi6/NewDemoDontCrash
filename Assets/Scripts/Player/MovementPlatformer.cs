@@ -151,6 +151,7 @@ public class MovementPlatformer : MonoBehaviour
 
     void Start()
     {
+        Application.targetFrameRate = 60;
         CashComponents();   // get all the components ready.
 
        // RespawnAtSavePoint();                     
@@ -479,6 +480,13 @@ public class MovementPlatformer : MonoBehaviour
         if (InputManager.instance.KeyDown(Keybindings.KeyList.Jump))
         {
             jumpMemory = 0.2f;
+
+            CellOrganizer cellO = CellOrganizer.instance;   // handle jump orbs
+            if (isAirborn && cellO.HaveOrbs())
+            {
+                cellO.ReleaseLatest();
+                groundedMemory = 0.05f;
+            }
         }
         if (isGrounded && isAirborn)
         {
@@ -928,8 +936,6 @@ public class MovementPlatformer : MonoBehaviour
             ResetOrb();
         }
     }
-
-
 
 
     private void AttackMemory()
