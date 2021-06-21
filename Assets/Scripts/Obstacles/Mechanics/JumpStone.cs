@@ -16,10 +16,13 @@ public class JumpStone : MonoBehaviour
     private Vector2 originalPos;
     private Tilemap tilemap;
     private bool inTiles;
+    public Color deactivatedColor;
+    private SpriteRenderer sprt;
 
     void Start()
     {
         player = GameMaster.instance.playerInstance.GetComponent<MovementPlatformer>();
+        sprt = GetComponent<SpriteRenderer>();
         originalPos = transform.position;
         tilemap = CellOrganizer.instance.tileMap;
     }
@@ -108,11 +111,11 @@ public class JumpStone : MonoBehaviour
 
         //  animator.SetBool("IsActive", false);
 
-     //   sprt.color = deactivatedColor;
+        sprt.color = deactivatedColor;
 
         yield return new WaitForSeconds(1f);
 
-       // sprt.color = Color.white;
+        sprt.color = Color.white;
         GetComponent<CircleCollider2D>().enabled = true;
     }
 
