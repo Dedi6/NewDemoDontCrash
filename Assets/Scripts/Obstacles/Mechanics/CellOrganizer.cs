@@ -42,6 +42,11 @@ public class CellOrganizer : MonoBehaviour
         cells[currentPos].currentCell = newCell;
     }
 
+    public bool CanAddCell()
+    {
+        return currentPos < cells.Length - 1 ? true : false;
+    }
+
     public void ReleaseLatest()
     {
 
@@ -54,7 +59,7 @@ public class CellOrganizer : MonoBehaviour
 
     public void ReleaseAll()
     {
-        while(currentPos > 0)
+        while(currentPos > -1)
         {
             cells[currentPos].positionToFollow = null;
             cells[currentPos].currentCell.GetComponent<JumpStone>().Pop();

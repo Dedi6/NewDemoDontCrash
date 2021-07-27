@@ -48,9 +48,9 @@ MonoBehaviour:
   animator: {fileID: 0}
   pointToFollow: {fileID: 0}
   currentSpeed: 0
-  speedClose: 10
-  speedFar: 15
-  radiusClose: 5
+  speedClose: 15
+  speedFar: 20
+  radiusClose: 3
   speedOffset: 0.5
   deactivatedColor: {r: 0.6784314, g: 0.6784314, b: 0.6784314, a: 1}
 --- !u!212 &1752884295623110469

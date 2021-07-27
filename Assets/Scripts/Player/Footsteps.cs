@@ -27,6 +27,7 @@ public class Footsteps : MonoBehaviour
 
     }
 
+   
     private void checkGroundType()
     {
         TileTerrain currentTerrain = currentTileMap.GetTile(currentTileMap.WorldToCell(footstepPosition.position)) as TileTerrain;
@@ -48,7 +49,15 @@ public class Footsteps : MonoBehaviour
         }
         else
             audioManager.PlaySound(currentSound);
+
+        // will play the landing sound if it's the last sound it got. Should be an easy fix 
     }
+
+    public void SetCurrentSound(AudioManager.SoundList newSound) // use this for the fix later to set every steppable object manually
+    {
+        currentSound = newSound;
+    }
+
 
     public void PlayerLanded()
     {

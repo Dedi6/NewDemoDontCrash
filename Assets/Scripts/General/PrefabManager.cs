@@ -28,6 +28,7 @@ public class PrefabManager : MonoBehaviour
     public ManageSprites[] arrayOfSprites;
     public GameObject transitionManager, roomNumber, ghostBullet, defaultBulletPrefab;
     public PlayableDirector currentDirector;
+
     public enum ListOfVFX
     {
         BulletDissapear,

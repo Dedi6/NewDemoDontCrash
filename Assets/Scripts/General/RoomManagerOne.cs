@@ -71,6 +71,7 @@ public class RoomManagerOne : MonoBehaviour
         {
             virtualCam.SetActive(false);
             corou = StartCoroutine(FreezeGame(freezeWhenSwitchingRoomTime));
+            CellOrganizer.instance.ReleaseAll();
         }
         else
         {
@@ -139,13 +140,20 @@ public class RoomManagerOne : MonoBehaviour
 
     public void PlayerRespawnReset2()
     {
-        if(respawnEnemiesOnRespawn)
+        /*if(respawnEnemiesOnRespawn)       // this only happens for if respawn enemies
         {
             var objects = FindObjectsOfType<MonoBehaviour>().OfType<IRespawnResetable>();
+            CellOrganizer.instance.ReleaseAll();
             foreach (IRespawnResetable o in objects)
             {
                 o.PlayerHasRespawned();
             }
+        }*/
+        var objects = FindObjectsOfType<MonoBehaviour>().OfType<IRespawnResetable>();
+        CellOrganizer.instance.ReleaseAll();
+        foreach (IRespawnResetable o in objects)
+        {
+            o.PlayerHasRespawned();
         }
     }
 

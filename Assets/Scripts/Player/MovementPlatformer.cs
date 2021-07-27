@@ -990,7 +990,7 @@ public class MovementPlatformer : MonoBehaviour
                 {
                     audioManager.PlaySound(AudioManager.SoundList.HiddenDoorOpen);
                     GameObject hitVFXspawn = Instantiate(hitVFXWall, enemy.transform.position, transform.rotation);
-                    Destroy(enemy.gameObject);
+                    enemy.GetComponent<HiddenDoor>().RevealPath();
                 }
                 if (enemy.gameObject.layer == 19)
                     enemy.GetComponentInParent<Hollow>().BlinkVFX();
@@ -1025,7 +1025,7 @@ public class MovementPlatformer : MonoBehaviour
                 {
                     audioManager.PlaySound(AudioManager.SoundList.HiddenDoorOpen);
                     GameObject hitVFXspawn = Instantiate(hitVFXWall, enemy.transform.position, Quaternion.Euler(0, 0, 90));
-                    Destroy(enemy.gameObject);
+                    enemy.GetComponent<HiddenDoor>().RevealPath();
                 }
                 if (enemy.gameObject.layer == 19)
                     enemy.GetComponentInParent<Hollow>().BlinkVFX();
@@ -1108,6 +1108,8 @@ public class MovementPlatformer : MonoBehaviour
         rb.constraints = RigidbodyConstraints2D.FreezePosition;
         yield return new WaitForSeconds(timeToWait);
         rb.constraints = ~RigidbodyConstraints2D.FreezePosition;
+
+        FallingGroundCheck();
     }       // pause only the player's movement for float timeToWait
 
 

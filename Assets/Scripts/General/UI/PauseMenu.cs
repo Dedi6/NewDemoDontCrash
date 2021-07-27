@@ -14,7 +14,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject controlsMenu;
     public GameObject cheatsMenu;
     private bool keybindsOpen, skillBookOpen, spellHandlerOpen, controlsOpen, audioOpen, cheatsOpen;
-    
+
     private void Start()
     {
         Cursor.visible = false;
@@ -23,7 +23,7 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
-        if (InputManager.instance.KeyDown(Keybindings.KeyList.PauseMenu))
+        if (InputManager.instance.KeyDown(Keybindings.KeyList.PauseMenu) || Input.GetKeyDown(KeyCode.Escape))
         {
             if (keybindsOpen || skillBookOpen || spellHandlerOpen || controlsOpen || audioOpen || cheatsOpen)
                 HandleActiveMenu();

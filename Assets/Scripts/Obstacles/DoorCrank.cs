@@ -8,6 +8,20 @@ public class DoorCrank : MonoBehaviour, IRespawnResetable
     public bool isTriggered = false;
     public Animator animator;
     public UnityEngine.Events.UnityEvent CrankTriggered;
+    public string nameForSave;
+
+    private void Start()
+    {
+        CheckIfActive();
+    }
+
+    public void CheckIfActive()
+    {
+        if (PlayerPrefs.HasKey(nameForSave))
+            Triggered();
+        else if (!CheckIfInCurrentRoom())
+            gameObject.SetActive(false);
+    }
 
     public void Triggered()
     {
@@ -17,6 +31,8 @@ public class DoorCrank : MonoBehaviour, IRespawnResetable
         GetComponent<CircleCollider2D>().enabled = false;
         GameMaster gm = GameMaster.instance;
         gm.GetComponent<AudioManager>().PlaySound(AudioManager.SoundList.ClankTriggered);
+
+        PlayerPrefs.SetInt(nameForSave, 1);
     }
 
     public void PlayerDiedAfterClank()
@@ -37,5 +53,10 @@ public class DoorCrank : MonoBehaviour, IRespawnResetable
     public void PlayerHasRespawned()
     {
         PlayerDiedAfterClank();
+    }
+
+    private bool CheckIfInCurrentRoom()
+    {
+        return ReferenceEquals(transform.parent.gameObject, GameMaster.instance.currentRoom);
     }
 }

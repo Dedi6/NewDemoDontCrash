@@ -118,6 +118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeBeforeFalling: 0.5
+  timeBeforeRespawning: 4.5
   waitTimeDestroy: 2
   animator: {fileID: 4050170991734981952}
 --- !u!50 &4050170991734981957

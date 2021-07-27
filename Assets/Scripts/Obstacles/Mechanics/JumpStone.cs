@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 //using UnityEngine.Experimental.Rendering.Universal;
 
 
-public class JumpStone : MonoBehaviour
+public class JumpStone : MonoBehaviour, IRespawnResetable
 {
     MovementPlatformer player;
     private bool isActive;
@@ -78,7 +78,7 @@ public class JumpStone : MonoBehaviour
             return false;
     }
 
-    void SetFloats()
+    void SetFloats() 
     {
         float rnd = Random.Range(-speedOffset, speedOffset);
         speedClose += rnd;
@@ -88,17 +88,19 @@ public class JumpStone : MonoBehaviour
     private void ActivateCell()
     {
         CellOrganizer org = CellOrganizer.instance;
-        org.AddCell(gameObject);
-        pointToFollow = org.GetCurrentPoint();
-        isActive = true;
-        GetComponent<CircleCollider2D>().enabled = false;
-        // animator.SetBool("IsActive", true);
+        if(org.CanAddCell())
+        {
+            org.AddCell(gameObject);
+            pointToFollow = org.GetCurrentPoint();
+            isActive = true;
+            GetComponent<CircleCollider2D>().enabled = false;
+            // animator.SetBool("IsActive", true);
+        }
     }
 
     public void DeactivateCell()
     {
         StartCoroutine(DelayDeactivation());
-        isActive = false;
     }
 
     private IEnumerator DelayDeactivation()
@@ -119,9 +121,9 @@ public class JumpStone : MonoBehaviour
         GetComponent<CircleCollider2D>().enabled = true;
     }
 
-    public void PlayerRespawned()
+    public void PlayerHasRespawned()
     {
-      //  AudioManager.instance.PlaySound(AudioManager.SoundList.OrbDesrtoy);
+        //  AudioManager.instance.PlaySound(AudioManager.SoundList.OrbDesrtoy);
         transform.position = originalPos;
         isActive = false;
         GetComponent<CircleCollider2D>().enabled = true;
@@ -129,7 +131,7 @@ public class JumpStone : MonoBehaviour
 
     public void Pop()
     {
-       //AudioManager.instance.PlaySound(AudioManager.SoundList.OrbDesrtoy);
+        //AudioManager.instance.PlaySound(AudioManager.SoundList.OrbDesrtoy);
         transform.position = originalPos;
         isActive = false;
         GetComponent<CircleCollider2D>().enabled = true;

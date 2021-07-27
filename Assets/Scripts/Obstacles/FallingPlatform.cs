@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FallingPlatform : MonoBehaviour, IRespawnResetable
 {
-    public float timeBeforeFalling;
+    public float timeBeforeFalling, timeBeforeRespawning;
     public float waitTimeDestroy;
     public Animator animator;
     private Vector2 originalPos;
@@ -33,7 +33,10 @@ public class FallingPlatform : MonoBehaviour, IRespawnResetable
         rb.isKinematic = false;
         GetComponent<BoxCollider2D>().enabled = false;
 
-        //Destroy(gameObject ,waitTimeDestroy);
+        yield return new WaitForSeconds(timeBeforeRespawning);
+
+        //animation for popping back up
+        PlayerHasRespawned();
     }
 
     public void PlayerHasRespawned()
