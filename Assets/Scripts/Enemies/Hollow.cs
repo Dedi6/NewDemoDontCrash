@@ -44,7 +44,7 @@ public class Hollow : MonoBehaviour, ISFXResetable
         enemy = GetComponent<Rigidbody2D>();
         raycastDirection = new Vector2(-1, 0);
         boxCollider = GetComponent<BoxCollider2D>();
-        player = GameObject.Find("Dirt");
+        player = GameMaster.instance.playerInstance;
         InvokeRepeating("StateHandler", 0, 0.2f);
         bool goRight = GetComponent<Enemy>().goRight;
         if ((goRight && !facingRight) || (!goRight && facingRight))

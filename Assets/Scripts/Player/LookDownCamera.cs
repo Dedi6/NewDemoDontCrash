@@ -13,6 +13,8 @@ public class LookDownCamera : MonoBehaviour
     private bool isActive;
     private Coroutine coroutine;
     private float newY, baseY;
+   
+    //private MovementPlatformer playerScript;   // all of the commented out section is if I want to prevent the player from moving while looking down.
 
     void Start()
     {
@@ -21,6 +23,8 @@ public class LookDownCamera : MonoBehaviour
         input = InputManager.instance;
         baseY = cam.m_ScreenY;
         newY = baseY - offSet;
+
+       // playerScript = GameMaster.instance.playerInstance.GetComponent<MovementPlatformer>();
     }
 
     void Update()
@@ -29,6 +33,11 @@ public class LookDownCamera : MonoBehaviour
             coroutine = StartCoroutine(LookDown());
         if (input.KeyUp(Keybindings.KeyList.Down))
             ResetToNormal();
+
+       /* if (playerScript.directionPressedNow == MovementPlatformer.DirectionPressed.Down && !isActive)
+            coroutine = StartCoroutine(LookDown());
+        if (playerScript.directionPressedNow != MovementPlatformer.DirectionPressed.Down && isActive)
+            ResetToNormal();*/
     }
 
     private IEnumerator LookDown()

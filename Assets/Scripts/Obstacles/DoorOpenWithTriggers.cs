@@ -42,6 +42,7 @@ public class DoorOpenWithTriggers : MonoBehaviour, IRespawnResetable
         }
     }
 
+
     private void ResetDoor()
     {
         if (!isClankTriggered)

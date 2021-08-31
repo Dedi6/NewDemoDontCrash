@@ -108,7 +108,7 @@ public class Enemy : MonoBehaviour, IRespawnResetable
             else
                 StartCoroutine(StunEnemy(StunTimeGrounded));
 
-            isBeingPulledDown = false;
+            
         }
     }
 
@@ -116,16 +116,33 @@ public class Enemy : MonoBehaviour, IRespawnResetable
     {
         if (col.gameObject.layer == LayerMask.NameToLayer("bullet"))
         {
-            player.GetComponent<MovementPlatformer>().CurrentBulletGameObject = gameObject;
-            player.GetComponent<MovementPlatformer>().didHitAnEnemy = true;
-            Highlight();
-            GetComponent<SpriteRenderer>().sortingOrder = 1;
-            player.GetComponent<MovementPlatformer>().UnHightLightEnemies();
-            audioManager.PlaySound(AudioManager.SoundList.BulletHitEnemy);
-            Destroy(col.gameObject);
+            BulletHitEnemy(col.gameObject);
         }
+        //if (col.gameObject.layer == LayerMask.NameToLayer("player"))
+          //  PlayerKnockBackAndDamage();
+    }
+
+    private void OnCollisionEnter2D(Collision2D col)
+    {
         if (col.gameObject.layer == LayerMask.NameToLayer("player"))
             PlayerKnockBackAndDamage();
+    }
+
+    private void OnCollisionStay2D(Collision2D col)
+    {
+        if (col.gameObject.layer == LayerMask.NameToLayer("player"))
+            PlayerKnockBackAndDamage();
+    }
+
+    void BulletHitEnemy(GameObject bullet)
+    {
+        player.GetComponent<MovementPlatformer>().CurrentBulletGameObject = gameObject;
+        player.GetComponent<MovementPlatformer>().didHitAnEnemy = true;
+        Highlight();
+        GetComponent<SpriteRenderer>().sortingOrder = 1;
+        player.GetComponent<MovementPlatformer>().UnHightLightEnemies();
+        audioManager.PlaySound(AudioManager.SoundList.BulletHitEnemy);
+        Destroy(bullet);
     }
 
     public void PlayerKnockBackAndDamage()
@@ -141,12 +158,7 @@ public class Enemy : MonoBehaviour, IRespawnResetable
     {
         if (col.gameObject.layer == LayerMask.NameToLayer("player"))
         {
-            if (player.transform.position.x > enemy.transform.position.x)
-                player.GetComponent<MovementPlatformer>().KnockBackPlayer(25f, 1f, 0.5f, true);
-            else
-                player.GetComponent<MovementPlatformer>().KnockBackPlayer(25f, 1f, 0.5f, false);
-            player.GetComponent<MovementPlatformer>().GotHitByAnEnemy(1);
-
+            PlayerKnockBackAndDamage();
         }
     }
 
@@ -175,11 +187,31 @@ public class Enemy : MonoBehaviour, IRespawnResetable
         gameObject.layer = LayerMask.NameToLayer("DeadEnemy");
         gameObject.tag = "EnemyDead";
 
-        if (wasSpawnedBySpawnManager && (GameObject.FindGameObjectsWithTag("EnemyAlive").Length == 0))
+        /* if (wasSpawnedBySpawnManager && (GameObject.FindGameObjectsWithTag("EnemyAlive").Length == 0))
+         {
+             spawnManager.GetComponent<WaveSpawnerManager>().InvokeEnemies();
+         }*/
+        if(wasSpawnedBySpawnManager)
+            CheckIfWasSpawnedByManager();
+    }
+
+    private void CheckIfWasSpawnedByManager()
+    {
+        if (GameObject.FindGameObjectsWithTag("EnemyAlive").Length == 0)
         {
             spawnManager.GetComponent<WaveSpawnerManager>().InvokeEnemies();
         }
-
+        else if (GameObject.FindGameObjectsWithTag("EnemyAlive").Length > 0)
+        {
+            int spawnedByManager = 0;
+            foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("EnemyAlive"))
+            {
+                if (enemy.GetComponent<Enemy>().wasSpawnedBySpawnManager)
+                    spawnedByManager++;
+            }
+            if (spawnedByManager == 0)
+                spawnManager.GetComponent<WaveSpawnerManager>().InvokeEnemies();
+        }
     }
 
     private void OnDisable()
@@ -194,6 +226,8 @@ public class Enemy : MonoBehaviour, IRespawnResetable
         enemy.velocity = Vector2.zero;
         enemy.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
         yield return new WaitForSeconds(stunDuration);
+
+        isBeingPulledDown = false;
         enemy.constraints = ~RigidbodyConstraints2D.FreezePosition;
         enemy.constraints = RigidbodyConstraints2D.FreezeRotation;
         StopPullDownVFX();
@@ -231,6 +265,11 @@ public class Enemy : MonoBehaviour, IRespawnResetable
         Highlight();
         TakeDamage(20);
         GetComponent<SpriteRenderer>().sortingOrder = 0;
+    }
+
+    public void StopMovements()
+    {
+        //enemy.constraints = RigidbodyConstraints2D.FreezeAll
     }
 
 }

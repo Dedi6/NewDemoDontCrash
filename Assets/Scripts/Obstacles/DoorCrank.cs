@@ -12,25 +12,29 @@ public class DoorCrank : MonoBehaviour, IRespawnResetable
 
     private void Start()
     {
-        CheckIfActive();
+        CheckIfActive(false);
     }
 
-    public void CheckIfActive()
+    public void CheckIfActive(bool shouldPlayAudio)
     {
         if (PlayerPrefs.HasKey(nameForSave))
-            Triggered();
+            Triggered(shouldPlayAudio);
         else if (!CheckIfInCurrentRoom())
             gameObject.SetActive(false);
     }
 
-    public void Triggered()
+    public void Triggered(bool shouldPlayAudio)
     {
         CrankTriggered.Invoke();
         animator.SetBool("IsTriggered", true);
         isTriggered = true;
         GetComponent<CircleCollider2D>().enabled = false;
-        GameMaster gm = GameMaster.instance;
-        gm.GetComponent<AudioManager>().PlaySound(AudioManager.SoundList.ClankTriggered);
+
+        if (shouldPlayAudio)
+        {
+            GameMaster gm = GameMaster.instance;
+            gm.GetComponent<AudioManager>().PlaySound(AudioManager.SoundList.ClankTriggered);
+        }
 
         PlayerPrefs.SetInt(nameForSave, 1);
     }

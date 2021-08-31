@@ -24,6 +24,8 @@ public class GameMaster : MonoBehaviour
         else
             Destroy(gameObject);
         playerInstance = GameObject.FindGameObjectWithTag("Player");
+
+      //  Application.targetFrameRate = 60;
     }
 
     public void UpdateSkillsName(string a, string b) { aSkillString = a; bSkillString = b;}

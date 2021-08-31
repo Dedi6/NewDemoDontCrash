@@ -151,7 +151,6 @@ public class MovementPlatformer : MonoBehaviour
 
     void Start()
     {
-        Application.targetFrameRate = 60;
         CashComponents();   // get all the components ready.
 
        // RespawnAtSavePoint();                     
@@ -985,7 +984,7 @@ public class MovementPlatformer : MonoBehaviour
                     GameObject hitVFXspawn = Instantiate(hitVFX, enemy.transform.position, Quaternion.Euler(0, y, Random.Range(-20, 20)));
                 }
                 if (enemy.gameObject.layer == 17) //crank
-                    enemy.GetComponent<DoorCrank>().Triggered();
+                    enemy.GetComponent<DoorCrank>().Triggered(true);
                 if (enemy.gameObject.layer == 30) //hidden door
                 {
                     audioManager.PlaySound(AudioManager.SoundList.HiddenDoorOpen);
@@ -1020,7 +1019,7 @@ public class MovementPlatformer : MonoBehaviour
                     GameObject hitVFXspawn = Instantiate(hitVFX, enemy.transform.position, Quaternion.Euler(0, 0, 90));
                 }
                 if (enemy.gameObject.layer == 17) //crank
-                    enemy.GetComponent<DoorCrank>().Triggered();
+                    enemy.GetComponent<DoorCrank>().Triggered(true);
                 if (enemy.gameObject.layer == 30) //hidden door
                 {
                     audioManager.PlaySound(AudioManager.SoundList.HiddenDoorOpen);
@@ -1068,8 +1067,12 @@ public class MovementPlatformer : MonoBehaviour
 
     private IEnumerator MakePlayerInvincible(float time)
     {
+        gameObject.layer = 6; // layermask which enemies dont collide with
         playerIsInvulnerable = true;
+
         yield return new WaitForSeconds(time);
+
+        gameObject.layer = 11; // regular layer mask of player
         playerIsInvulnerable = false;
     }       // make the player invincible for float time 
 
@@ -1263,7 +1266,7 @@ public class MovementPlatformer : MonoBehaviour
         rb.constraints = ~RigidbodyConstraints2D.FreezePosition;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         transform.position = gm.lastCheckPointPosition;
-        GetComponent<Health>().DealDamage(1);
+        
         BulletReset();
         //currentRoom.GetComponent<RoomManagerOne>().PlayerRespawned.Invoke();
         currentRoom.GetComponent<RoomManagerOne>().PlayerRespawnReset2();
@@ -1275,6 +1278,7 @@ public class MovementPlatformer : MonoBehaviour
         {
             StartCoroutine(StartSwitchStateToIgnoreInputs(0.1f, false));
             StartCoroutine(RespawnAtCheckpoint(0.4f));
+            GetComponent<Health>().DealDamage(1);
         }
     }
 

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MyBox;
+using Cinemachine;
 
 public class WaveSpawnerManager : MonoBehaviour, IRespawnResetable
 {
@@ -11,7 +13,7 @@ public class WaveSpawnerManager : MonoBehaviour, IRespawnResetable
         public float spawnAfterTimer;
         public bool dontWaitForWaveToEnd;
     }
-    
+
     [System.Serializable]
     public class HelperArray
     {
@@ -29,11 +31,16 @@ public class WaveSpawnerManager : MonoBehaviour, IRespawnResetable
     public UnityEngine.Events.UnityEvent ClearedWaves;
     public UnityEngine.Events.UnityEvent WavesTriggered;
     public bool loopFear = false;
+    [SerializeField]
+    private bool shouldConfineCamera;
+    [ConditionalField(nameof(shouldConfineCamera))] public GameObject newCam; public float dampTime;
+
 
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.layer == LayerMask.NameToLayer("player") && !isTriggeredAlready)
         {
+            HandleConfiners();
             InvokeEnemies();
             isTriggeredAlready = true;
             WavesTriggered.Invoke();
@@ -82,7 +89,10 @@ public class WaveSpawnerManager : MonoBehaviour, IRespawnResetable
             if (currentWave < Waves.Length)
                 StartCoroutine(StartSpawning(Waves[currentWave].spawnAfterTimer));
             else
+            {
                 ClearedWaves.Invoke();
+                RevertConfiners();
+            }
         }
         else
         {
@@ -100,6 +110,7 @@ public class WaveSpawnerManager : MonoBehaviour, IRespawnResetable
     {
         if (!playerRespawning)
         {
+            RevertConfiners();
             playerRespawning = true;
             Invoke("PlayerRespawningCoroutine", 0.5f);
             if (!loopFear)
@@ -118,5 +129,34 @@ public class WaveSpawnerManager : MonoBehaviour, IRespawnResetable
     private void PlayerRespawningCoroutine()
     {
         playerRespawning = false;
+    }
+
+    private void HandleConfiners()
+    {
+        if(shouldConfineCamera)
+        {
+            StartCoroutine(DampConfiners(dampTime));
+            newCam.SetActive(true);
+            currentRoom.GetComponent<RoomManagerOne>().virtualCam.SetActive(false);
+        }
+    }
+
+    private void RevertConfiners()
+    {
+        if (shouldConfineCamera)
+        {
+            StartCoroutine(DampConfiners(dampTime));
+            currentRoom.GetComponent<RoomManagerOne>().virtualCam.SetActive(true);
+            newCam.SetActive(false);
+        }
+    }
+
+    private IEnumerator DampConfiners(float confineTime)
+    {
+       Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 0.45f;
+
+        yield return new WaitForSeconds(confineTime);
+
+        Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 0.3f;
     }
 }
