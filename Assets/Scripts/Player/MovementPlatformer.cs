@@ -87,7 +87,8 @@ public class MovementPlatformer : MonoBehaviour
     public float attackRate = 2f;
     private float nextAttackTime = 0f;
     private float regularAttackTimer, atkAnimationCombo = 0;
-    private bool atkAndFlip;        //!
+    private bool atkAndFlip, isNearWall;        //!
+    private Vector2 atkCapsuleHor;
 
     [Header("General")]
     [Space]
@@ -481,20 +482,23 @@ public class MovementPlatformer : MonoBehaviour
             jumpMemory = 0.2f;
 
             CellOrganizer cellO = CellOrganizer.instance;   // handle jump orbs
-            if (isAirborn && cellO.HaveOrbs())
+            if (isAirborn && cellO.HaveOrbs() && !IsNearGround())
             {
                 cellO.ReleaseLatest();
                 groundedMemory = 0.05f;
             }
         }
-        if (isGrounded && isAirborn)
+        if (isGrounded)
         {
-            isAirborn = false;
             groundedMemory = 0.05f;
-            animator.SetBool("IsFalling", false);
-            GetComponent<Footsteps>().PlayerLanded();
-            CreateDust();
-            OnLandEvent.Invoke();
+            if (isAirborn)
+            {
+                isAirborn = false;
+                animator.SetBool("IsFalling", false);
+                GetComponent<Footsteps>().PlayerLanded();
+                CreateDust();
+                OnLandEvent.Invoke();
+            }
         }
         else if (!isGrounded)
         {
@@ -504,6 +508,11 @@ public class MovementPlatformer : MonoBehaviour
         }
 
     }       // preparing the conditions to the jump
+
+    private bool IsNearGround()
+    {
+        return Physics2D.Raycast(transform.position, Vector2.down, 2, whatIsGround);
+    }
 
     public void FallingGroundCheck()
     {
@@ -749,7 +758,8 @@ public class MovementPlatformer : MonoBehaviour
                 rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x, CurrentBulletGameObject.transform.position.y + 1);
                 StartCoroutine(TPDoor(new Vector2(0, 1), thrustPower * 0.92f, 0.15f));
                 break;
-            case DirectionPressed.Down:
+            case DirectionPressed
+            .Down:
                 //rb.transform.position = new Vector2(CurrentBulletGameObject.transform.position.x, CurrentBulletGameObject.transform.position.y - 1);
                 CurrentBulletGameObject.GetComponent<Enemy>().isBeingPulledDown = true;
                 break;
@@ -942,6 +952,32 @@ public class MovementPlatformer : MonoBehaviour
         if (InputManager.instance.KeyDown(Keybindings.KeyList.Attack))
             regularAttackTimer = 0.1f;
     }       // attacking functions
+
+    private void CheckIfHitWall()
+    {
+        RaycastHit2D checkIfHitWall;
+        Vector2 dir = facingRight ? Vector2.right : Vector2.left;
+
+        checkIfHitWall = Physics2D.Raycast(shootingPoint.position, dir, 5, whatIsGround);
+
+        if (checkIfHitWall)
+        {
+            audioManager.PlaySound(AudioManager.SoundList.HitWall);
+            GameObject hitVFXspawn = Instantiate(hitVFXWall, checkIfHitWall.point, transform.rotation);
+            if(checkIfHitWall.point.x < 2)
+                atkCapsuleHor = new Vector2(5f, 3.2f);
+            else
+            { 
+                atkCapsuleHor = new Vector2(3.2f, 3.2f);
+                isNearWall = true;
+            }
+        }
+        else
+        {
+            atkCapsuleHor = new Vector2(5f, 3.2f);
+            isNearWall = false;
+        }
+    }
     public void AttackRegular()
     {
         atkAnimationStallTimer = 19;
@@ -958,10 +994,13 @@ public class MovementPlatformer : MonoBehaviour
                 atkAnimationCombo = 0;
             }
 
+            CheckIfHitWall();
             //Detect all the enemies hit and puts the data in a collider array, allowing to affect each enemy hit.
-            Collider2D[] hitEnemies = Physics2D.OverlapCapsuleAll(regularAttackPoint.position, new Vector2(5, 3.2f), CapsuleDirection2D.Horizontal, 0, canBeAttackedLayerMask);
+            float offsetHit = isNearWall ? -1.1f : 0;
+            Vector2 attackPoint = new Vector2(regularAttackPoint.position.x + offsetHit, regularAttackPoint.position.y);
+            Collider2D[] hitEnemies = Physics2D.OverlapCapsuleAll(attackPoint, atkCapsuleHor, CapsuleDirection2D.Horizontal, 0, canBeAttackedLayerMask);
 
-            if (hitEnemies.Length == 0)
+           /* if (hitEnemies.Length == 0)
             {
                 RaycastHit2D checkIfHitWall;
                 if (facingRight)
@@ -973,7 +1012,7 @@ public class MovementPlatformer : MonoBehaviour
                     audioManager.PlaySound(AudioManager.SoundList.HitWall);
                     GameObject hitVFXspawn = Instantiate(hitVFXWall, checkIfHitWall.point, transform.rotation);
                 }
-            }
+            }*/
             foreach (Collider2D enemy in hitEnemies)
             {
                 if (enemy.gameObject.layer == 12) // enemy
@@ -1049,7 +1088,7 @@ public class MovementPlatformer : MonoBehaviour
     public void HealNow()
     {
         manaBar.UseMana(25);
-        GetComponent<Health>().health++;
+        GetComponent<Health>().health += 4;
         AudioManager.instance.PlaySound(AudioManager.SoundList.Heal);
         PrefabManager.instance.PlayVFX(PrefabManager.ListOfVFX.HealParticle, transform.position);
     }   //healing

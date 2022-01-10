@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
+
 
 
 public class HarderRoomSwitcher : MonoBehaviour
@@ -51,7 +51,7 @@ public class HarderRoomSwitcher : MonoBehaviour
             transform.GetChild(i).gameObject.SetActive(activatingNow);
 
         isActive = activatingNow;
-        if(activatingNow) background.GetComponent<Light2D>().color = newColor; else background.GetComponent<Light2D>().color = Color.white;
+        if(activatingNow) background.GetComponent<UnityEngine.Rendering.Universal.Light2D>().color = newColor; else background.GetComponent<UnityEngine.Rendering.Universal.Light2D>().color = Color.white;
 
         animator.SetBool("IsActive", activatingNow);
     }

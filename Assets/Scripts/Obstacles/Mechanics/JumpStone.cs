@@ -64,7 +64,7 @@ public class JumpStone : MonoBehaviour, IRespawnResetable
     {
         if (other.gameObject.layer == 11) // 11 is player
         {
-           // isActive = true;
+            // isActive = true;
             ActivateCell();
             SetFloats();
         }
@@ -78,7 +78,7 @@ public class JumpStone : MonoBehaviour, IRespawnResetable
             return false;
     }
 
-    void SetFloats() 
+    void SetFloats()
     {
         float rnd = Random.Range(-speedOffset, speedOffset);
         speedClose += rnd;
@@ -88,7 +88,7 @@ public class JumpStone : MonoBehaviour, IRespawnResetable
     private void ActivateCell()
     {
         CellOrganizer org = CellOrganizer.instance;
-        if(org.CanAddCell())
+        if (org.CanAddCell())
         {
             org.AddCell(gameObject);
             pointToFollow = org.GetCurrentPoint();

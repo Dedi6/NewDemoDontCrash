@@ -54,6 +54,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,8 +64,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -85,6 +86,8 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
@@ -362,6 +365,17 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      BigFrog_Attack_1: -2198896543793030551
+      BigFrog_Attack_3: -2195637854703693796
+      BigFrog_Attack_6: -1529925021524519924
+      BigFrog_Attack_8: 2433403837772443917
+      BigFrog_Attack_2: -4963820524756040130
+      BigFrog_Attack_0: -5197217066868333963
+      BigFrog_Attack_9: -953601734410491522
+      BigFrog_Attack_4: -3134123998713590951
+      BigFrog_Attack_7: 5284179537520191610
+      BigFrog_Attack_5: -949383431452115104
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

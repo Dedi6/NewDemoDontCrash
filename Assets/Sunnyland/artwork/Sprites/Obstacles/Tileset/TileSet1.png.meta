@@ -165,6 +165,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -174,8 +175,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -1264,6 +1265,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      TileSet1_42: 5175757167905647728
+      TileSet1_4: 7913761298055792127
+      TileSet1_6: -6052383861389844148
+      TileSet1_26: -990106264700009365
+      TileSet1_28: -8502167546225735696
+      TileSet1_34: 5995945486054490675
+      TileSet1_37: -3257545195275534213
+      TileSet1_5: 1150484138138771588
+      TileSet1_13: 9061301743138691808
+      TileSet1_29: -2311073205737701583
+      TileSet1_3: -1333397687957773085
+      TileSet1_14: -2092255171269340897
+      TileSet1_23: -1443930635687694967
+      TileSet1_1: -6519111396178722930
+      TileSet1_41: -730739372426502338
+      TileSet1_12: -3759158105702177216
+      TileSet1_32: 6240271544958458090
+      TileSet1_2: -5233512828908260958
+      TileSet1_36: -6571157857345871310
+      TileSet1_15: 105596898293198400
+      TileSet1_0: -5304940498723720264
+      TileSet1_11: -6768838159083506613
+      TileSet1_21: 190553109559179730
+      TileSet1_38: -3107334961035729792
+      TileSet1_33: 5729573921366810557
+      TileSet1_40: 5581017759434073040
+      TileSet1_46: -2422398208933425465
+      TileSet1_30: -264389268747534044
+      TileSet1_18: -5048786779950800258
+      TileSet1_8: 5175211428452132647
+      TileSet1_16: -4028584720550820621
+      TileSet1_9: 7819622754648746793
+      TileSet1_10: 7602392362791983893
+      TileSet1_35: 497116368653141397
+      TileSet1_44: 7811263000559539438
+      TileSet1_19: -8341848852261350334
+      TileSet1_27: -826825627866347069
+      TileSet1_17: -6632189271649670531
+      TileSet1_22: 4873071220289756956
+      TileSet1_45: 3018946688945687010
+      TileSet1_43: -4784087117336411447
+      TileSet1_20: 1787456807680634500
+      TileSet1_31: -6930978442682463341
+      TileSet1_39: -5517769573068398579
+      TileSet1_24: 7273537132181969772
+      TileSet1_25: 5014834887817956150
+      TileSet1_7: 2710384566151579511
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -48,7 +48,8 @@ public class Footsteps : MonoBehaviour
             audioManager.PlaySound(currentSound);
         }
         else
-            audioManager.PlaySound(currentSound);
+            audioManager.PlaySound(AudioManager.SoundList.StepStone);
+            //audioManager.PlaySound(currentSound);
 
         // will play the landing sound if it's the last sound it got. Should be an easy fix 
     }
@@ -81,7 +82,8 @@ public class Footsteps : MonoBehaviour
             audioManager.PlaySound(currentSound);
         }
         else
-            audioManager.PlaySound(currentSound);
+            audioManager.PlaySound(AudioManager.SoundList.LandStone);
+            //audioManager.PlaySound(currentSound);
 
     }
 

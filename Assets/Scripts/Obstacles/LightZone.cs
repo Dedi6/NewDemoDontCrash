@@ -5,7 +5,7 @@ using UnityEngine;
 public class LightZone : MonoBehaviour
 {
     public float zoneRadius, bulletChangedSpeed, reduceZoneSpeed;
-    private UnityEngine.Experimental.Rendering.Universal.Light2D lightController;
+    private UnityEngine.Rendering.Universal.Light2D lightController;
     [HideInInspector]
     public bool isDead = false, isExpanding = false, isShrinking = false;
     [HideInInspector]
@@ -79,7 +79,7 @@ public class LightZone : MonoBehaviour
     public void SetZone()
     {
         isDead = false;
-        lightController = GetComponent<UnityEngine.Experimental.Rendering.Universal.Light2D>();
+        lightController = GetComponent<UnityEngine.Rendering.Universal.Light2D>();
         lightController.pointLightOuterRadius = zoneRadius;
         GetComponent<CircleCollider2D>().enabled = true;
         GetComponent<CircleCollider2D>().radius = zoneRadius;

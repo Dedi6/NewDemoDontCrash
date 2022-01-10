@@ -151,7 +151,7 @@ public class Enemy : MonoBehaviour, IRespawnResetable
             player.GetComponent<MovementPlatformer>().KnockBackPlayer(25f, 1f, 0.5f, true);
         else
             player.GetComponent<MovementPlatformer>().KnockBackPlayer(25f, 1f, 0.5f, false);
-        player.GetComponent<MovementPlatformer>().GotHitByAnEnemy(1);
+        player.GetComponent<MovementPlatformer>().GotHitByAnEnemy(4);
     }
 
     private void OnTriggerStay2D(Collider2D col)

@@ -8,12 +8,13 @@ public class ArrowTrap : MonoBehaviour
     public Transform spawnPoint;
     public float spawnArrowPer, arrowSpeed;
     public GameObject arrowPrefab;
+    public bool isOn;
 
     void Start()
     {
         if(!isRight)
             transform.Rotate(0.0f, 180.0f, 0.0f);
-        StartCoroutine(ShootArrow());
+        StartShooting();
     }
 
     private IEnumerator ShootArrow()
@@ -30,6 +31,19 @@ public class ArrowTrap : MonoBehaviour
 
     private void OnEnable()
     {
-        StartCoroutine(ShootArrow());
+        Invoke("StartShooting", 0.5f);
+    }
+
+    private void OnDisable()
+    {
+        isOn = false;
+    }
+    void StartShooting()
+    {
+        if (!isOn)
+        {
+            StartCoroutine(ShootArrow());
+            isOn = true;
+        }
     }
 }

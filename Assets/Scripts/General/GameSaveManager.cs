@@ -87,6 +87,7 @@ public class GameSaveManager : MonoBehaviour
         {
             Directory.CreateDirectory(Application.persistentDataPath + "/game_save/keybindings");
         }
+        
         foreach (KeybindForPlatforms binding in arrayOfBindings)
         {
             BinaryFormatter binaryF = new BinaryFormatter();
@@ -163,6 +164,33 @@ public class GameSaveManager : MonoBehaviour
             file.Close();
 
             return data;
+        }
+        else
+            return null;
+    }
+
+    public void SaveMemoryStream(string path, MemoryStream memoryStream)
+    {
+        if (!Directory.Exists(Application.persistentDataPath + "/game_save/race_Data")) // create a keybindigs directory
+        {
+            Directory.CreateDirectory(Application.persistentDataPath + "/game_save/race_Data");
+        }
+
+        BinaryFormatter binaryF = new BinaryFormatter();
+        FileStream stream = File.Create(Application.persistentDataPath + "/game_save/race_Data/" + path + ".txt");
+        binaryF.Serialize(stream, memoryStream);
+        stream.Close();
+    }
+
+    public MemoryStream LoadMemoryStream(string path)
+    {
+        if (File.Exists(Application.persistentDataPath + "/game_save/race_Data/" + path + ".txt"))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(Application.persistentDataPath + "/game_save/race_Data/" + path + ".txt", FileMode.Open);
+            MemoryStream memoStream = bf.Deserialize(file) as MemoryStream;
+            file.Close();
+            return memoStream;
         }
         else
             return null;

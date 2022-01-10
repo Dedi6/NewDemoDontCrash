@@ -57,6 +57,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -66,8 +67,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -88,6 +89,8 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
@@ -386,6 +389,18 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      ShellDragon_StompSkill_3: 7690655328428666557
+      ShellDragon_StompSkill_4: -6550554966795697171
+      ShellDragon_StompSkill_0: 5941403113290894351
+      ShellDragon_StompSkill_8: -4968028159895762927
+      ShellDragon_StompSkill_2: 3425760643419548747
+      ShellDragon_StompSkill_9: 1966752666285375780
+      ShellDragon_StompSkill_10: -5087170541024894078
+      ShellDragon_StompSkill_6: -500794983092141528
+      ShellDragon_StompSkill_7: -8857830105376650784
+      ShellDragon_StompSkill_1: -20649822813536830
+      ShellDragon_StompSkill_5: -2587053592475304632
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

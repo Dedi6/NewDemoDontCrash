@@ -18,35 +18,53 @@ public class Health : MonoBehaviour
         SetHP();
     }
 
-    void Update()
+    void FixedUpdate()
     {
 
-        if(health > numberOfHearts)
+        if(health > 4 * numberOfHearts)
         {
-            health = numberOfHearts;
+            health = 4 * numberOfHearts;
         }
         
         for (int i = 0; i < hearts.Length; i++)
         {
-            if (i < health)
+            if (i < health / 4)
             {
-                hearts[i].sprite = fullHeart;
+                hearts[i].fillAmount = 1;
             }
             else
-                hearts[i].sprite = emptyHeart;
+            {
+                hearts[i].fillAmount = 0;
+                if(i == health / 4)
+                    hearts[i].fillAmount = GetFillPercentile(health % 4);
+            }
 
             if(i < numberOfHearts)
-            {
-                hearts[i].enabled = true;
-            }
+                hearts[i].gameObject.SetActive(true);   //  hearts[i].enabled = true;
             else
-                hearts[i].enabled = false;
+                hearts[i].gameObject.SetActive(false); // hearts[i].enabled = false;
         }
+    }
+
+    private float GetFillPercentile(int i)
+    {
+        switch(i)
+        {
+            case 0:
+                return 0;
+            case 1:
+                return 0.25f;
+            case 2:
+                return 0.5f;
+            case 3:
+                return 0.75f;
+        }
+        return 1f;
     }
 
     public bool IsFullHealth()
     {
-        if (health == numberOfHearts)
+        if (health / 4 == numberOfHearts)
             return true;
         else
             return false;
@@ -90,7 +108,8 @@ public class Health : MonoBehaviour
             hp = PlayerPrefs.GetInt("HP");
         else
             hp = 7;
-        health = hp;
+        health = hp * 4;
         numberOfHearts = hp;
     }
+
 }

@@ -10,12 +10,15 @@ public class MovingPlatform_Jump : MonoBehaviour
     public Transform endPos;
     private bool shouldMove = false, goReverse = false;
     private MovementPlatformer mp;
+    public Color activeColor;
+    private SpriteRenderer sprite;
 
     void Start()
     {
         originalPos = transform.position;
         targetPos = endPos.position;
         GetComponent<BoxCollider2D>().size = GetComponent<SpriteRenderer>().size;
+        sprite = GetComponent<SpriteRenderer>();
 
         mp = GameMaster.instance.playerInstance.GetComponent<MovementPlatformer>();
 
@@ -27,13 +30,18 @@ public class MovingPlatform_Jump : MonoBehaviour
 
         if(shouldMove)
         {
+            if(gameObject.layer != 13)
+            {
+                gameObject.layer = 13;
+                ChangeChildLayer(13);
+                sprite.color = activeColor;
+            }
             if (!goReverse)
             {
                 transform.position = Vector2.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
                 if (Vector2.Distance(transform.position, targetPos) <= 0)
                 {
-                    shouldMove = false;
-                    goReverse = true;
+                    RevertToNormal(true);
                 }
             }
             else
@@ -41,11 +49,28 @@ public class MovingPlatform_Jump : MonoBehaviour
                 transform.position = Vector2.MoveTowards(transform.position, originalPos, speed * Time.deltaTime);
                 if (Vector2.Distance(originalPos, transform.position) <= 0)
                 {
-                    shouldMove = false;
-                    goReverse = false;
+                    RevertToNormal(false);
                 }
             }
         }
+    }
+
+    private void ChangeChildLayer(int newLayer)
+    {
+        foreach(Transform child in transform)
+        {
+            if(child.gameObject.layer != 10)
+                child.gameObject.layer = newLayer;
+        }
+    }
+
+    private void RevertToNormal(bool isReverse)
+    {
+        gameObject.layer = 8;
+        shouldMove = false;
+        goReverse = isReverse;
+        sprite.color = Color.white;
+        ChangeChildLayer(8);
     }
 
     private void SwitchBool()

@@ -150,6 +150,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -159,8 +160,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -1132,6 +1133,49 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      TopDownAutumnsRise_5: -8821133824547599980
+      TopDownAutumnsRise_39: 1419949148219439486
+      TopDownAutumnsRise_19: -6808693222192565908
+      TopDownAutumnsRise_9: -4430582643672864954
+      TopDownAutumnsRise_22: -6734286629276436444
+      TopDownAutumnsRise_27: -4221721303733987468
+      TopDownAutumnsRise_36: -8249531932490164343
+      TopDownAutumnsRise_40: -2704940312778244992
+      TopDownAutumnsRise_2: 307187228881049932
+      TopDownAutumnsRise_21: 1880772537396222266
+      TopDownAutumnsRise_26: 4786074896311671540
+      TopDownAutumnsRise_37: 3768548130935477178
+      TopDownAutumnsRise_31: -442845859854264422
+      TopDownAutumnsRise_1: 4372971823753513415
+      TopDownAutumnsRise_10: -6010330198537020019
+      TopDownAutumnsRise_41: -8688251051347177296
+      TopDownAutumnsRise_33: -6600866675670014107
+      TopDownAutumnsRise_14: 4036096010407192385
+      TopDownAutumnsRise_15: -5512248344944822940
+      TopDownAutumnsRise_20: 7436436337690651778
+      TopDownAutumnsRise_17: -7679904165539488459
+      TopDownAutumnsRise_6: -1932835733103118803
+      TopDownAutumnsRise_12: 4209012187964491493
+      TopDownAutumnsRise_29: -8489381783082589821
+      TopDownAutumnsRise_16: -3172891317580204081
+      TopDownAutumnsRise_25: 8656531452705525636
+      TopDownAutumnsRise_28: -5972838894072572147
+      TopDownAutumnsRise_30: 3806545498022703664
+      TopDownAutumnsRise_24: 8006102478747274639
+      TopDownAutumnsRise_3: 9015943152254096366
+      TopDownAutumnsRise_34: 4710529907700188116
+      TopDownAutumnsRise_35: -1122447056953139679
+      TopDownAutumnsRise_18: -1527862463744356317
+      TopDownAutumnsRise_11: 832854250884093271
+      TopDownAutumnsRise_32: 7092506514167684847
+      TopDownAutumnsRise_8: -4488590081035233159
+      TopDownAutumnsRise_13: -7773459662504670642
+      TopDownAutumnsRise_23: 8518198168585117863
+      TopDownAutumnsRise_0: 4497900377740201555
+      TopDownAutumnsRise_38: 7920693944205930362
+      TopDownAutumnsRise_4: -8918314800858926227
+      TopDownAutumnsRise_7: -5463866888371797254
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

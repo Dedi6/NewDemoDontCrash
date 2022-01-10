@@ -7,13 +7,14 @@ public class DoorTriggers : MonoBehaviour
     private GameObject doorToOpen;
     private bool isTriggered;
     public Animator animator;
+
     void Start()
     {
         doorToOpen = transform.parent.gameObject; 
     }
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.layer == LayerMask.NameToLayer("player") && !isTriggered)
+        if (col.tag == "Player" && !isTriggered)
         {
             GameMaster gm = GameMaster.instance;
             AudioManager.instance.PlaySound(AudioManager.SoundList.DoorTriggerTriggered);

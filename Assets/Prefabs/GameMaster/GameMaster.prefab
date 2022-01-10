@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4991171767656836299}
   - component: {fileID: 4991171767656836298}
   - component: {fileID: 4991171767656836293}
+  - component: {fileID: 2897429303267134070}
   m_Layer: 0
   m_Name: GameMaster
   m_TagString: GM
@@ -32,6 +33,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 11.42718, y: 0.26422542, z: -3478.503}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -71,7 +73,8 @@ MonoBehaviour:
   fadeTime: 0.2
   BgMusicVolume: 0.32
   ListOfSounds:
-  - SoundFor: 6
+  - title: 
+    SoundFor: 6
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 7af0d02506d2d854aa2cf4dc8d777b47, type: 3}
       volume: 1
@@ -94,7 +97,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 2
+  - title: 
+    SoundFor: 2
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: cc68cd9f9dac9bc43856819aabc0e491, type: 3}
       volume: 0.435
@@ -111,7 +115,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 0
+  - title: 
+    SoundFor: 0
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: b230de1d0f9908e458c803b35e0bd08b, type: 3}
       volume: 1
@@ -122,7 +127,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 8
+  - title: 
+    SoundFor: 8
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 1242833a229644249b423703e2c8bfc5, type: 3}
       volume: 0.528
@@ -139,7 +145,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 16
+  - title: 
+    SoundFor: 16
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 2679970962513d94d914cf3765702cf7, type: 3}
       volume: 0.174
@@ -162,7 +169,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 9
+  - title: 
+    SoundFor: 9
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: c972635c8880a6047962540c3ff09732, type: 3}
       volume: 0.359
@@ -173,7 +181,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 7
+  - title: 
+    SoundFor: 7
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: e9c19d00f5381e24a8b820f6a9cf58fb, type: 3}
       volume: 1
@@ -184,7 +193,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 17
+  - title: 
+    SoundFor: 17
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 43c03f2ac29ab674da7d35929f2d33fd, type: 3}
       volume: 0.2
@@ -201,7 +211,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 18
+  - title: 
+    SoundFor: 18
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: e9a2b2c27f76c7143a15435df5bd1bd9, type: 3}
       volume: 0.442
@@ -212,7 +223,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 19
+  - title: 
+    SoundFor: 19
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 02f053b080326e34ea6caed75b31983a, type: 3}
       volume: 0.388
@@ -223,7 +235,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 13
+  - title: 
+    SoundFor: 13
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: f0cdcf3302e1aad45808a9d2fd6e7675, type: 3}
       volume: 0.442
@@ -234,7 +247,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 10
+  - title: 
+    SoundFor: 10
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 2996aa378a982f74db67bfcdb3c09d26, type: 3}
       volume: 0.716
@@ -245,7 +259,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 12
+  - title: 
+    SoundFor: 12
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 93a2d56c5e1e2da43b5684fbb38deb7c, type: 3}
       volume: 0.558
@@ -256,7 +271,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 11
+  - title: 
+    SoundFor: 11
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 4ea303c2c7b6b3341bec90e2d7664270, type: 3}
       volume: 0.522
@@ -267,7 +283,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 3
+  - title: 
+    SoundFor: 3
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: c6ecf37edf765c3448a0e71cd78e5598, type: 3}
       volume: 0.642
@@ -278,7 +295,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 14
+  - title: 
+    SoundFor: 14
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 2020a6e4aaedfa04d8b7ad4b80536e14, type: 3}
       volume: 0.455
@@ -289,7 +307,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 15
+  - title: 
+    SoundFor: 15
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: b2f25ff7f39de094380062fa0a1ee321, type: 3}
       volume: 0.6
@@ -300,7 +319,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 20
+  - title: 
+    SoundFor: 20
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 5086ff3744d6bad42b542c3cdab6c248, type: 3}
       volume: 0.388
@@ -311,7 +331,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 21
+  - title: 
+    SoundFor: 21
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: e9909844d59773643af77794f4f72e24, type: 3}
       volume: 0.3
@@ -322,7 +343,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 22
+  - title: 
+    SoundFor: 22
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 0aec5b4f326f4fd40974a8513654a68c, type: 3}
       volume: 0.25
@@ -333,7 +355,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 23
+  - title: 
+    SoundFor: 23
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: a51e595c4eb2b4b4d91bca2fc1bb4ef4, type: 3}
       volume: 0
@@ -344,7 +367,8 @@ MonoBehaviour:
     loop: 1
     source: {fileID: 0}
     AudioManagerType: 1
-  - SoundFor: 24
+  - title: 
+    SoundFor: 24
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 412d491d75347ef4aafb3eca3c5f66c6, type: 3}
       volume: 0
@@ -355,7 +379,8 @@ MonoBehaviour:
     loop: 1
     source: {fileID: 0}
     AudioManagerType: 1
-  - SoundFor: 25
+  - title: 
+    SoundFor: 25
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 2d331bd615e0ef743928360d7f4cdf6d, type: 3}
       volume: 0
@@ -366,7 +391,8 @@ MonoBehaviour:
     loop: 1
     source: {fileID: 0}
     AudioManagerType: 1
-  - SoundFor: 26
+  - title: 
+    SoundFor: 26
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: e96927219e221aa459bcdba789db91d7, type: 3}
       volume: 0
@@ -377,7 +403,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 1
-  - SoundFor: 27
+  - title: 
+    SoundFor: 27
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: e7fc3364a43f6d949857b089f9c08fa4, type: 3}
       volume: 0
@@ -388,7 +415,8 @@ MonoBehaviour:
     loop: 1
     source: {fileID: 0}
     AudioManagerType: 1
-  - SoundFor: 28
+  - title: 
+    SoundFor: 28
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 59c4c4a95f1ba544a8e99b243300a1af, type: 3}
       volume: 0
@@ -399,7 +427,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 1
-  - SoundFor: 29
+  - title: 
+    SoundFor: 29
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 31ec43378c9b27e4f930434778340997, type: 3}
       volume: 0.21
@@ -410,7 +439,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 30
+  - title: 
+    SoundFor: 30
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: cb4f7c00f53c54d42aa128d991972a6e, type: 3}
       volume: 0.145
@@ -421,7 +451,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 31
+  - title: 
+    SoundFor: 31
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 330b6be09ca42714f82b966685519e33, type: 3}
       volume: 0.209
@@ -438,7 +469,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 32
+  - title: 
+    SoundFor: 32
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 6d985593a7e542f48963701e5b445bbc, type: 3}
       volume: 0.081
@@ -449,7 +481,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 33
+  - title: 
+    SoundFor: 33
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 0049c079522c9d6499594e3eeadc7c8a, type: 3}
       volume: 0.11
@@ -472,7 +505,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 34
+  - title: 
+    SoundFor: 34
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: a8a86383b9de88a4fa594ab73a2dfcc6, type: 3}
       volume: 0.087
@@ -483,7 +517,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 35
+  - title: 
+    SoundFor: 35
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: cb4f7c00f53c54d42aa128d991972a6e, type: 3}
       volume: 0.233
@@ -494,7 +529,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 36
+  - title: 
+    SoundFor: 36
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 003925cb560ee2f40a8ed4853f3f7139, type: 3}
       volume: 0.11
@@ -511,7 +547,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 37
+  - title: 
+    SoundFor: 37
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 35cf1f48e8c87ac4d9cea51398ed73fd, type: 3}
       volume: 0.208
@@ -522,7 +559,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 38
+  - title: 
+    SoundFor: 38
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 5309c106ed9b4b0468bb5b179ed99c76, type: 3}
       volume: 0.197
@@ -533,7 +571,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 39
+  - title: 
+    SoundFor: 39
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 4db3e9a930b36d341a444141193b3c5d, type: 3}
       volume: 0.11
@@ -544,7 +583,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 40
+  - title: 
+    SoundFor: 40
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: fcdf3918183bed14687ae168f8c1dc6b, type: 3}
       volume: 0.063
@@ -573,7 +613,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 41
+  - title: 
+    SoundFor: 41
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 1ae5c8f4d08edaa4b9a6eff00035591e, type: 3}
       volume: 0.163
@@ -590,7 +631,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 42
+  - title: 
+    SoundFor: 42
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 3259548979ac15f43b3b4cd9210a3fdd, type: 3}
       volume: 0.093
@@ -601,7 +643,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 43
+  - title: 
+    SoundFor: 43
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 1231a2472f8a95a40b8b01d26f246167, type: 3}
       volume: 0.254
@@ -612,7 +655,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 44
+  - title: 
+    SoundFor: 44
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 2c033cab7a3955447a65af25141e6d7b, type: 3}
       volume: 0.303
@@ -623,7 +667,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 45
+  - title: 
+    SoundFor: 45
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 83471627d6bc35e44b934da409f665a5, type: 3}
       volume: 0.256
@@ -634,7 +679,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 46
+  - title: 
+    SoundFor: 46
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 2dea503c37dfc2e4d83a2cfdd15e6ef3, type: 3}
       volume: 0.145
@@ -645,7 +691,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 47
+  - title: 
+    SoundFor: 47
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 0983c7dd1eb6ef54994ebbecdc874679, type: 3}
       volume: 0.116
@@ -656,7 +703,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 48
+  - title: 
+    SoundFor: 48
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 169c6f19a993a524d8f4707f0a01ba0b, type: 3}
       volume: 0.116
@@ -667,7 +715,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 49
+  - title: 
+    SoundFor: 49
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: d068712f0bc53384ba5f82f2688e48a5, type: 3}
       volume: 0.151
@@ -684,7 +733,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 50
+  - title: 
+    SoundFor: 50
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: e8b5b1e65d3eb4f4ea19d92841f9a325, type: 3}
       volume: 0.156
@@ -695,7 +745,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 51
+  - title: 
+    SoundFor: 51
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: c214108adcee4494893713942f7287e7, type: 3}
       volume: 0.116
@@ -706,7 +757,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 52
+  - title: 
+    SoundFor: 52
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 83471627d6bc35e44b934da409f665a5, type: 3}
       volume: 0.204
@@ -723,7 +775,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 53
+  - title: 
+    SoundFor: 53
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: a188bba572125764b8bd1672946481fe, type: 3}
       volume: 0.08
@@ -734,7 +787,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 54
+  - title: 
+    SoundFor: 54
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 09f7e18b46a67e049819dcb0818d6131, type: 3}
       volume: 0.1
@@ -745,7 +799,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 0
-  - SoundFor: 55
+  - title: 
+    SoundFor: 55
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 6757dc1f65262504ba7c39b4919a0b36, type: 3}
       volume: 0.151
@@ -756,7 +811,8 @@ MonoBehaviour:
     loop: 1
     source: {fileID: 0}
     AudioManagerType: 1
-  - SoundFor: 56
+  - title: 
+    SoundFor: 56
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: e4a18bd90f8a9b246adf90d8a327b653, type: 3}
       volume: 0.157
@@ -767,7 +823,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 1
-  - SoundFor: 57
+  - title: 
+    SoundFor: 57
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 1f33072e45f3d5d4a82886b34684e11a, type: 3}
       volume: 0.157
@@ -778,7 +835,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 1
-  - SoundFor: 58
+  - title: 
+    SoundFor: 58
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: bde83e49978da01458327daac5ab382a, type: 3}
       volume: 0.157
@@ -789,7 +847,8 @@ MonoBehaviour:
     loop: 1
     source: {fileID: 0}
     AudioManagerType: 1
-  - SoundFor: 59
+  - title: 
+    SoundFor: 59
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: cf670ce46c6fbb1419188f93516cd565, type: 3}
       volume: 0.157
@@ -800,7 +859,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 1
-  - SoundFor: 60
+  - title: 
+    SoundFor: 60
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 05cb82ed3bd1c884cbcf91f940963615, type: 3}
       volume: 0.157
@@ -811,7 +871,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 1
-  - SoundFor: 61
+  - title: 
+    SoundFor: 61
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: a3934d6a5f2734546aab8506107f77f7, type: 3}
       volume: 0.157
@@ -822,7 +883,8 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     AudioManagerType: 1
-  - SoundFor: 62
+  - title: 
+    SoundFor: 62
     arrayOfClips:
     - audioClip: {fileID: 8300000, guid: 848eb4a50cbea0b4db2d990d24a5f071, type: 3}
       volume: 0.25
@@ -846,6 +908,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc33e1d74aaf26a4d86e6409c8560846, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTopDown: 0
   keybindings: {fileID: 11400000, guid: 4a1c5a9aab96cfd4db80bdffa8ddde86, type: 2}
   keyboardKeybinds: {fileID: 11400000, guid: 4a1c5a9aab96cfd4db80bdffa8ddde86, type: 2}
   joyStickKeybind: {fileID: 11400000, guid: 8bad714fcd4bcc241aae8b676d7b58c0, type: 2}
@@ -881,34 +944,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arrayOfVFX:
-  - vfxName: 0
+  - name: 
+    vfxName: 0
     vfxGameObject: {fileID: 6220396275880966040, guid: 089270a9c784c6847ba393cd926259b3,
       type: 3}
-  - vfxName: 3
+  - name: 
+    vfxName: 3
     vfxGameObject: {fileID: 5058502571673433294, guid: 8b9922ac1a5b3974c8964387b6e71ed6,
       type: 3}
-  - vfxName: 4
+  - name: 
+    vfxName: 4
     vfxGameObject: {fileID: 7772967964808977005, guid: e86d82eb266246a4db7b230b5e3f86d7,
       type: 3}
-  - vfxName: 6
+  - name: 
+    vfxName: 6
     vfxGameObject: {fileID: 2345108725815064783, guid: 5ec99ea1b755b2c4085c04782ec49ba7,
       type: 3}
-  - vfxName: 5
+  - name: 
+    vfxName: 5
     vfxGameObject: {fileID: 5712330410880325955, guid: 71d5739de5a302245b1efd85b718b9e0,
       type: 3}
-  - vfxName: 7
+  - name: 
+    vfxName: 7
     vfxGameObject: {fileID: 4837341740618559273, guid: b9ee41fb691a1e54e86541a6eb3c5326,
       type: 3}
-  - vfxName: 8
+  - name: 
+    vfxName: 8
     vfxGameObject: {fileID: 1126003101426457101, guid: 2188b47d8df98a74c9ee7c7ddcaba2f2,
       type: 3}
-  - vfxName: 9
+  - name: 
+    vfxName: 9
     vfxGameObject: {fileID: 4003571801619070448, guid: 545e992483c945540ac65e20a0444a0d,
       type: 3}
-  - vfxName: 11
+  - name: 
+    vfxName: 11
     vfxGameObject: {fileID: 5829624815046751344, guid: 948e538f38b179a4796a99106e90dc9c,
       type: 3}
-  - vfxName: 10
+  - name: 
+    vfxName: 10
     vfxGameObject: {fileID: 2815069511257131028, guid: 7142c56957286a24784e1322ecce7d43,
       type: 3}
   arrayOfSprites:
@@ -918,6 +991,9 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 622d4066508dc804a8b6b80027ac5960, type: 3}
   transitionManager: {fileID: 0}
   roomNumber: {fileID: 0}
+  ghostBullet: {fileID: 0}
+  defaultBulletPrefab: {fileID: 0}
+  currentDirector: {fileID: 0}
 --- !u!114 &4991171767656836293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -930,3 +1006,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3da85bb848517a459600dd1e2f90e63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2897429303267134070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4991171767656836300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c49ea5444cd0a43a655497f9f3ab99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cells:
+  - positionToFollow: {fileID: 0}
+    currentCell: {fileID: 0}
+  - positionToFollow: {fileID: 0}
+    currentCell: {fileID: 0}
+  - positionToFollow: {fileID: 0}
+    currentCell: {fileID: 0}
+  - positionToFollow: {fileID: 0}
+    currentCell: {fileID: 0}
+  - positionToFollow: {fileID: 0}
+    currentCell: {fileID: 0}
+  - positionToFollow: {fileID: 0}
+    currentCell: {fileID: 0}
+  positions:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  currentPos: -1
+  player: {fileID: 0}
+  tileMap: {fileID: 0}

@@ -31,9 +31,13 @@ public class CellOrganizer : MonoBehaviour
             Destroy(gameObject);
 
       //  cells = new OrganizerHelper[positions.Length];
-        player = GameMaster.instance.playerInstance;
+        
     }
 
+    private void Start()
+    {
+        player = GameMaster.instance.playerInstance;
+    }
 
     public void AddCell(GameObject newCell)
     {
