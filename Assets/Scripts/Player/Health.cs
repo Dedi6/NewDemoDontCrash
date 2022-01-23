@@ -83,7 +83,7 @@ public class Health : MonoBehaviour
 
     public void FullHeal()
     {
-        health = numberOfHearts;
+        health = numberOfHearts * 4;
     }
 
     public void IncreaseHp()
@@ -111,5 +111,6 @@ public class Health : MonoBehaviour
         health = hp * 4;
         numberOfHearts = hp;
     }
+
 
 }

@@ -10,7 +10,7 @@ public class Thunder : MonoBehaviour
                 col.GetComponent<MovementPlatformer>().KnockBackPlayer(25f, 1f, 0.5f, true);
             else
                 col.GetComponent<MovementPlatformer>().KnockBackPlayer(25f, 1f, 0.5f, false);
-            col.GetComponent<MovementPlatformer>().GotHitByAnEnemy(1);
+            col.GetComponent<MovementPlatformer>().GotHitByAnEnemy(4);
         }
     }
 

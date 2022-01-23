@@ -81,7 +81,7 @@ public class MovementPlatformer : MonoBehaviour
     public GameObject bulletPointer;
     public GameObject hitVFX;
     public GameObject hitVFXWall;
-    private int canBeAttackedLayerMask = (1 << 12) | (1 << 17) | (1 << 30) | (1 << 19);
+    private int canBeAttackedLayerMask = (1 << 12) | (1 << 17) | (1 << 30) | (1 << 19) | (1 << 23);
     public int attackDamage = 40, manaFillPerAttack = 7;
     private float atkAnimationStallTimer;
     public float attackRate = 2f;
@@ -220,8 +220,8 @@ public class MovementPlatformer : MonoBehaviour
                     ShootStart();
                 else if (input.KeyDown(Keybindings.KeyList.Shoot) && canTeleport)
                     Teleport();
-                if (canHeal && input.KeyDown(Keybindings.KeyList.Heal) && manaBar.HaveEnoughMana(25) && !GetComponent<Health>().IsFullHealth())
-                    StartCoroutine(StartHeal());
+               /* if (canHeal && input.KeyDown(Keybindings.KeyList.Heal) && manaBar.HaveEnoughMana(25) && !GetComponent<Health>().IsFullHealth())
+                    StartCoroutine(StartHeal());*/
                 break;
             case State.DashingToEnemy:
                 HandleAnimations();
@@ -1024,6 +1024,8 @@ public class MovementPlatformer : MonoBehaviour
                 }
                 if (enemy.gameObject.layer == 17) //crank
                     enemy.GetComponent<DoorCrank>().Triggered(true);
+                if (enemy.gameObject.layer == 23) //Hittable Object
+                    enemy.GetComponent<HittableObject>().HitObject();
                 if (enemy.gameObject.layer == 30) //hidden door
                 {
                     audioManager.PlaySound(AudioManager.SoundList.HiddenDoorOpen);
@@ -1225,6 +1227,7 @@ public class MovementPlatformer : MonoBehaviour
 
         canHeal = true;
     }
+
 
     public IEnumerator SwitchStateIgnore(float time)
     {

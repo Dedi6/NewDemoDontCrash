@@ -11,6 +11,12 @@ public class Follow : MonoBehaviour
     [HideInInspector]
     public bool facingRight = false, playerFacingRight;
     public Transform target;
+    public GameObject crystal;
+    private Transform playerTarget, player;
+    private bool isCreatingCrystal;
+    private ManaBar manaBar;
+    private InputManager inputM;
+
 
     public Animator animator;
     [HideInInspector]
@@ -31,6 +37,10 @@ public class Follow : MonoBehaviour
     {
         state = State.Normal;
         handlerSkills = GetComponent<SkillsManager>();
+        playerTarget = target;
+        player = GameMaster.instance.playerInstance.transform;
+        manaBar = player.GetComponent<ManaBar>();
+        inputM = InputManager.instance;
     }
     void Update()
     {
@@ -45,8 +55,13 @@ public class Follow : MonoBehaviour
                     else if (transform.position.x < target.position.x && !facingRight)
                         Flip();
                 }
-                else if (Vector2.Distance(transform.position, target.position) < 0.3f && isUsingSkill)
-                    StartCoroutine(UseSkill());
+                else 
+                {
+                    if (isUsingSkill)
+                        StartCoroutine(UseSkill());
+                    if (isCreatingCrystal)
+                        StopCrystal();
+                }
                 break;
             case State.Attacking:
                 break;
@@ -56,8 +71,77 @@ public class Follow : MonoBehaviour
 
         if (transform.childCount > 1)
             Destroy(transform.GetChild(0).gameObject);
+
+        if (inputM.KeyDown(Keybindings.KeyList.Heal) && CanCreateCrystal())
+            CreateCrystal();
+
+
     }
 
+    private bool CanCreateCrystal()
+    {
+        return manaBar.HaveEnoughMana(25);
+    }
+
+    private void CreateCrystal()
+    {
+        isCreatingCrystal = true;
+        float lookingRight;
+        Vector2 dirWall;
+        if (player.GetComponentInParent<MovementPlatformer>().IsFacingRight())
+        {
+            lookingRight = 2f;
+            dirWall = Vector2.right;
+        }
+        else
+        {
+            lookingRight = -2f;
+            dirWall = Vector2.left;
+        }
+       // float lookingRight = player.GetComponentInParent<MovementPlatformer>().IsFacingRight() ? 2f : -2f;
+        Vector2 rayOrigin = new Vector2(player.transform.position.x + lookingRight, player.transform.position.y);
+        RaycastHit2D rayToFloor = Physics2D.Raycast(rayOrigin, Vector2.down, 7, 1 << 8);
+        RaycastHit2D rayToWall = Physics2D.Raycast(player.transform.position, dirWall, 2, 1 << 8);
+        if (rayToWall)
+            Debug.Log("WAll");
+        
+        if (rayToFloor && !rayToWall)
+        {
+            Vector3 newTarget = new Vector3(rayToFloor.point.x, rayToFloor.point.y + 0.6f, 0f);
+            GameObject newCrytsal = Instantiate(crystal, newTarget, Quaternion.identity, rayToFloor.transform);
+            target = newCrytsal.transform;
+            manaBar.UseMana(25);
+        }
+        else
+        {
+            RaycastHit2D rayFromPlayer = Physics2D.Raycast(player.position, Vector2.down, 7, 1 << 8);
+            if (rayFromPlayer)
+            {
+                Vector3 newTarget = new Vector3(rayFromPlayer.point.x, rayFromPlayer.point.y + 0.6f, 0f);
+                GameObject newCrytsal = Instantiate(crystal, newTarget, Quaternion.identity, rayToFloor.transform);
+                target = newCrytsal.transform;
+                manaBar.UseMana(25);
+            }
+            else
+                isCreatingCrystal = false;
+        }
+        if(Vector2.Distance(transform.position, target.position) > 3f)
+            currentSpeed = speedWhenFar;
+    }
+
+    private void StopCrystal()
+    {
+        if(isCreatingCrystal)
+        {
+            isCreatingCrystal = false;
+            target.GetComponent<HealCrystal>().CreateCrystal();
+            target = playerTarget;
+            if (Vector2.Distance(transform.position, target.position) > 5f)
+                currentSpeed = speedWhenFar;
+            else
+                currentSpeed = speedWhenClose;
+        }
+    }
    
     void Flip()
     {

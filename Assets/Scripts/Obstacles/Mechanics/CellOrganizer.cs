@@ -83,4 +83,11 @@ public class CellOrganizer : MonoBehaviour
         return currentPos >= 0 ? true : false;
     }
 
+    public bool IsPositionInsideTilemap(Vector2 pos)
+    {
+        if (!tileMap.HasTile(tileMap.WorldToCell(pos)))
+            return true;
+        else
+            return false;
+    }
 }
