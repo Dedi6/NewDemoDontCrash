@@ -3,6 +3,8 @@
 public class Action_TriggerHitPlayer : MonoBehaviour
 {
     public Animator animator;
+    [SerializeField]
+    private int damage = 4;
     public bool useHitEffect, destroyWhenHit;
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -13,7 +15,7 @@ public class Action_TriggerHitPlayer : MonoBehaviour
                 col.GetComponent<MovementPlatformer>().KnockBackPlayer(25f, 1f, 0.5f, true);
             else
                 col.GetComponent<MovementPlatformer>().KnockBackPlayer(25f, 1f, 0.5f, false);
-            col.GetComponent<MovementPlatformer>().GotHitByAnEnemy(1);
+            col.GetComponent<MovementPlatformer>().GotHitByAnEnemy(damage);
             if (useHitEffect)
             {
                 animator.SetTrigger("HitPlayer");
