@@ -11,14 +11,16 @@ public class MovingPlatform_Jump : MonoBehaviour
     private bool shouldMove = false, goReverse = false;
     private MovementPlatformer mp;
     public Color activeColor;
+    private Color defaultColor;
     private SpriteRenderer sprite;
 
     void Start()
     {
-        originalPos = transform.position;
-        targetPos = endPos.position;
+        originalPos = transform.localPosition;
+        targetPos = endPos.localPosition;
         GetComponent<BoxCollider2D>().size = GetComponent<SpriteRenderer>().size;
         sprite = GetComponent<SpriteRenderer>();
+        defaultColor = sprite.color;
 
         mp = GameMaster.instance.playerInstance.GetComponent<MovementPlatformer>();
 
@@ -38,16 +40,16 @@ public class MovingPlatform_Jump : MonoBehaviour
             }
             if (!goReverse)
             {
-                transform.position = Vector2.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
-                if (Vector2.Distance(transform.position, targetPos) <= 0)
+                transform.localPosition = Vector2.MoveTowards(transform.localPosition, targetPos, speed * Time.deltaTime);
+                if (Vector2.Distance(transform.localPosition, targetPos) <= 0)
                 {
                     RevertToNormal(true);
                 }
             }
             else
             {
-                transform.position = Vector2.MoveTowards(transform.position, originalPos, speed * Time.deltaTime);
-                if (Vector2.Distance(originalPos, transform.position) <= 0)
+                transform.localPosition = Vector2.MoveTowards(transform.localPosition, originalPos, speed * Time.deltaTime);
+                if (Vector2.Distance(originalPos, transform.localPosition) <= 0)
                 {
                     RevertToNormal(false);
                 }
@@ -69,7 +71,7 @@ public class MovingPlatform_Jump : MonoBehaviour
         gameObject.layer = 8;
         shouldMove = false;
         goReverse = isReverse;
-        sprite.color = Color.white;
+        sprite.color = defaultColor;
         ChangeChildLayer(8);
     }
 

@@ -102,8 +102,7 @@ public class Follow : MonoBehaviour
         Vector2 rayOrigin = new Vector2(player.transform.position.x + lookingRight, player.transform.position.y);
         RaycastHit2D rayToFloor = Physics2D.Raycast(rayOrigin, Vector2.down, 7, 1 << 8);
         RaycastHit2D rayToWall = Physics2D.Raycast(player.transform.position, dirWall, 2, 1 << 8);
-        if (rayToWall)
-            Debug.Log("WAll");
+
         
         if (rayToFloor && !rayToWall)
         {

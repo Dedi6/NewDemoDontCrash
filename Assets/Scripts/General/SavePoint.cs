@@ -21,7 +21,7 @@ public class SavePoint : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D col)
     {
-        if (!isSaving && col.gameObject.layer == 11 && col.transform.position.y > (transform.position.y + 2f) && playerScript.moveInputVertical < 0) // player collided from above
+        if (!isSaving && InputManager.instance.KeyDown(Keybindings.KeyList.Down) && col.transform.position.y > (transform.position.y + 2f) && col.gameObject.layer == 11) // player collided from above
         {
             isSaving = true;
             StartCoroutine(Save());
@@ -39,7 +39,7 @@ public class SavePoint : MonoBehaviour
         isSaving = true;
         StartCoroutine(playerScript.SwitchStateIgnore(0.51f));
         playerScript.animator.SetTrigger("Heal");
-        playerScript.animator.speed = 0.3f;
+        playerScript.animator.speed = 0.8f;
 
         yield return new WaitForSeconds(0.5f);
 

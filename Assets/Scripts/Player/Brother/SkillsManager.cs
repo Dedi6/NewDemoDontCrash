@@ -81,6 +81,7 @@ public class SkillsManager : MonoBehaviour
     private void HandleLoad()
     {
         bool firstTimeLogging = IsFirstTimePlaying();
+        
         if (firstTimeLogging)
         {
             skillsUI.SetNewArray();

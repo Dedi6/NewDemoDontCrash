@@ -9,17 +9,19 @@ public class FallingPlatform : MonoBehaviour, IRespawnResetable
     public Animator animator;
     private Vector2 originalPos;
     private Rigidbody2D rb;
+    [SerializeField]
+    private bool ShouldIgnoreEnable;
 
     private void Start()
     {
-        originalPos = transform.position;
+        originalPos = transform.localPosition;
         Vector2 sizeCol = GetComponent<SpriteRenderer>().size;
         GetComponent<BoxCollider2D>().size = sizeCol;
         rb = GetComponent<Rigidbody2D>();
     }
     private void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.layer == 11 && col.transform.position.y > (transform.position.y + 2)) // 11 = player
+        if (col.gameObject.layer == 11 && col.transform.position.y > (transform.position.y + 1.5f)) // 11 = player
             StartCoroutine("Fall");
     }
 
@@ -46,15 +48,18 @@ public class FallingPlatform : MonoBehaviour, IRespawnResetable
         rb.isKinematic = true;
         rb.velocity = Vector2.zero;
 
-        transform.position = originalPos;
+        transform.localPosition = originalPos;
         animator.SetBool("Fall", false);
         GetComponent<BoxCollider2D>().enabled = true;
     }
 
     private void OnEnable()
     {
-        if (GetComponent<BoxCollider2D>().enabled == false)
-            PlayerHasRespawned();
+        if(!ShouldIgnoreEnable)
+        {
+            if (GetComponent<BoxCollider2D>().enabled == false)
+                PlayerHasRespawned();
+        }
 
        // stop the reset platform coroutine
     }

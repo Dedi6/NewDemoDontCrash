@@ -154,8 +154,8 @@ public class MovementPlatformer : MonoBehaviour
     {
         CashComponents();   // get all the components ready.
 
-       // RespawnAtSavePoint();                     
-        gm.savePointPosition = transform.position; // for testing :D
+        //gm.savePointPosition = transform.position; // for testing :D
+        //RespawnAtSavePoint();                     
         audioManager.PlayTheme(AudioManager.SoundList.FirstTestSong, 0.1f); /////// test song
         //  delete when building!!!!
         //SetForBuilding(); /// this is only active once before building
@@ -1067,6 +1067,8 @@ public class MovementPlatformer : MonoBehaviour
                     GameObject hitVFXspawn = Instantiate(hitVFXWall, enemy.transform.position, Quaternion.Euler(0, 0, 90));
                     enemy.GetComponent<HiddenDoor>().RevealPath();
                 }
+                if (enemy.gameObject.layer == 23) //Hittable Object
+                    enemy.GetComponent<HittableObject>().HitObject();
                 if (enemy.gameObject.layer == 19)
                     enemy.GetComponentInParent<Hollow>().BlinkVFX();
             }
@@ -1232,6 +1234,8 @@ public class MovementPlatformer : MonoBehaviour
     public IEnumerator SwitchStateIgnore(float time)
     {
         state = State.IgnorePlayerInput;
+        rb.velocity = Vector2.zero;
+
 
         yield return new WaitForSeconds(time);
 
@@ -1460,6 +1464,7 @@ public class MovementPlatformer : MonoBehaviour
             CurrentBulletGameObject.GetComponent<bullet>().SetSpeedNormal();
     }
 
+ 
     /*
     private void SavePoiner()
     {
@@ -1477,6 +1482,7 @@ public class MovementPlatformer : MonoBehaviour
     void SetForBuilding()
     {
         PlayerPrefs.DeleteKey("BeginGame");
+        PlayerPrefs.DeleteKey("FirstTimePlaying");
     }
 
 }

@@ -28,6 +28,11 @@ public class GameMaster : MonoBehaviour
         Application.targetFrameRate = 60;
     }
 
+    private void Start()
+    {
+        StartCoroutine(GameSaveManager.instance.LoadGameAfterDelay(1f));
+    }
+
     public void UpdateSkillsName(string a, string b) { aSkillString = a; bSkillString = b;}
 
     public void ShakeCamera(float time, float force)

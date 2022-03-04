@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameSaveManager : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class GameSaveManager : MonoBehaviour
 
         public float savePointX;
         public float savePointY;
+        public int currentScene;
         public string aSkillName, bSkillName;
         public string[] arrayOfSkills;
         public PlayerData(string[] array)
@@ -30,12 +32,16 @@ public class GameSaveManager : MonoBehaviour
             bSkillName = GameMaster.instance.bSkillString;
             savePointX = GameMaster.instance.savePointPosition.x;
             savePointY = GameMaster.instance.savePointPosition.y;
+            currentScene = SceneManager.GetActiveScene().buildIndex;
+            Debug.Log(currentScene);
             arrayOfSkills = array;
         }
     }
 
     public SkillsUI skillsLoader;
 
+    [HideInInspector]
+    public int lastScene;
 
     void Awake()
     {
@@ -77,6 +83,11 @@ public class GameSaveManager : MonoBehaviour
         SavePLayerData();
     }
 
+    public bool DoesSaveFileExist(string path)
+    {
+        return Directory.Exists(Application.persistentDataPath + path);
+    }
+
     public void SaveKeybindings()
     {
         if (!IsSaveFile())
@@ -113,6 +124,13 @@ public class GameSaveManager : MonoBehaviour
         return Directory.Exists(Application.persistentDataPath + "/game_save");
     }
 
+    public IEnumerator LoadGameAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        LoadGame();
+    }
+
     public void LoadGame()
     {
         if (!Directory.Exists(Application.persistentDataPath + "/game_save/keybindings"))
@@ -142,14 +160,23 @@ public class GameSaveManager : MonoBehaviour
     public void LoadSkills()
     {
         PlayerData data = LoadPlayerData();
+        
         /*
         string[] d = new string[2];  //fix 1
         d[0] = "ThunderBolt";
         d[1] = "ThunderWave";
         skillsLoader.LoadSkills("ThunderBolt", "ThunderWave", d);*/
+
         skillsLoader.LoadSkills(data.aSkillName, data.bSkillName, data.arrayOfSkills);
         Vector2 point = new Vector2(data.savePointX, data.savePointY);
         GameMaster.instance.savePointPosition = point;
+        GameMaster.instance.playerInstance.transform.position = point;
+    }
+
+    public int GetLastScene()
+    {
+        PlayerData data = LoadPlayerData();
+        return data.currentScene;
     }
 
     public static PlayerData LoadPlayerData()
@@ -194,5 +221,11 @@ public class GameSaveManager : MonoBehaviour
         }
         else
             return null;
+    }
+
+    public void DeleteSaveFile()
+    {
+        Directory.Delete(Application.persistentDataPath + "/game_save", true);
+        PlayerPrefs.DeleteKey("FirstTimePlaying");
     }
 }

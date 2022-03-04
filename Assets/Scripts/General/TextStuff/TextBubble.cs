@@ -17,6 +17,7 @@ public class TextBubble : MonoBehaviour
         chatBubbleTransform.localPosition = localPosition;
 
         chatBubbleTransform.GetComponent<TextBubble>().Setup(text);
+        chatBubbleTransform.localPosition = new Vector3(-1, 2); // hardcoding 
 
         Destroy(chatBubbleTransform.gameObject, bubbleTime);
     }
@@ -38,4 +39,6 @@ public class TextBubble : MonoBehaviour
 
         TextWriter.AddWriter_Static(textMeshPro, text, .05f, true, true);
     }
+
+
 }

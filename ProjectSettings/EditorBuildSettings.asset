@@ -9,6 +9,12 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 58aa581c624102646a92a29fb16268dd
   - enabled: 1
+    path: Assets/Scenes/FirstArea.unity
+    guid: cd742488b42139e45a7434a7dadf79cc
+  - enabled: 1
+    path: Assets/Scenes/FearOfHeights.unity
+    guid: 47e3d29b5d218894cbafb531df1533e8
+  - enabled: 1
     path: Assets/Scenes/DemoScene.unity
     guid: 638fbc5c771ac1a4487e2548afd87474
   m_configObjects: {}

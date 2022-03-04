@@ -6,6 +6,30 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     public GameObject menuMaster;
+    [SerializeField]
+    private GameObject firstStartButton, newAndLoadButtons;
+
+
+    private void Start()
+    {
+        CheckIfFirstTime();
+    }
+
+    void CheckIfFirstTime()
+    {
+        if (GameSaveManager.instance.IsSaveFile())
+            SetStartAndLoad(false);
+        else
+            SetStartAndLoad(true);
+    }
+
+    void SetStartAndLoad(bool firstTime)
+    {
+        Debug.Log(firstTime);
+        firstStartButton.SetActive(firstTime);
+        newAndLoadButtons.SetActive(!firstTime);
+    }
+
     public void PlayGame()
     {
         Destroy(menuMaster);
@@ -26,4 +50,11 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
         
+    public void StartAndLoad()
+    {
+        GameSaveManager saveM = GameSaveManager.instance;
+        Destroy(menuMaster);
+        Debug.Log(saveM.lastScene);
+        SceneManager.LoadScene(saveM.GetLastScene());
+    }
 }

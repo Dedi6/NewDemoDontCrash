@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class CheatTeleport : MonoBehaviour
 {
-    // Start is called before the first frame update
    
     public void TeleportToRoom(string roomNumber)
     {

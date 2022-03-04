@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -180,4 +181,22 @@ public class PauseMenu : MonoBehaviour
        {
 
        }*/
+       
+    public void GoToNextLevel()
+    {
+        Destroy(GameMaster.instance.gameObject);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    public void SkipScene()
+    {
+        Destroy(GameMaster.instance.gameObject);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    public void ReturnScene()
+    {
+        Destroy(GameMaster.instance.gameObject);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+    }
 }

@@ -5,6 +5,7 @@ public class Action_TriggerHitPlayer : MonoBehaviour
     public Animator animator;
     [SerializeField]
     private int damage = 4;
+    
     public bool useHitEffect, destroyWhenHit;
 
     private void OnTriggerEnter2D(Collider2D col)
