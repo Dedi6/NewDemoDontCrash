@@ -109,7 +109,6 @@ public class Follow : MonoBehaviour
             Vector3 newTarget = new Vector3(rayToFloor.point.x, rayToFloor.point.y + 0.6f, 0f);
             GameObject newCrytsal = Instantiate(crystal, newTarget, Quaternion.identity, rayToFloor.transform);
             target = newCrytsal.transform;
-            manaBar.UseMana(25);
         }
         else
         {
@@ -119,7 +118,6 @@ public class Follow : MonoBehaviour
                 Vector3 newTarget = new Vector3(rayFromPlayer.point.x, rayFromPlayer.point.y + 0.6f, 0f);
                 GameObject newCrytsal = Instantiate(crystal, newTarget, Quaternion.identity, rayToFloor.transform);
                 target = newCrytsal.transform;
-                manaBar.UseMana(25);
             }
             else
                 isCreatingCrystal = false;
@@ -134,6 +132,7 @@ public class Follow : MonoBehaviour
         {
             isCreatingCrystal = false;
             target.GetComponent<HealCrystal>().CreateCrystal();
+            manaBar.UseMana(25);
             target = playerTarget;
             if (Vector2.Distance(transform.position, target.position) > 5f)
                 currentSpeed = speedWhenFar;

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using MyBox;
 //using UnityEngine.Experimental.Rendering.Universal;
 
 
@@ -19,12 +20,18 @@ public class JumpStone : MonoBehaviour, IRespawnResetable
     public Color deactivatedColor;
     private SpriteRenderer sprt;
 
+    public bool isOnFearOfHeights = false;
+    [ConditionalField("isOnFearOfHeights")] public bool isOnFar;
+    [ConditionalField("isOnFearOfHeights")] public LayerSwitcher layerSwitcher;
+
     void Start()
     {
         player = GameMaster.instance.playerInstance.GetComponent<MovementPlatformer>();
         sprt = GetComponent<SpriteRenderer>();
         originalPos = transform.position;
         tilemap = CellOrganizer.instance.tileMap;
+        if (!isOnFar)
+            originalPos = transform.localPosition;
     }
 
     private void Update()
@@ -124,7 +131,17 @@ public class JumpStone : MonoBehaviour, IRespawnResetable
     public void PlayerHasRespawned()
     {
         //  AudioManager.instance.PlaySound(AudioManager.SoundList.OrbDesrtoy);
-        transform.position = originalPos;
+        if (isOnFearOfHeights)
+        {
+            layerSwitcher.ResetJumpStones(gameObject, isOnFar);
+            if(!isOnFar)
+                transform.localPosition = originalPos;
+            else
+                transform.position = originalPos;
+        }
+        else
+            transform.position = originalPos;
+
         isActive = false;
         GetComponent<CircleCollider2D>().enabled = true;
     }

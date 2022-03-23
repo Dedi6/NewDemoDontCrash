@@ -146,8 +146,9 @@ public class FireBoar : MonoBehaviour, ISFXResetable
         if (stunTimer <= 0 && wallCheckRaycast && shouldStun)
         {
             StartCoroutine(StunOnlyOnce());
-            GetComponent<Enemy>().TakeDamage(35);
-            state = State.Normal;
+            GetComponent<Enemy>().TakeDamage(50);
+            if(state != State.Dead)
+                state = State.Normal;
             animator.SetBool("IsAttacking", false);
         }
         else if (stunTimer > 0 && wallCheckRaycast)

@@ -31,8 +31,8 @@ public class LayerSwitcher : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.N))
-            StartCoroutine(StartSwitching());
+        if (Input.GetKeyDown(KeyCode.L))
+            SwitchLayer();
     }
 
     private IEnumerator StartSwitching()
@@ -142,6 +142,14 @@ public class LayerSwitcher : MonoBehaviour
         }
     }
 
+    public void ResetJumpStones(GameObject jumpStone, bool shouldBeOnFar)
+    {
+        Transform newParent = shouldBeOnFar ? roomsFar[0] : roomsClose[0];
+        jumpStone.transform.SetParent(newParent);
+        GetComponent<BlurControl>().ChangeMatOfObject(jumpStone, shouldBeOnFar);
+        jumpStone.transform.localScale = new Vector3(1f, 1f, 0f);
+    }
+
     private IEnumerator DisableJumpStones()
     {
         yield return new WaitForSeconds(0.2f);
@@ -161,6 +169,15 @@ public class LayerSwitcher : MonoBehaviour
         {
             if (child.TryGetComponent(out CircleCollider2D col))
                 col.enabled = false;
+        }
+    }
+
+    public void PlayerRespawned()
+    {
+        if(switchToFar)
+        {
+            SwitchData(true, 8f, speedFar, colorFar);
+            switchToFar = !switchToFar;
         }
     }
 }

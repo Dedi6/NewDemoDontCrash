@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 823025485985596563}
   - component: {fileID: 823025485985596562}
   m_Layer: 8
-  m_Name: DoorOpenPurple1
+  m_Name: DoorOpenPurple
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1,13 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MyBox;
 
 public class FallZone : MonoBehaviour
 {
+    public bool isOnFearOfHeights;
+    [ConditionalField("isOnFearOfHeights")] public LayerSwitcher layerSwitcher;
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
+            if(isOnFearOfHeights)
+                layerSwitcher.PlayerRespawned();
             other.GetComponent<MovementPlatformer>().RespawnAtLatestCheckpoint();
         }
         else

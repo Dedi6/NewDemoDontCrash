@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RegularBoar : MonoBehaviour, ISFXResetable
+public class RegularBoar : MonoBehaviour, ISFXResetable, IKnockbackable
 {
 
     [Header("General")]
@@ -16,6 +16,8 @@ public class RegularBoar : MonoBehaviour, ISFXResetable
     public float wallCheckDistance = 1, platformCheckDistance;
     public float groundCheckDistance = 1;
     private int layerMaskGround = 1 << 8;
+    [SerializeField]
+    private float knockBackTime = 0.1f;
 
     [Header("Attacking")]
     [Space]
@@ -152,5 +154,20 @@ public class RegularBoar : MonoBehaviour, ISFXResetable
     public void SetStateDead()
     {
         state = State.Dead;
+    }
+
+    public void DisableOtherMovement()
+    {
+        StartCoroutine(KnockBackState());
+    }
+
+    private IEnumerator KnockBackState()
+    {
+        State currentState = state;
+        state = State.Dead;
+
+        yield return new WaitForSeconds(knockBackTime);
+
+        state = currentState;
     }
 }

@@ -33,7 +33,6 @@ public class GameSaveManager : MonoBehaviour
             savePointX = GameMaster.instance.savePointPosition.x;
             savePointY = GameMaster.instance.savePointPosition.y;
             currentScene = SceneManager.GetActiveScene().buildIndex;
-            Debug.Log(currentScene);
             arrayOfSkills = array;
         }
     }
@@ -155,6 +154,7 @@ public class GameSaveManager : MonoBehaviour
             file.Close();
         }
         LoadSkills();
+        LoadPlayer();
     }
 
     public void LoadSkills()
@@ -168,9 +168,15 @@ public class GameSaveManager : MonoBehaviour
         skillsLoader.LoadSkills("ThunderBolt", "ThunderWave", d);*/
 
         skillsLoader.LoadSkills(data.aSkillName, data.bSkillName, data.arrayOfSkills);
+    }
+
+    public void LoadPlayer()
+    {
+        PlayerData data = LoadPlayerData();
         Vector2 point = new Vector2(data.savePointX, data.savePointY);
-        GameMaster.instance.savePointPosition = point;
-        GameMaster.instance.playerInstance.transform.position = point;
+        GameMaster gm = GameMaster.instance;
+        gm.savePointPosition = point;
+        gm.TeleportPlayerToSave(point);
     }
 
     public int GetLastScene()

@@ -13,6 +13,8 @@ public class GameMaster : MonoBehaviour
     public GameObject currentRoom;
     public GameObject firstRoom;
     public Transform spawnPoint;
+    [HideInInspector]
+    public GameObject brotherInstance;
 
     void Awake()
     {
@@ -24,13 +26,18 @@ public class GameMaster : MonoBehaviour
         else
             Destroy(gameObject);
         playerInstance = GameObject.FindGameObjectWithTag("Player");
+        brotherInstance = GameObject.FindGameObjectWithTag("Brother");
 
         Application.targetFrameRate = 60;
     }
 
     private void Start()
     {
-        StartCoroutine(GameSaveManager.instance.LoadGameAfterDelay(1f));
+        if (ShouldLoadPlayer())
+        {
+            StartCoroutine(GameSaveManager.instance.LoadGameAfterDelay(0.2f));
+            PlayerPrefs.DeleteKey("LoadPlayer");
+        }
     }
 
     public void UpdateSkillsName(string a, string b) { aSkillString = a; bSkillString = b;}
@@ -46,4 +53,14 @@ public class GameMaster : MonoBehaviour
         //playerInstance.transform.position = 
     }
 
+    public void TeleportPlayerToSave(Vector2 loadPoint)
+    {
+        playerInstance.transform.position = loadPoint;
+        brotherInstance.transform.position = loadPoint;
+    }
+
+    private bool ShouldLoadPlayer()
+    {
+        return PlayerPrefs.HasKey("LoadPlayer");
+    }
 }

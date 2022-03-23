@@ -94,7 +94,7 @@ public class SkillsManager : MonoBehaviour
         }
         else
         {
-            GameSaveManager.instance.LoadGame();
+            GameSaveManager.instance.LoadSkills();
             //GameSaveManager.instance.LoadSkills();
         }
     }

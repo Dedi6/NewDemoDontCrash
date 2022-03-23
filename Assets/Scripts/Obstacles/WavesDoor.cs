@@ -10,8 +10,7 @@ public class WavesDoor : MonoBehaviour, IRespawnResetable
 
     public void OpenDoor()
     {
-        GameMaster gm = GameMaster.instance;
-        gm.GetComponent<AudioManager>().PlaySound(AudioManager.SoundList.DoorClose);
+        AudioManager.instance.PlaySound(AudioManager.SoundList.DoorClose);
         GetComponent<BoxCollider2D>().enabled = false;
         animator.SetBool("IsOpen", true);
         boolValue = true;
@@ -19,8 +18,7 @@ public class WavesDoor : MonoBehaviour, IRespawnResetable
 
     public void CloseDoor()
     {
-        GameMaster gm = GameMaster.instance;
-        gm.GetComponent<AudioManager>().PlaySound(AudioManager.SoundList.DoorClose);
+        AudioManager.instance.PlaySound(AudioManager.SoundList.DoorClose);
         GetComponent<BoxCollider2D>().enabled = true;
         animator.SetBool("IsOpen", false);
         boolValue = false;

@@ -186,9 +186,6 @@ public class MovementPlatformer : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.L))
-            SwitchOrbType(OrbType.Ghost, 3.5f);
-
 
         if (Time.timeScale == 0)
             return;
@@ -534,8 +531,7 @@ public class MovementPlatformer : MonoBehaviour
             groundedMemory = 0;
             jumpMemory = 0;
             //rb.velocity = Vector2.up * jumpV;
-            float xSpeedBoost = facingRight ? 5f : -5f;
-            rb.velocity = new Vector2(rb.velocity.x + xSpeedBoost, 1 * jumpV);
+            rb.velocity = new Vector2(rb.velocity.x, 1 * jumpV);
             CreateDust();
             audioManager.PlaySound(AudioManager.SoundList.PlayerJump);
             jumpedNow?.Invoke();
@@ -573,9 +569,9 @@ public class MovementPlatformer : MonoBehaviour
         if (!wallCheckHit && wallSlideMemory > 0)
             wallSlideMemory -= Time.deltaTime;
 
-        if (isWallSliding && wallCheckHit)
+        if (isWallSliding && wallCheckHit && !input.GetKey(Keybindings.KeyList.Jump))
             rb.drag = 10f;
-        else if (!isWallSliding || !wallCheckHit)
+        else if (!isWallSliding || !wallCheckHit || input.GetKey(Keybindings.KeyList.Jump))
             rb.drag = 0f;
     }
 

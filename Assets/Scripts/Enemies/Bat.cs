@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bat : MonoBehaviour, ISFXResetable
+public class Bat : MonoBehaviour, ISFXResetable, IKnockbackable
 {
 
     [Header("General")]
@@ -188,5 +188,20 @@ public class Bat : MonoBehaviour, ISFXResetable
         InvokeRepeating("StateHandler", 0, 0.2f);
         state = State.Normal;
         enemy.sharedMaterial = null;
+    }
+
+    public void DisableOtherMovement()
+    {
+        StartCoroutine(KnockBackState());
+    }
+
+    private IEnumerator KnockBackState()
+    {
+        State currentState = state;
+        state = State.Dead;
+
+        yield return new WaitForSeconds(knockBackTime);
+
+        state = currentState;
     }
 }

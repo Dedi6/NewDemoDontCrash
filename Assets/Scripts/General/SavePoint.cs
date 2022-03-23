@@ -21,7 +21,7 @@ public class SavePoint : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D col)
     {
-        if (!isSaving && InputManager.instance.KeyDown(Keybindings.KeyList.Down) && col.transform.position.y > (transform.position.y + 2f) && col.gameObject.layer == 11) // player collided from above
+        if (InputManager.instance.KeyDown(Keybindings.KeyList.Down) && !isSaving && col.transform.position.y > (transform.position.y + 2f) && col.gameObject.layer == 11) // player collided from above
         {
             isSaving = true;
             StartCoroutine(Save());

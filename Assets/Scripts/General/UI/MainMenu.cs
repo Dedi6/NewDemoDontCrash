@@ -25,7 +25,6 @@ public class MainMenu : MonoBehaviour
 
     void SetStartAndLoad(bool firstTime)
     {
-        Debug.Log(firstTime);
         firstStartButton.SetActive(firstTime);
         newAndLoadButtons.SetActive(!firstTime);
     }
@@ -52,9 +51,9 @@ public class MainMenu : MonoBehaviour
         
     public void StartAndLoad()
     {
+        PlayerPrefs.SetInt("LoadPlayer", 1);
         GameSaveManager saveM = GameSaveManager.instance;
         Destroy(menuMaster);
-        Debug.Log(saveM.lastScene);
         SceneManager.LoadScene(saveM.GetLastScene());
     }
 }

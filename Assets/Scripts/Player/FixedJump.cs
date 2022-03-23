@@ -11,7 +11,7 @@ public class FixedJump : MonoBehaviour
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody2D> ();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void FixedUpdate()
@@ -26,5 +26,4 @@ public class FixedJump : MonoBehaviour
             //rb.GetComponent<MovementPlatformer>().animator.SetBool("IsJumping", true);
         }
     }
-
 }
