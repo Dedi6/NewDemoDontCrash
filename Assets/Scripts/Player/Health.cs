@@ -77,7 +77,7 @@ public class Health : MonoBehaviour
         {
             AudioManager.instance.PlaySound(AudioManager.SoundList.RespawnSound);
             health = numberOfHearts;
-            StartCoroutine(GetComponent<MovementPlatformer>().TransitionStart());
+            StartCoroutine(GetComponent<MovementPlatformer>().TransitionStart());  // respawn 
         }
     }
 

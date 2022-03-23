@@ -21,6 +21,7 @@ public class MovementPlatformer : MonoBehaviour
     private float fHorizontalVelocity;
     private float wallSlideMemory;
     public float speedMulitiplier, fallSpeed;
+    private bool pressedJump;
 
 
     private bool facingRight = true;
@@ -292,6 +293,27 @@ public class MovementPlatformer : MonoBehaviour
             enemyNearWallLeft = Physics2D.BoxCast(EnemyBoxColl.bounds.center, new Vector2(EnemyBoxColl.bounds.size.x - 0.1f, EnemyBoxColl.bounds.size.y - 0.39f), 0, Vector2.left, distanceTest, whatIsGround);
         }
     }
+
+    /*private void FixBumps()    // this is garbage code for a garbage bug
+    {
+        RaycastHit2D checkForBumpUp = Physics2D.Raycast(new Vector2(wallCheck.position.x, wallCheck.position.y + 0.5f), Vector2.up, 2f, whatIsGround);
+        float xUp = facingRight ? -0.1f : 0.1f;
+        Vector2 originalColliderSize = boxCollider.size;
+        Vector2 xVector2 = new Vector2(wallCheck.position.x + xUp * 3, wallCheck.position.y + 0.5f);
+        RaycastHit2D checkForBumpUpSecondary = Physics2D.Raycast(xVector2, Vector2.up, 2f, whatIsGround);
+
+        if (input.KeyDown(Keybindings.KeyList.Jump))
+            pressedJump = true;
+        if(rb.velocity.y < 0)
+            boxCollider.size = new Vector2(0.15f, boxCollider.size.y);
+
+        if (pressedJump && input.GetKey(Keybindings.KeyList.Jump) && checkForBumpUp && !checkForBumpUpSecondary)
+        {
+            pressedJump = false;
+            boxCollider.size = new Vector2(boxCollider.size.x - 0.08f, boxCollider.size.y);
+            Debug.Log("dds");
+        }
+    }*/
 
     private void HandleMoveInput()
     {
@@ -1318,9 +1340,11 @@ public class MovementPlatformer : MonoBehaviour
     {
         if (!dontRespawn)
         {
+            Health health = GetComponent<Health>();
             StartCoroutine(StartSwitchStateToIgnoreInputs(0.1f, false));
-            StartCoroutine(RespawnAtCheckpoint(0.4f));
-            GetComponent<Health>().DealDamage(1);
+            if(health.health > 1)
+                StartCoroutine(RespawnAtCheckpoint(0.4f));
+            health.DealDamage(1);
         }
     }
 

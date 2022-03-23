@@ -30,7 +30,7 @@ public class JumpStone : MonoBehaviour, IRespawnResetable
         sprt = GetComponent<SpriteRenderer>();
         originalPos = transform.position;
         tilemap = CellOrganizer.instance.tileMap;
-        if (!isOnFar)
+        if (isOnFearOfHeights && !isOnFar)
             originalPos = transform.localPosition;
     }
 
@@ -133,6 +133,7 @@ public class JumpStone : MonoBehaviour, IRespawnResetable
         //  AudioManager.instance.PlaySound(AudioManager.SoundList.OrbDesrtoy);
         if (isOnFearOfHeights)
         {
+            Debug.Log("isonfear");
             layerSwitcher.ResetJumpStones(gameObject, isOnFar);
             if(!isOnFar)
                 transform.localPosition = originalPos;
