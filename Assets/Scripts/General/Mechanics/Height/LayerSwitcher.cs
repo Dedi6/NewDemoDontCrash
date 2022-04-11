@@ -180,4 +180,9 @@ public class LayerSwitcher : MonoBehaviour
             switchToFar = !switchToFar;
         }
     }
+
+    public bool ShouldDisableCollider(bool isObjectOnFar)
+    {
+        return isObjectOnFar == !switchToFar;
+    }
 }

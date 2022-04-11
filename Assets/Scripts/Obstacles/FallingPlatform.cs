@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MyBox;
 
 public class FallingPlatform : MonoBehaviour, IRespawnResetable
 {
@@ -11,6 +12,10 @@ public class FallingPlatform : MonoBehaviour, IRespawnResetable
     private Rigidbody2D rb;
     [SerializeField]
     private bool ShouldIgnoreEnable;
+
+    public bool isOnFearOfHeights = false;
+    [ConditionalField("isOnFearOfHeights")] public bool isOnFar;
+    [ConditionalField("isOnFearOfHeights")] public LayerSwitcher layerSwitcher;
 
     private void Start()
     {
@@ -51,6 +56,13 @@ public class FallingPlatform : MonoBehaviour, IRespawnResetable
         transform.localPosition = originalPos;
         animator.SetBool("Fall", false);
         GetComponent<BoxCollider2D>().enabled = true;
+        HandleHeightsCollider();
+    }
+
+    void HandleHeightsCollider()
+    {
+        if(isOnFearOfHeights && layerSwitcher.ShouldDisableCollider(isOnFar))
+            GetComponent<BoxCollider2D>().enabled = false;
     }
 
     private void OnEnable()

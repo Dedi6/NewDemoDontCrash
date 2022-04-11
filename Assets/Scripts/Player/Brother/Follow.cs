@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+
 public class Follow : MonoBehaviour
 {
     public float speedWhenClose, speedWhenFar, speedWhenSkill;
-    private float currentSpeed = 12, smokeBombDelay = 0.1f;
+    private float currentSpeed = 12, smokeBombDelay = 0.1f, encouragementTimer = 60;
     private bool isUsingSkill = false;
     [HideInInspector]
     public bool facingRight = false, playerFacingRight;
@@ -16,6 +17,7 @@ public class Follow : MonoBehaviour
     private bool isCreatingCrystal;
     private ManaBar manaBar;
     private InputManager inputM;
+    private int encouragementInt;
 
 
     public Animator animator;
@@ -62,6 +64,8 @@ public class Follow : MonoBehaviour
                     if (isCreatingCrystal)
                         StopCrystal();
                 }
+                if (inputM.KeyDown(Keybindings.KeyList.Heal) && CanCreateCrystal())
+                    CreateCrystal();
                 break;
             case State.Attacking:
                 break;
@@ -72,10 +76,17 @@ public class Follow : MonoBehaviour
         if (transform.childCount > 1)
             Destroy(transform.GetChild(0).gameObject);
 
-        if (inputM.KeyDown(Keybindings.KeyList.Heal) && CanCreateCrystal())
-            CreateCrystal();
+        Timers();
+    }
 
-
+    private void Timers()
+    {
+        encouragementTimer -= Time.deltaTime;
+        if (encouragementTimer <= 0)
+        {
+            encouragementTimer = 60f;
+            encouragementInt = 0;
+        }
     }
 
     private bool CanCreateCrystal()
@@ -263,7 +274,24 @@ public class Follow : MonoBehaviour
     {
         StartCoroutine(AppearAgain());
     }
-    
+
+    public void PlayerRespawned()       // play when player reapawns. Nice comment Dedi I would never guess. stfu bITCH
+    {
+        HandleEncouragement();
+    }
+
+    private void HandleEncouragement()
+    {
+        encouragementInt++;
+        int chance = UnityEngine.Random.Range(1, 101);
+        if (encouragementInt > 3 && chance <= encouragementInt * 5)
+        {
+            encouragementInt = 0;
+            GetComponent<BrotherText>().PlayRandomEncouragement();
+        }
+    }
+
+
     private IEnumerator AppearAgain()
     {
         PrefabManager.instance.PlayVFX(PrefabManager.ListOfVFX.SmokeBomb, transform.position);

@@ -11,8 +11,8 @@ public class FallZone : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            if(isOnFearOfHeights)
-                layerSwitcher.PlayerRespawned();
+            if (isOnFearOfHeights)
+                StartCoroutine(DelaySwitching());
             other.GetComponent<MovementPlatformer>().RespawnAtLatestCheckpoint();
         }
         else
@@ -20,5 +20,12 @@ public class FallZone : MonoBehaviour
             GameMaster.instance.playerInstance.GetComponent<MovementPlatformer>().KillBulletObject();
             PrefabManager.instance.PlayVFX(PrefabManager.ListOfVFX.BulletDissapear, other.transform.position);
         }
+    }
+
+    private IEnumerator DelaySwitching()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        layerSwitcher.PlayerRespawned();
     }
 }

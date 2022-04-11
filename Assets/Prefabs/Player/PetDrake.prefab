@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6631028446786895957}
   - component: {fileID: 6631028446786895956}
   - component: {fileID: 1626548000}
+  - component: {fileID: 1524437723087969006}
   m_Layer: 31
   m_Name: PetDrake
   m_TagString: Brother
@@ -185,3 +186,27 @@ MonoBehaviour:
   player: {fileID: 0}
   brother: {fileID: 6631028446786895982}
   isUsingSkill: 0
+--- !u!114 &1524437723087969006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6631028446786895982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c54aad5c7e1493d448ec8838db9242aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  randomEncouragement:
+  - Breath.
+  - Drink some water and try again.
+  - You got this.
+  - You can do this.
+  - Take a second to stretch.
+  - This is the one.
+  - Focus.
+  - Imagine it in your head.
+  - Allez.
+  - Venga venga.
+  appearTime: 5

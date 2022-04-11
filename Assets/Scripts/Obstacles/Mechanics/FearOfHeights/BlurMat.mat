@@ -76,7 +76,7 @@ Material:
     m_Floats:
     - _AlphaClip: 0
     - _Blend: 0
-    - _BlurAmount: 0.6
+    - _BlurAmount: 0
     - _BumpAmt: 10
     - _BumpScale: 1
     - _Cull: 2

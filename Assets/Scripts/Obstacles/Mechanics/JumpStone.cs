@@ -133,7 +133,6 @@ public class JumpStone : MonoBehaviour, IRespawnResetable
         //  AudioManager.instance.PlaySound(AudioManager.SoundList.OrbDesrtoy);
         if (isOnFearOfHeights)
         {
-            Debug.Log("isonfear");
             layerSwitcher.ResetJumpStones(gameObject, isOnFar);
             if(!isOnFar)
                 transform.localPosition = originalPos;

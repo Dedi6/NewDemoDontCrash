@@ -1343,8 +1343,9 @@ public class MovementPlatformer : MonoBehaviour
             Health health = GetComponent<Health>();
             StartCoroutine(StartSwitchStateToIgnoreInputs(0.1f, false));
             if(health.health > 1)
-                StartCoroutine(RespawnAtCheckpoint(0.4f));
+                StartCoroutine(RespawnAtCheckpoint(0.8f));
             health.DealDamage(1);
+            GameMaster.instance.brotherInstance.GetComponent<Follow>().PlayerRespawned();
         }
     }
 
