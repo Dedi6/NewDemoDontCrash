@@ -45,6 +45,9 @@ public class PrefabManager : MonoBehaviour
         SkillsUnlockedPop,
         ArrowTrap,
         GhostBulletTrail,
+        SwordSummon, 
+        CannonSummon,
+        FanSummon,
     }
 
     public enum ListOfSprites
@@ -67,6 +70,17 @@ public class PrefabManager : MonoBehaviour
     public void PlayVFX(ListOfVFX name, Vector2 position)
     {
         GameObject vfx = Instantiate(FindVFX(name), position, Quaternion.identity);
+    }
+
+    public void VFXAngle(ListOfVFX name, Vector2 position, float angle)
+    {
+        GameObject vfx = Instantiate(FindVFX(name), position, Quaternion.Euler(0, 0, angle));
+    }
+
+    public GameObject CreatePrefabAndReturnObject(ListOfVFX name, Vector2 position, float angle)
+    {
+        GameObject vfx = Instantiate(FindVFX(name), position, Quaternion.Euler(0, 0, angle));
+        return vfx;
     }
 
     public GameObject FindVFX(ListOfVFX name)

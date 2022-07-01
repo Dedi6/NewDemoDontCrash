@@ -22,6 +22,9 @@ public class LayerSwitcher : MonoBehaviour
     [SerializeField]
     private Transform[] roomsFar, roomsClose;
 
+    [SerializeField]
+    private Material closeMat;
+
 
 
     public void SwitchLayer()
@@ -41,7 +44,7 @@ public class LayerSwitcher : MonoBehaviour
         player.GetComponent<Animator>().SetTrigger("Heal");
         yield return new WaitForSeconds(0.2f);
 
-        
+
         if (switchToFar)
         {
             SwitchData(true, 8f, speedFar, colorFar);
@@ -100,7 +103,7 @@ public class LayerSwitcher : MonoBehaviour
             foreach (Transform child in room)
                 TrySwitchingColliders(child, switchToFar);
         }
-        
+
         foreach (Transform room in roomsClose)
         {
             foreach (Transform child in room)
@@ -115,7 +118,7 @@ public class LayerSwitcher : MonoBehaviour
         if (child.TryGetComponent(out CircleCollider2D colCircle))
             colCircle.enabled = shouldEnable;
 
-        if(child.childCount > 0)
+        if (child.childCount > 0)
         {
             foreach (Transform grandChild in child)
             {
@@ -132,11 +135,13 @@ public class LayerSwitcher : MonoBehaviour
         if (cellsO.HaveOrbs())
         {
             Transform newParent = switchToFar ? roomsFar[0] : roomsClose[0];
+            string newSortingLayer = switchToFar ? "Default" : "Tilemap";
             for (int i = 0; i <= cellsO.currentPos; i++)
             {
                 GameObject currentCell = cellsO.cells[i].currentCell;
                 currentCell.transform.SetParent(newParent);
                 GetComponent<BlurControl>().ChangeMatOfObject(currentCell, switchToFar);
+                currentCell.GetComponent<SpriteRenderer>().sortingLayerName = newSortingLayer;
                 currentCell.transform.localScale = new Vector3(1f, 1f, 0f);
             }
         }
@@ -145,8 +150,10 @@ public class LayerSwitcher : MonoBehaviour
     public void ResetJumpStones(GameObject jumpStone, bool shouldBeOnFar)
     {
         Transform newParent = shouldBeOnFar ? roomsFar[0] : roomsClose[0];
+        string newSortingLayer = switchToFar ? "Default" : "Tilemap";
         jumpStone.transform.SetParent(newParent);
         GetComponent<BlurControl>().ChangeMatOfObject(jumpStone, shouldBeOnFar);
+        jumpStone.GetComponent<SpriteRenderer>().sortingLayerName = newSortingLayer;
         jumpStone.transform.localScale = new Vector3(1f, 1f, 0f);
     }
 
@@ -174,7 +181,7 @@ public class LayerSwitcher : MonoBehaviour
 
     public void PlayerRespawned()
     {
-        if(switchToFar)
+        if (switchToFar)
         {
             SwitchData(true, 8f, speedFar, colorFar);
             switchToFar = !switchToFar;
@@ -184,5 +191,39 @@ public class LayerSwitcher : MonoBehaviour
     public bool ShouldDisableCollider(bool isObjectOnFar)
     {
         return isObjectOnFar == !switchToFar;
+    }
+
+    public bool ShouldDisableJumpstone(SpriteRenderer stone)
+    {
+        return stone.sharedMaterial.GetFloat("_BlurAmount") == 0;
+    }
+
+    public void HandleBoss(float sizeFar, float sizeClose, bool switchToFar, Transform boss)
+    {
+        Color newColor;
+        SpriteRenderer sprite = boss.GetComponent<SpriteRenderer>();
+        if(switchToFar)
+        {
+            newColor = colorFar;
+            boss.localScale = new Vector3(sizeFar, sizeFar, 0f);
+            boss.SetParent(roomsFar[0]);
+            sprite.sortingLayerName = "Default";
+            sprite.sortingOrder = 0;
+        }
+        else
+        {
+            newColor = colorClose;
+            boss.localScale = new Vector3(sizeClose, sizeClose, 0f);
+            boss.SetParent(roomsClose[0]);
+            sprite.sortingLayerName = "Foreground";
+            sprite.sortingOrder = 1;
+        }
+        sprite.color = newColor;
+        GetComponent<BlurControl>().ChangeMatOfObjectBoss(boss.gameObject, switchToFar);
+    }
+
+    public bool IsOnFarSide()
+    {
+        return switchToFar ? false : true;
     }
 }

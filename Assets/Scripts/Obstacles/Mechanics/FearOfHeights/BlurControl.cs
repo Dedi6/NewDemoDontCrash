@@ -17,7 +17,7 @@ public class BlurControl : MonoBehaviour
 
     public void SwitchBlur(bool isCloseLayer)
     {
-        if(isCloseLayer)
+        if (isCloseLayer)
         {
             matClose.SetFloat("_BlurAmount", 0);
             matFar.SetFloat("_BlurAmount", blurAmount);
@@ -36,6 +36,12 @@ public class BlurControl : MonoBehaviour
     public void ChangeMatOfObject(GameObject gameObject, bool switchToFar)
     {
         Material newMat = switchToFar ? objectsFar : objectsClose;
+        gameObject.GetComponent<SpriteRenderer>().material = newMat;
+    }
+
+    public void ChangeMatOfObjectBoss(GameObject gameObject, bool switchToFar)
+    {
+        Material newMat = switchToFar ? matFar : matClose;
         gameObject.GetComponent<SpriteRenderer>().material = newMat;
     }
 }

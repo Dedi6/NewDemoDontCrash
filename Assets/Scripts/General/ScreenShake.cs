@@ -11,7 +11,7 @@ public class ScreenShake : MonoBehaviour
     {
         var noise = GetComponent<CinemachineVirtualCamera>().AddCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
         noise.m_NoiseProfile = noiseSet;
-        noise.m_AmplitudeGain = 2;
+        noise.m_AmplitudeGain = amp;
         yield return new WaitForSeconds(time);
         noise.m_AmplitudeGain = 0;
     }

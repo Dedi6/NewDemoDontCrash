@@ -69,6 +69,7 @@ public class Follow : MonoBehaviour
                 break;
             case State.Attacking:
                 break;
+
             case State.UsingSkill:
                 break;
         }
@@ -307,5 +308,15 @@ public class Follow : MonoBehaviour
         state = State.Normal;
         currentSpeed = speedWhenClose;
         animator.SetFloat("speedMultiplier", 1.5f);
+    }
+
+    public void SetStateSkill()
+    {
+        state = State.UsingSkill;
+    }
+
+    public float GetCurrentSpeed()
+    {
+        return currentSpeed;
     }
 }

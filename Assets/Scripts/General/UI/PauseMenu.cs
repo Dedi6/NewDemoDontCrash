@@ -170,6 +170,8 @@ public class PauseMenu : MonoBehaviour
         sliders[0].value = PlayerPrefs.GetFloat("MixerMaster");
         sliders[1].value = PlayerPrefs.GetFloat("MixerMusic");
         sliders[2].value = PlayerPrefs.GetFloat("MixerSFX");
+
+
     }
 
     public void QuitGame()

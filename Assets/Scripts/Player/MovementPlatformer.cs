@@ -273,7 +273,7 @@ public class MovementPlatformer : MonoBehaviour
         }
     }
 
-    private void SetStateNormal()
+    public void SetStateNormal()
     {
         state = State.Normal;
     }
@@ -386,7 +386,7 @@ public class MovementPlatformer : MonoBehaviour
             StartCoroutine(MakePlayerInvincible(1.5f));
             StartCoroutine(PlayerBlinkingAnimation());
             audioManager.PlaySound(AudioManager.SoundList.PlayerHit);
-            StartCoroutine(FreezeGameForTime(0.2f));
+            StartCoroutine(FreezeGameForTime(0.3f));
             GetComponent<Health>().DealDamage(damage);
         }
     }
@@ -1172,7 +1172,7 @@ public class MovementPlatformer : MonoBehaviour
         rb.constraints = RigidbodyConstraints2D.FreezePosition;
         yield return new WaitForSeconds(timeToWait);
         rb.constraints = ~RigidbodyConstraints2D.FreezePosition;
-
+        
         FallingGroundCheck();
     }       // pause only the player's movement for float timeToWait
 
@@ -1300,6 +1300,9 @@ public class MovementPlatformer : MonoBehaviour
 
     public void StartIgnoreInput()
     {
+        ResetAxis();
+        rb.velocity = Vector2.zero;
+        animator.SetFloat("Speed", 0);
         state = State.IgnorePlayerInput;
     }
     public void EndIgnoreInput()
@@ -1422,6 +1425,12 @@ public class MovementPlatformer : MonoBehaviour
             directionPressedNow = DirectionPressed.DownLeft;
 
     }
+
+    public Vector2 GetDirectionPressedVector()
+    {
+        return directionPressed;
+    }
+
 
     public bool IsFacingRight()
     {

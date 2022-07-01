@@ -125,7 +125,17 @@ public class JumpStone : MonoBehaviour, IRespawnResetable
         yield return new WaitForSeconds(1f);
 
         sprt.color = Color.white;
-        GetComponent<CircleCollider2D>().enabled = true;
+        SetColliders();
+    }
+
+    void SetColliders()
+    {
+        if(!isOnFearOfHeights)
+            GetComponent<CircleCollider2D>().enabled = true;
+        else
+        {
+            GetComponent<CircleCollider2D>().enabled = layerSwitcher.ShouldDisableJumpstone(GetComponent<SpriteRenderer>());
+        }
     }
 
     public void PlayerHasRespawned()
@@ -134,16 +144,24 @@ public class JumpStone : MonoBehaviour, IRespawnResetable
         if (isOnFearOfHeights)
         {
             layerSwitcher.ResetJumpStones(gameObject, isOnFar);
-            if(!isOnFar)
+            if (!isOnFar)
+            {
                 transform.localPosition = originalPos;
+                GetComponent<CircleCollider2D>().enabled = false;
+            }
             else
+            {
                 transform.position = originalPos;
+                GetComponent<CircleCollider2D>().enabled = true;
+            }
         }
         else
+        {
             transform.position = originalPos;
+            GetComponent<CircleCollider2D>().enabled = true;
+        }
 
         isActive = false;
-        GetComponent<CircleCollider2D>().enabled = true;
     }
 
     public void Pop()

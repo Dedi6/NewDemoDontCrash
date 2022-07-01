@@ -63,4 +63,10 @@ public class Action_TriggerHitPlayer : MonoBehaviour
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 180f;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
+
+    public void SetPositionAndMovement(Vector2 direction, float speed, Vector2 position)
+    {
+        transform.position = position;
+        SetMovement(direction, speed);
+    }
 }
