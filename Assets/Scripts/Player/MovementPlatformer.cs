@@ -22,6 +22,8 @@ public class MovementPlatformer : MonoBehaviour
     private float wallSlideMemory;
     public float speedMulitiplier, fallSpeed;
     private bool pressedJump;
+    [SerializeField]
+    private float groundStuckCheckHeight;
 
 
     private bool facingRight = true;
@@ -32,7 +34,7 @@ public class MovementPlatformer : MonoBehaviour
     public Transform groundCheck, wallCheck;           // objects for checking if the player touches the ground/wall.
     public float wallCheckDistance;
     public float groundCheckDistance;
-    private RaycastHit2D wallCheckHit;
+    private RaycastHit2D wallCheckHit, groundStuckHit;
     [HideInInspector]
     public int whatIsGround = (1 << 8) | (1 << 22);          // !
 
@@ -155,9 +157,8 @@ public class MovementPlatformer : MonoBehaviour
     {
         CashComponents();   // get all the components ready.
 
-        //gm.savePointPosition = transform.position; // for testing :D
+        gm.lastCheckPointPosition = transform.position; // for testing :D
         //RespawnAtSavePoint();                     
-        audioManager.PlayTheme(AudioManager.SoundList.FirstTestSong, 0.1f); /////// test song
         //  delete when building!!!!
         //SetForBuilding(); /// this is only active once before building
     }
@@ -186,8 +187,6 @@ public class MovementPlatformer : MonoBehaviour
 
     void Update()
     {
-
-
         if (Time.timeScale == 0)
             return;
 
@@ -202,7 +201,6 @@ public class MovementPlatformer : MonoBehaviour
                 HandleAnimations();
                 MoveStart();
                 WallSlideCheck();
-                //WallJumpStart();
                 SwitchStates();
                 ShootMemory();
                 CheckDirectionPressed();
@@ -228,14 +226,6 @@ public class MovementPlatformer : MonoBehaviour
                 break;
         }
 
-        /* if (isUsingTopNSideTeleport && InputManager.instance.KeyDown(Keybindings.KeyList.Attack))
-         {
-             state = State.DashingToEnemy;
-             Flip();
-             Debug.Log("hi");
-         }*/
-
-
         if (shouldICheckIsGrounded)
             GroundCheckForShoot();
 
@@ -246,7 +236,6 @@ public class MovementPlatformer : MonoBehaviour
         
         if (showPointer)
             RotatePointer();
-
     }
 
     void FixedUpdate()
@@ -293,6 +282,7 @@ public class MovementPlatformer : MonoBehaviour
             enemyNearWallLeft = Physics2D.BoxCast(EnemyBoxColl.bounds.center, new Vector2(EnemyBoxColl.bounds.size.x - 0.1f, EnemyBoxColl.bounds.size.y - 0.39f), 0, Vector2.left, distanceTest, whatIsGround);
         }
     }
+
 
     /*private void FixBumps()    // this is garbage code for a garbage bug
     {
@@ -1091,16 +1081,7 @@ public class MovementPlatformer : MonoBehaviour
                     enemy.GetComponentInParent<Hollow>().BlinkVFX();
             }
         }
-        //else if (moveInputVertical < 0)  // dont need attack for down 
-        //  {
-        //    if (rb.velocity.y > 0)
-        //       rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * -10);
-        //    else if (rb.velocity.y < 0)
-        //       rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 10);
-        //    else if (rb.velocity.y == 0)
-        //        rb.velocity = new Vector2(rb.velocity.x, -10);
-        //    animator.SetTrigger("AttackingRegularDown");
-        // }
+       
         audioManager.PlaySound(AudioManager.SoundList.PlayerAttack);
     }       // .
 
@@ -1170,9 +1151,12 @@ public class MovementPlatformer : MonoBehaviour
     {
         rb.velocity = Vector2.zero;
         rb.constraints = RigidbodyConstraints2D.FreezePosition;
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+
         yield return new WaitForSeconds(timeToWait);
         rb.constraints = ~RigidbodyConstraints2D.FreezePosition;
-        
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+
         FallingGroundCheck();
     }       // pause only the player's movement for float timeToWait
 
@@ -1207,7 +1191,8 @@ public class MovementPlatformer : MonoBehaviour
         var original = Time.timeScale;
         Time.timeScale = 0.1f;
 
-        yield return new WaitForSecondsRealtime(time);
+        //yield return new WaitForSecondsRealtime(time);
+        yield return new WaitForSeconds(time * 0.1f);
 
         Time.timeScale = original;
     }       // Freeze the game for float time
@@ -1224,6 +1209,7 @@ public class MovementPlatformer : MonoBehaviour
             animator.SetBool("IsHurt", false);
         state = State.Normal;
     }       //Ignore player's input for float time, if isPlayerHurt, play hurt animation.
+
 
     private IEnumerator SideSkillsState(float time)
     {

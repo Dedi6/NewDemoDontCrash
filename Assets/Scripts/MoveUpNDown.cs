@@ -7,44 +7,11 @@ public class MoveUpNDown : MonoBehaviour  // side to side like a roller coaster
     public float numberOfMoves, intervalT, offset;
     private float currentMoves, currentInterval, currentOffset;
     public bool goUp;
-    private MovementPlatformer mp;
     private bool isCorouActive;
 
-    [Header("Running")]
-    [Space]
-    public float runningNumberOfMoves; public float runningIntervalT, runningOffset;
-
-    void Start()
-    {
-        mp = GameMaster.instance.playerInstance.GetComponent<MovementPlatformer>();
-        SetCurrentFloats(numberOfMoves, intervalT, offset);
-        StartCoroutine(Move());
-    }
-
-    private void Update()
-    {
-
-        if(mp.moveInput == 0 && currentInterval != intervalT)
-        {
-            SetCurrentFloats(numberOfMoves, intervalT, offset);
-        }
-        else if(mp.moveInput != 0 && currentInterval != runningIntervalT)  // running
-        {
-            SetCurrentFloats(runningNumberOfMoves, runningIntervalT, runningOffset);
-        }
-
-        if (!mp.isGrounded && isCorouActive)
-        {
-            StopAllCoroutines();
-            isCorouActive = false;
-        }
-        else if (mp.isGrounded && !isCorouActive)
-            StartCoroutine(Move());
-    }
 
     void SetCurrentFloats(float num, float t, float off)
     {
-        transform.localPosition = Vector3.zero;
         currentMoves = num;
         currentInterval = t;
         currentOffset = off;
@@ -70,6 +37,17 @@ public class MoveUpNDown : MonoBehaviour  // side to side like a roller coaster
             currentMoves = numberOfMoves;
         }
 
+        StartCoroutine(Move());
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+    }
+
+    private void OnEnable()
+    {
+        SetCurrentFloats(numberOfMoves, intervalT, offset);
         StartCoroutine(Move());
     }
 }

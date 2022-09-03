@@ -100,6 +100,7 @@ public class Follow : MonoBehaviour
         isCreatingCrystal = true;
         float lookingRight;
         Vector2 dirWall;
+        float offsetX = UnityEngine.Random.Range(-0.3f, 0.3f);
         if (player.GetComponentInParent<MovementPlatformer>().IsFacingRight())
         {
             lookingRight = 2f;
@@ -118,7 +119,7 @@ public class Follow : MonoBehaviour
         
         if (rayToFloor && !rayToWall)
         {
-            Vector3 newTarget = new Vector3(rayToFloor.point.x, rayToFloor.point.y + 0.6f, 0f);
+            Vector3 newTarget = new Vector3(rayToFloor.point.x + offsetX, rayToFloor.point.y + 0.6f, 0f);
             GameObject newCrytsal = Instantiate(crystal, newTarget, Quaternion.identity, rayToFloor.transform);
             target = newCrytsal.transform;
         }
@@ -127,8 +128,8 @@ public class Follow : MonoBehaviour
             RaycastHit2D rayFromPlayer = Physics2D.Raycast(player.position, Vector2.down, 7, 1 << 8);
             if (rayFromPlayer)
             {
-                Vector3 newTarget = new Vector3(rayFromPlayer.point.x, rayFromPlayer.point.y + 0.6f, 0f);
-                GameObject newCrytsal = Instantiate(crystal, newTarget, Quaternion.identity, rayToFloor.transform);
+                Vector3 newTarget = new Vector3(rayFromPlayer.point.x + offsetX, rayFromPlayer.point.y + 0.6f, 0f);
+                GameObject newCrytsal = Instantiate(crystal, newTarget, Quaternion.identity, rayFromPlayer.transform);
                 target = newCrytsal.transform;
             }
             else
@@ -172,6 +173,8 @@ public class Follow : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (isCreatingCrystal) return;
+
         currentSpeed = speedWhenClose;
         animator.SetFloat("speedMultiplier", 1f);
         if (isUsingSkill)
@@ -285,7 +288,7 @@ public class Follow : MonoBehaviour
     {
         encouragementInt++;
         int chance = UnityEngine.Random.Range(1, 101);
-        if (encouragementInt > 3 && chance <= encouragementInt * 5)
+        if (encouragementInt > 3 && chance <= encouragementInt)
         {
             encouragementInt = 0;
             GetComponent<BrotherText>().PlayRandomEncouragement();

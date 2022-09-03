@@ -40,7 +40,9 @@ public class LayerSwitcher : MonoBehaviour
 
     private IEnumerator StartSwitching()
     {
-        StartCoroutine(player.GetComponent<MovementPlatformer>().SwitchStateIgnore(0.2f));
+        MovementPlatformer playerScript = player.GetComponent<MovementPlatformer>();
+        StartCoroutine(playerScript.SwitchStateIgnore(0.2f));
+        StartCoroutine(playerScript.PauseMovement(0.2f));
         player.GetComponent<Animator>().SetTrigger("Heal");
         yield return new WaitForSeconds(0.2f);
 
@@ -62,6 +64,7 @@ public class LayerSwitcher : MonoBehaviour
     {
         layerFar.enabled = switchToFar;
         layerClose.enabled = !switchToFar;
+        HandleHealCrystals(switchToFar);
         SwitchCollidersOfChildren(switchToFar);
         Transform playerTransform = player.GetComponent<Transform>();
         MovementPlatformer playerScript = player.GetComponent<MovementPlatformer>();
@@ -78,6 +81,26 @@ public class LayerSwitcher : MonoBehaviour
         GetComponent<BlurControl>().SwitchBlur(!switchToFar);
         HandleJumpOrbs();
         StartCoroutine(SwitchBirdValues(switchToFar, newColour));
+    }
+
+    void HandleHealCrystals(bool switchToFar)
+    {
+        /* foreach (Transform child in layerFar.transform)
+             child.GetComponent<CircleCollider2D>().enabled = switchToFar;
+         foreach (Transform child in layerClose.transform)
+             child.GetComponent<CircleCollider2D>().enabled = !switchToFar;*/
+        foreach (Transform child in layerFar.transform)
+        {
+            if (child.TryGetComponent(out CircleCollider2D col))
+                ResetJumpStones(col.gameObject, true);
+        }
+        foreach (Transform child in layerClose.transform)
+        {
+            if (child.TryGetComponent(out CircleCollider2D col))
+                ResetJumpStones(col.gameObject, false);
+        }
+
+
     }
 
     private IEnumerator SwitchBirdValues(bool switchToFar, Color newColor)
@@ -150,7 +173,7 @@ public class LayerSwitcher : MonoBehaviour
     public void ResetJumpStones(GameObject jumpStone, bool shouldBeOnFar)
     {
         Transform newParent = shouldBeOnFar ? roomsFar[0] : roomsClose[0];
-        string newSortingLayer = switchToFar ? "Default" : "Tilemap";
+        string newSortingLayer = !switchToFar ? "Default" : "Tilemap";
         jumpStone.transform.SetParent(newParent);
         GetComponent<BlurControl>().ChangeMatOfObject(jumpStone, shouldBeOnFar);
         jumpStone.GetComponent<SpriteRenderer>().sortingLayerName = newSortingLayer;

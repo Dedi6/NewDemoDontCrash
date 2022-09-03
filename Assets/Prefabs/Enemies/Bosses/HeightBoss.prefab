@@ -5099,6 +5099,8 @@ MonoBehaviour:
   stallAnimation: 0
   phaseTwoHp: 0
   phaseThreeHp: 0
+  specialMoveHp: 0
+  deathBlinkNumber: 0
   pauseBeforeAttack: 0.1
   stompShakeTime: 0
   stompShakeForce: 0
@@ -5108,8 +5110,13 @@ MonoBehaviour:
   cannonDelay: 0.8
   cannonHeight: 1
   cannonBallSpeed: 30
+  fanDuration: 0
+  fanParticleSpeed: 0
+  specialSwordDelay: 0
   swordAmountMax: 8
+  specialSwordAmount: 0
   cannonAmountMax: 3
+  playerMassRunToFan: 0
   leftPosition: {fileID: 0}
   rightPosition: {fileID: 0}
   quakePosLeft: {fileID: 0}
@@ -5118,7 +5125,17 @@ MonoBehaviour:
   rightPosClose: {fileID: 0}
   quakePosLeftClose: {fileID: 0}
   quakePosRightClose: {fileID: 0}
+  startingQuake: {fileID: 0}
+  quakeObjectRight: {fileID: 0}
+  quakeObjectLeft: {fileID: 0}
+  quakeObjectRightClose: {fileID: 0}
+  quakeObjectLeftClose: {fileID: 0}
+  startQuakeObject: {fileID: 0}
+  triggerFightObject: {fileID: 0}
   cannonSummonCD: 0
+  swordSummonCD: 0
+  fanSummonCD: 0
+  dashCD: 0
   animator: {fileID: 4606747775596510171}
   layerSwitcher: {fileID: 0}
   bossFightTriggered:
@@ -5135,6 +5152,9 @@ MonoBehaviour:
   fanPrefab: {fileID: 0}
   cannonBallPrefab: {fileID: 4253132379563027631, guid: 75f14c0cc56f5874b9b5009aaeafe03b,
     type: 3}
+  quakePrefab: {fileID: 0}
+  blackOverlay: {fileID: 0}
+  tpPortals: []
 --- !u!114 &4606747775596510168
 MonoBehaviour:
   m_ObjectHideFlags: 0

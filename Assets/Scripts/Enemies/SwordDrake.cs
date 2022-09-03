@@ -27,7 +27,7 @@ public class SwordDrake : MonoBehaviour, ISFXResetable, IKnockbackable
     private bool onCooldown = false;
     private int numOfDashes;
     public Transform attackGroundCheck;
-
+    private Coroutine attackCorou;
 
     public Animator animator;
     private BoxCollider2D boxCollider;
@@ -47,7 +47,7 @@ public class SwordDrake : MonoBehaviour, ISFXResetable, IKnockbackable
         enemy = GetComponent<Rigidbody2D>();
         raycastDirection = new Vector2(-1, 0);
         boxCollider = GetComponent<BoxCollider2D>();
-        player = GameObject.Find("Dirt");
+        player = GameMaster.instance.playerInstance;
         speedMulitiplier += Random.Range(-1f, 1f);
         bool goRight = GetComponent<Enemy>().goRight;
         if ((goRight && !facingRight) || (!goRight && facingRight))
@@ -192,7 +192,7 @@ public class SwordDrake : MonoBehaviour, ISFXResetable, IKnockbackable
     private IEnumerator AttackCoroutine(float cooldown)
     {
         onCooldown = true;
-        StartCoroutine(PauseBeforeAttack());
+        attackCorou = StartCoroutine(PauseBeforeAttack());
         numOfDashes = Random.Range(1, 3);
 
         yield return new WaitForSeconds(cooldown);
@@ -234,7 +234,7 @@ public class SwordDrake : MonoBehaviour, ISFXResetable, IKnockbackable
             {
                 numOfDashes--;
                 Flip();
-                StartCoroutine(PauseBeforeAttack());
+                attackCorou = StartCoroutine(PauseBeforeAttack());
             }
             /*else if(numOfDashes == 0 && state != State.Dead)
                 state = State.Normal;*/
@@ -260,6 +260,7 @@ public class SwordDrake : MonoBehaviour, ISFXResetable, IKnockbackable
     public void SetStateDead()
     {
         state = State.Dead;
+        StopCoroutine(attackCorou);
     }
 
     public void DisableOtherMovement()

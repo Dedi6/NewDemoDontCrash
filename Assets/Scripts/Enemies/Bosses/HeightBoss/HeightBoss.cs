@@ -9,34 +9,39 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
     public Rigidbody2D enemy;
     public Transform rayCheckPointGround;
     private bool facingRight = true, playerRespawned = false, isOnFarLayer;
-    private RaycastHit2D wallCheckRaycast;
-    private RaycastHit2D groundCheckRaycast;
     private Vector2 originalPos;
     public float wallCheckDistance = 1, attackCheckDistance, knockBackTime, turnAroundTimer;
-    public float groundCheckDistance = 1, stallAnimation, phaseTwoHp, phaseThreeHp;
+    public float groundCheckDistance = 1, stallAnimation, phaseTwoHp, phaseThreeHp, specialMoveHp;
     private int layerMaskGround = 1 << 8, currentPhase = 1;
     private Collider2D waitingCast;
+    private Coroutine cooldownCoroutine;
+    [SerializeField]
+    private int deathBlinkNumber;
 
     [Header("Attacking")]
     [Space]
     public float pauseBeforeAttack;
-    public float stompShakeTime, stompShakeForce, dashSpeed, swordDelay, swordHeight, cannonDelay, cannonHeight, cannonBallSpeed, fanDuration, fanParticleSpeed;
-    private float dashSpeedMultiplier;
-    public int swordAmountMax, cannonAmountMax, playerMassRunToFan;
-    private int currentSkillsInt, swordAmount, cannonAmount, cannonDivide, currentFanAngle, currentQuake;
+    public float stompShakeTime, stompShakeForce, dashSpeed, swordDelay, swordHeight, cannonDelay, cannonHeight, cannonBallSpeed, fanDuration, fanParticleSpeed, specialSwordDelay;
+    private float dashSpeedMultiplier, deathTpWait = 0.5f;
+    public int swordAmountMax, specialSwordAmount, cannonAmountMax, playerMassRunToFan;
+    private int swordAmount, cannonAmount, cannonDivide, currentFanAngle, currentQuake;
     private Vector2 currentSpawnPoint, dashDir, dashEndPos;
-    private bool isDashing, isFanActive, didQuakeOnFar, didQuakeOnRight, isSeondQuake, isFirstQuakeRight;
+    private bool isDashing, isFanActive, didQuakeOnFar, didQuakeOnRight, isSeondQuake, isFirstQuakeRight, isQuaking, usedSpecialMove, canDodge, shouldDisableSecondCol, shouldDisableCannons;
+    private string coroutineName;
 
     [Header("Positions")]
     [Space]
     public Transform leftPosition;
-    public Transform rightPosition, quakePosLeft, quakePosRight, leftPosClose, rightPosClose, quakePosLeftClose, quakePosRightClose;
+    public Transform rightPosition, quakePosLeft, quakePosRight, leftPosClose, rightPosClose, quakePosLeftClose, quakePosRightClose, startingQuake;
     [SerializeField]
-    private GameObject quakeObjectRight, quakeObjectLeft, quakeObjectRightClose, quakeObjectLeftClose;
+    private GameObject quakeObjectRight, quakeObjectLeft, quakeObjectRightClose, quakeObjectLeftClose, startQuakeObject, triggerFightObject, firstQuakeCollider, secondQuakeCollider, seperateQuakeCol;
 
     [Header("Cooldowns")]
     [Space]
-    public float cannonSummonCD;
+    [SerializeField]
+    private float cannonSummonCD;
+    [SerializeField]
+    private float swordSummonCD, fanSummonCD, dashCD;
 
 
     private System.Action currentSkill;
@@ -45,13 +50,18 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
     private BoxCollider2D boxCollider;
     public UnityEngine.Events.UnityEvent bossFightTriggered, bossDied;
     public Transform enemiesParent;
+    private AudioManager audioManager;
     GameObject player;
     [Header("Summon Prefabs")]
     [Space]
     [SerializeField]
     private GameObject swordPrefab;
     [SerializeField]
-    private GameObject cannonPrefab, fanPrefab, cannonBallPrefab, quakePrefab;
+    private GameObject cannonPrefab, fanPrefab, cannonBallPrefab, quakePrefab, blackOverlay;
+    [SerializeField]
+    private GameObject[] tpPortals;
+    [SerializeField]
+    private AudioSource bg_Gameobject;
 
     private State state;
 
@@ -62,19 +72,21 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
         Attack,
         Stunned,
         Dead,
+        SpecialAttack,
     }
     void Start()
     {
         enemy = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = GameMaster.instance.playerInstance;
         GetComponent<Enemy>().usePhases = true;
-        currentSkillsInt = 45;
         bool goRight = GetComponent<Enemy>().goRight;
         if ((goRight && !facingRight) || (!goRight && facingRight))
             ForceFlip();
-        originalPos = transform.position;
+        originalPos = transform.localPosition;
         isOnFarLayer = true;
+        SwitchLayers();
+        SwitchLayers();
         SwitchLayers();
         HandleSkillPrefabs();
     }
@@ -83,6 +95,7 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
     {
         swordAmount = swordAmountMax;
         cannonAmount = cannonAmountMax;
+        audioManager = AudioManager.instance;
     }
 
     private void Awake()
@@ -92,28 +105,14 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.U))
-            StartCoroutine(StartQuake());
-        if (Input.GetKeyDown(KeyCode.J))
-            StartCoroutine(SummonSword());
-        if (Input.GetKeyDown(KeyCode.M))
-            StartCoroutine(DashCoroutine());
-        if (Input.GetKeyDown(KeyCode.N))
-            StartCoroutine(SummonFan());
-        if (Input.GetKeyDown(KeyCode.B))
-            StartCoroutine(SummonCannon());
-        if (Input.GetKeyDown(KeyCode.O))
-            SwitchLayers();
-
 
         if (state == State.Normal)
         {
-            if (Mathf.Abs(transform.position.x - player.transform.position.x) < 8 && turnAroundTimer <= 0 && (Mathf.Abs(transform.position.y - player.transform.position.y) < 2))
+            if (turnAroundTimer <= 0)
             {
                 ForceFlip();
             }
         }
-
 
         if (turnAroundTimer > 0)
             turnAroundTimer -= Time.deltaTime;
@@ -129,7 +128,7 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
                 CheckForPlayer();
                 break;
             case State.Normal:
-              //  StartCoroutine(PauseBeforeAttack(pauseBeforeAttack));
+                //  StartCoroutine(PauseBeforeAttack(pauseBeforeAttack));
                 break;
             case State.Attack:
                 if (isDashing)
@@ -159,6 +158,8 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
     }
     private void HandleEnemyClassObjects()
     {
+        if (state == State.Dead) return;
+
         GetComponent<Enemy>().facingRight = facingRight;
 
         // handle collider for layer switcher
@@ -167,7 +168,7 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
         else if (!layerSwitcher.ShouldDisableCollider(isOnFarLayer) && boxCollider.enabled == false)
             boxCollider.enabled = true;
 
-        if(isFanActive)
+        if (isFanActive)
         {
             float playerXInput = player.GetComponent<MovementPlatformer>().moveInput;
             Rigidbody2D playerRB = player.GetComponent<Rigidbody2D>();
@@ -189,7 +190,6 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
     public void ResetSFXCues()
     {
         state = State.Waiting;
-        currentSkillsInt = 60;
         currentPhase = 1;
     }
 
@@ -201,10 +201,20 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
 
     private IEnumerator CooldownCoroutine(float cooldown)
     {
-        yield return new WaitForSeconds(cooldown);
+        canDodge = true;
+        yield return new WaitForSeconds(cooldown - 0.15f); // to prevent dodging
 
-        if (state != State.Dead && state != State.Waiting)
-            state = State.Normal;
+        canDodge = false;
+
+        yield return new WaitForSeconds(0.15f);
+
+        if (state != State.Dead && state != State.SpecialAttack)
+        {
+            if (!isQuaking)
+                SetActionTrigger();
+            if (isQuaking)
+                StartCoroutine(StartQuake());
+        }
     }
 
     private IEnumerator PauseBeforeAttack(float pauseTime)
@@ -218,67 +228,58 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
         yield return new WaitForSeconds(0.3f);
     }
 
+    private void StartSummon()
+    {
+        StartCoroutine(DodgeCoroutine());
+        StartCoroutine(DissableColliderForTime(0.25f));
+
+        animator.SetTrigger("Summon");
+    }
+
+    public void PlaySummonSFX()
+    {
+        audioManager.ThreeDSound(AudioManager.SoundList.HeightBossSummon, transform.position);
+    }
 
     private void SetActionTrigger()
     {
-        int max = currentPhase == 1 ? 65 : 100;
+        state = State.Normal;
+        if (isDashing) isDashing = false;
+
+        int max = currentPhase == 1 ? 100 : 100;
         int i = Random.Range(1, max); // range is X to Y -1 for ints. [1-3]
 
+        // POSssibiliteS Dash Sword Cannon Fan 
         if (1 <= i && i <= 40)
         {
-            animator.SetTrigger("Enrage");
-           // AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossPrep);
-            SetEnrageSkill();
+            StartSummon();
+            coroutineName = "SummonSword";
+            // AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossPrep);
         }
-        else if (41 <= i && i <= 65)
+        else if (41 <= i && i <= 75)
         {
-            animator.SetTrigger("Slash");
-           // animator.SetBool("FirstSlash", SetSlashBool());
+            StartSummon();
+            coroutineName = "SummonCannon";
+            // animator.SetBool("FirstSlash", SetSlashBool());
         }
-        else if (66 <= i && i <= 100)
+        else if (76 <= i && i <= 90)
         {
-            animator.SetTrigger("PunchStart");
-           // AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossPrepPunch);
+            StartCoroutine(DashCoroutine());
+            // AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossPrepPunch);
+        }
+        else if (91 <= i && i <= 100)
+        {
+            StartSummon();
+            coroutineName = "SummonFan";
+            // AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossPrepPunch);
         }
     }
 
-
-
-    private void SetEnrageSkill()
+    public void StartSkill()
     {
-
-        if (currentPhase != 3)             // not final phase
-        {
-            int i = Random.Range(1, currentSkillsInt + 1); // range is X to Y -1 for ints. 
-            if (1 <= i && i <= 15)
-            {
-             //   currentSkill = SummonRedFrogs;
-            }
-            else if (16 <= i && i <= 30)
-            {
-               // currentSkill = ShootInACircle;
-                currentSpawnPoint = new Vector2(player.transform.position.x, player.transform.position.y + 5f);
-            }
-            else if (31 <= i && i <= 45)
-            {
-               // currentSkill = ShootMeteor;
-            }
-        }
-        else                               // in final phase
-        {
-            int i = Random.Range(1, 3); // range is X to Y -1 for ints.  so 1-2 here.
-            if (i == 1)
-            {
-                //Meteor side to side
-               // currentSkill = StartMeteorFall;
-            }
-            else
-            {
-                //Meteor interlace
-               // currentSkill = StartMeteorInterlace;
-            }
-        }
+        StartCoroutine(coroutineName);
     }
+
 
     private bool ShouldTeleportFar()
     {
@@ -293,30 +294,29 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
     private void StartDash()
     {
         animator.SetTrigger("Dash");
+        audioManager.ThreeDSound(AudioManager.SoundList.HeightBossDodge, transform.position);
+        canDodge = false;
         state = State.Attack;
-        /*dashDir = IsRightSide() ? Vector2.left : Vector2.right;
-        if(IsRightSide())
-        {
-            dashDir = Vector2.left;
-            // tp to right
-            // sfx dash
-            // 
-        }*/
+        FreezeAnything();
     }
 
     private IEnumerator DashCoroutine()
     {
         Vector2 tpPosition;
         animator.SetTrigger("Blink");
+        StartCoroutine(DissableColliderForTime(0.25f));
+        canDodge = false;
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.25f);
+        PlayDashStartSFX();
+        yield return new WaitForSeconds(0.25f);
 
         if (ShouldSwitchLanes()) SwitchLayers();
 
         if (IsRightSide())
         {
             dashDir = Vector2.left;
-            if(!isOnFarLayer)
+            if (!isOnFarLayer)
             {
                 tpPosition = rightPosition.localPosition;
                 dashSpeedMultiplier = 1f;
@@ -331,7 +331,7 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
             // tp to right
             // sfx dash
             // 
-            if(facingRight)
+            if (facingRight)
                 Flip();
         }
         else
@@ -356,8 +356,9 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
         transform.localPosition = tpPosition;
 
         StartDash();
+
     }
-    
+
 
     private void Dash()
     {
@@ -369,7 +370,17 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
 
     public void ActivateDashBool()
     {
+        StartCoroutine(DashAnimationDone());
+    }
+
+    private IEnumerator DashAnimationDone()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        FreezeAnything();
+        enemy.constraints = ~RigidbodyConstraints2D.FreezePositionX;
         isDashing = true;
+        GetComponent<AudioClipsGameObject>().PlayAudioSource(1);
     }
 
     private IEnumerator StopDash()
@@ -378,15 +389,29 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
         enemy.velocity = Vector2.zero;
         isDashing = false;
         state = State.Normal;
+        GetComponent<AudioClipsGameObject>().StopAudioSource(1);
 
         yield return new WaitForSeconds(0.1f);
 
         animator.SetBool("DashStop", false);
+        FreezeAnything();
+        StartCoroutine(DodgeCoroutine());
+        if (state != State.Waiting)
+            cooldownCoroutine = StartCoroutine(CooldownCoroutine(dashCD));
         //  animator.SetBool("DashStop", false);
     }
 
+    public void PlayDashStartSFX()
+    {
+        audioManager.ThreeDSound(AudioManager.SoundList.HeightBossDashStart, transform.position);
+    }
 
-    public IEnumerator StartSkill()
+    void FreezeAnything()
+    {
+        enemy.constraints = RigidbodyConstraints2D.FreezeAll;
+    }
+
+    public IEnumerator StartSkill2()
     {
         StartCoroutine(GetComponentInParent<RoomManagerOne>().virtualCam.GetComponent<ScreenShake>().ShakeyShakey(stompShakeTime, stompShakeForce));
         GameObject pref = PrefabManager.instance.FindVFX(PrefabManager.ListOfVFX.RageBossSummon);
@@ -394,7 +419,7 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
 
         yield return new WaitForSeconds(0.5f);
 
-        AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossEnrage);
+        audioManager.PlaySound(AudioManager.SoundList.RageBossEnrage);
         currentSkill();
     }
 
@@ -406,45 +431,62 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
 
         if (swordAmount % 4 == 0 && swordAmount != swordAmountMax)
         {
-            /* int rnd = GetRandomInt(2) == 1 ? 1 : -1;
-             Vector2 summonLast = new Vector2(player.transform.position.x + swordHeight * rnd, player.transform.position.y);
-             PrefabManager.instance.VFXAngle(PrefabManager.ListOfVFX.SwordSummon, summonLast, 90 * rnd);*/
             float predictX = player.GetComponent<MovementPlatformer>().moveInput;
             if (predictX != 0)
                 predictX = isPlayerOnFar ? predictX * 2f : predictX * 6f;
             Vector2 summonLast = new Vector2(player.transform.position.x + 1.7f + predictX, player.transform.position.y);
-           // PrefabManager.instance.VFXAngle(PrefabManager.ListOfVFX.SwordSummon, summonLast, -90);
             GameObject sword = Instantiate(swordPrefab, summonLast, Quaternion.Euler(0, 0, -90));
             summonLast = new Vector2(player.transform.position.x - 1.7f + predictX, player.transform.position.y);
-            // PrefabManager.instance.VFXAngle(PrefabManager.ListOfVFX.SwordSummon, summonLast, 90);
             GameObject sword2 = Instantiate(swordPrefab, summonLast, Quaternion.Euler(0, 0, 90));
-            if(!isPlayerOnFar)
+            if (!isPlayerOnFar)
             {
                 layerSwitcher.HandleBoss(1f, 1.4f, isPlayerOnFar, sword.transform);
                 layerSwitcher.HandleBoss(1f, 1.4f, isPlayerOnFar, sword2.transform);
             }
+            if (currentPhase >= 3)
+            {
+                summonLast = new Vector2(player.transform.position.x + predictX, player.transform.position.y + swordHeight);
+                GameObject sword3 = Instantiate(swordPrefab, summonLast, Quaternion.identity);
+                if (!isPlayerOnFar)
+                    layerSwitcher.HandleBoss(1f, 1.4f, isPlayerOnFar, sword3.transform);
+            }
+            audioManager.ThreeDSound(AudioManager.SoundList.HeightBossPortal, sword.transform.position);
+            //audioManager.ThreeDSound(AudioManager.SoundList.HeightBossSword, sword.transform.position);
+            //audioManager.ThreeDSound(AudioManager.SoundList.HeightBossSword, sword2.transform.position);
         }
         else
         {
             Vector2 summonPoint = new Vector2(player.transform.position.x, player.transform.position.y + swordHeight);
-            // PrefabManager.instance.PlayVFX(PrefabManager.ListOfVFX.SwordSummon, summonPoint);
             GameObject sword = Instantiate(swordPrefab, summonPoint, Quaternion.identity);
             if (!isPlayerOnFar)
                 layerSwitcher.HandleBoss(1f, 1.4f, isPlayerOnFar, sword.transform);
+
+            audioManager.ThreeDSound(AudioManager.SoundList.HeightBossPortal, sword.transform.position);
+            //audioManager.ThreeDSound(AudioManager.SoundList.HeightBossSword, sword.transform.position);
         }
 
         yield return new WaitForSeconds(swordDelay);
 
-        if (swordAmount > 0)
+        if (swordAmount > 0 && CanSummonAgain())
             StartCoroutine(SummonSword());
         else
+        {
             swordAmount = swordAmountMax;
+            if (state != State.Waiting)
+                cooldownCoroutine = StartCoroutine(CooldownCoroutine(swordSummonCD));
+        }
     }
+
+    private bool CanSummonAgain()
+    {
+        return state != State.Waiting && state != State.SpecialAttack;
+    }
+
 
     private int rndDiv;
     private IEnumerator SummonCannon()
     {
-        if (cannonAmount == cannonAmountMax)
+        if (cannonAmount == cannonAmountMax || cannonAmount == cannonAmountMax +1)
         {
             rndDiv = cannonDivide = GetRandomInt(2);
             cannonDivide = GetRandomInt(5);
@@ -471,13 +513,18 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
 
         GameObject cannonP = Instantiate(cannonPrefab, summonPoint + summonHeightDiff, yRotation);
         if(!isPlayerOnFar) layerSwitcher.HandleBoss(1f, 1.4f, isPlayerOnFar, cannonP.transform);
+        audioManager.ThreeDSound(AudioManager.SoundList.HeightBossPortal, cannonP.transform.position);
 
         yield return new WaitForSeconds(cannonDelay);
 
-        if (cannonAmount > 0)
+        if (!shouldDisableCannons && cannonAmount > 0)
             StartCoroutine(SummonCannon());
         else
-            cannonAmount = cannonAmountMax;
+        {
+            cannonAmount = currentPhase > 1 ? cannonAmountMax + 1 : cannonAmountMax;
+            if (state != State.Waiting)
+                cooldownCoroutine = StartCoroutine(CooldownCoroutine(cannonSummonCD));
+        }
     }
 
     public void ShootCannon(Transform cannon)
@@ -490,6 +537,7 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
         layerSwitcher.HandleBoss(1f, 1.4f, isPlayerOnFar, cannonB.transform);
         cannonB.GetComponent<CircleCollider2D>().enabled = layerSwitcher.ShouldDisableCollider(isPlayerOnFar);
         cannonB.GetComponent<Action_TriggerHitPlayer>().SetPositionAndMovement(dir, cannonBallSpeed, posToSpawn);
+        AudioManager.instance.ThreeDSound(AudioManager.SoundList.HeightBossCannon, posToSpawn);
     }
 
     private IEnumerator SummonFan()
@@ -514,11 +562,13 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
         }
 
         GameObject fan = Instantiate(fanPrefab, summonPoint, yRotation);
+        audioManager.ThreeDSound(AudioManager.SoundList.HeightBossPortal, transform.position);
         layerSwitcher.HandleBoss(1f, 1.4f, isPlayerOnFar, fan.transform);
         fan.GetComponent<BoxCollider2D>().enabled = layerSwitcher.ShouldDisableCollider(isPlayerOnFar);
         fan.GetComponent<Animator>().SetBool("IsActive", true);
+        fan.GetComponent<AudioSource>().Play();
 
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(1f);
 
         AreaEffector2D effector = fan.GetComponent<AreaEffector2D>();
         ParticleSystem particles = fan.GetComponentInChildren<ParticleSystem>();
@@ -533,8 +583,13 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
             particlesV.speedModifier = -1;
         }
 
+        if (state != State.Waiting)
+            cooldownCoroutine = StartCoroutine(CooldownCoroutine(fanSummonCD));
+
         yield return new WaitForSeconds(fanDuration);
 
+        fan.GetComponent<AudioSource>().Stop();
+        audioManager.ThreeDSound(AudioManager.SoundList.HeightBossPortal, fan.transform.position);
         fan.GetComponent<Animator>().SetBool("IsActive", false);
         effector.enabled = false;
         isFanActive = false;
@@ -544,6 +599,7 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
     private IEnumerator StartQuake()
     {
         animator.SetTrigger("Blink");
+        StartCoroutine(DissableColliderForTime(0.25f));
 
         yield return new WaitForSeconds(0.5f);
 
@@ -555,10 +611,12 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
 
         yield return new WaitForSeconds(0.5f);
 
+        enemy.constraints = ~RigidbodyConstraints2D.FreezePositionY;
         Vector2 quakePos = QuakePoint();
         animator.SetTrigger("Quake");
         animator.SetBool("QuakeStop", false);
         enemy.velocity = Vector2.up * 3;
+        audioManager.ThreeDSound(AudioManager.SoundList.HeightBossQuakeStart, transform.position);
 
         yield return new WaitForSeconds(0.4f);
 
@@ -566,6 +624,7 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
 
         yield return new WaitForSeconds(0.2f);
 
+        FreezeAnything();
         GameObject quakeVFX = Instantiate(quakePrefab, quakePos, Quaternion.identity);
         GameMaster.instance.ShakeCamera(0.1f, 5f);
         layerSwitcher.HandleBoss(1f, 1.4f, isPlayerOnFar, quakeVFX.transform);
@@ -576,6 +635,7 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
              sprite.sortingOrder = 4;
         }
         quakeVFX.transform.localPosition = QuakePoint();
+        audioManager.ThreeDSound(AudioManager.SoundList.HeightBossQuake, quakeVFX.transform.position);
         if (!layerSwitcher.ShouldDisableCollider(isPlayerOnFar))
             quakeVFX.GetComponent<CheckForHit>().CallThisToIgnoreCheck();
         enemy.velocity = Vector2.zero;
@@ -585,7 +645,10 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
         if (currentQuake == 1)
         {
             currentQuake = 0;
+            isQuaking = false;
             StartCoroutine(DodgeCoroutine());
+            if (state != State.Waiting)
+                cooldownCoroutine = StartCoroutine(CooldownCoroutine(2f));
         }
         else
         {
@@ -606,8 +669,36 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
         ground.GetComponent<Animator>().SetTrigger("Start");
         foreach (Transform child in ground.transform)
         {
-            Destroy(child.gameObject);
+            child.gameObject.SetActive(false);
         }
+
+        if(!isOnFarLayer)
+        {
+            if(!shouldDisableSecondCol)
+            {
+                shouldDisableSecondCol = true;
+                firstQuakeCollider.SetActive(false);
+                secondQuakeCollider.SetActive(true);
+                float x = didQuakeOnRight ? 812f : 825f;
+                float xChild = didQuakeOnRight ? 43.5f : -19.5f;
+                secondQuakeCollider.transform.localPosition = new Vector2(x, secondQuakeCollider.transform.localPosition.y);
+                secondQuakeCollider.transform.GetChild(0).transform.localPosition = new Vector2(xChild, 0f);
+            }
+            else
+            {
+                secondQuakeCollider.SetActive(false);
+                seperateQuakeCol.SetActive(true);
+            }
+        }
+    }
+
+    private void RevertEdgeColliders()
+    {
+        shouldDisableSecondCol = false;
+        firstQuakeCollider.SetActive(true);
+        firstQuakeCollider.GetComponent<BoxCollider2D>().enabled = true;
+        secondQuakeCollider.SetActive(false);
+        seperateQuakeCol.SetActive(false);
     }
 
     private Vector2 QuakePoint()
@@ -624,9 +715,161 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
         }
     }
 
-    private void QuakeMove()
+    public void StartFight()
     {
-        enemy.velocity = Vector2.down * 20f;
+        StartCoroutine(StartingQuake());
+        state = State.Normal;
+    }
+
+    private void HandlePortals(bool setActive)
+    {
+        foreach (GameObject portal in tpPortals)
+        {
+            portal.SetActive(setActive);
+        }
+    }
+
+    private IEnumerator StartingQuake()
+    {
+        animator.SetTrigger("Blink");
+
+        yield return new WaitForSeconds(0.5f);
+
+        transform.localPosition = startingQuake.localPosition;
+        if (isOnFarLayer) SwitchLayers();
+
+        yield return new WaitForSeconds(0.5f);
+
+        enemy.constraints = ~RigidbodyConstraints2D.FreezePositionY;
+        Vector2 quakePos = QuakePoint();
+        animator.SetTrigger("Quake");
+        animator.SetBool("QuakeStop", false);
+        enemy.velocity = Vector2.up * 3;
+        audioManager.ThreeDSound(AudioManager.SoundList.HeightBossQuakeStart, transform.position);
+
+        yield return new WaitForSeconds(0.4f);
+
+        enemy.velocity = Vector2.down * 80f;
+
+        yield return new WaitForSeconds(0.2f);
+
+        FreezeAnything();
+        GameObject quakeVFX = Instantiate(quakePrefab, quakePos, Quaternion.identity);
+        GameMaster.instance.ShakeCamera(0.1f, 5f);
+        layerSwitcher.HandleBoss(1f, 1.4f, true, quakeVFX.transform);
+       
+        quakeVFX.transform.localPosition = QuakePoint();
+        audioManager.ThreeDSound(AudioManager.SoundList.HeightBossQuake, quakeVFX.transform.position);
+
+        enemy.velocity = Vector2.zero;
+        animator.SetBool("QuakeStop", true);
+
+        startQuakeObject.GetComponent<Animator>().SetTrigger("Start");
+        foreach (Transform child in startQuakeObject.transform)
+        {
+            child.gameObject.SetActive(false);
+        }
+
+        HandlePortals(true);
+        SetStateNormal();
+        audioManager.PlayTheme(AudioManager.SoundList.HeightFear_BossBG, 2f);
+        audioManager.StartFadeOutSource(bg_Gameobject, 2f);
+
+        animator.SetTrigger("Blink");
+        cooldownCoroutine = StartCoroutine(CooldownCoroutine(2f));
+
+        yield return new WaitForSeconds(2f);
+
+        bg_Gameobject.enabled = false;
+    }
+
+    private IEnumerator StartSpecialMove()
+    {
+        StopCoroutine(cooldownCoroutine);
+        state = State.SpecialAttack;
+        shouldDisableCannons = true;
+
+        StartCoroutine(DodgeCoroutine());
+
+        yield return new WaitForSeconds(0.5f);
+
+        float delayTime = 0.6f;
+        StartCoroutine(blackOverlay.GetComponent<FadeIn>().FadeTo(0.6f, delayTime));
+
+        yield return new WaitForSeconds(delayTime);
+
+        swordAmount = specialSwordAmount;
+        StartCoroutine(SpecialSword());
+
+        yield return new WaitForSeconds(specialSwordAmount * specialSwordDelay + 1f);
+
+        swordAmount = 4;
+        StartCoroutine(SpecialSwordHorizontal());
+
+        yield return new WaitForSeconds(2f);
+
+        shouldDisableCannons = false;
+        cannonAmount = 3;
+        StartCoroutine(SummonCannon());
+
+        yield return new WaitForSeconds(3f);
+
+        StartCoroutine(blackOverlay.GetComponent<FadeIn>().FadeTo(0f, delayTime));
+        state = State.Normal;
+
+        yield return new WaitForSeconds(delayTime);
+
+        if (state != State.Waiting)
+            cooldownCoroutine = StartCoroutine(CooldownCoroutine(cannonSummonCD));
+    }
+
+    private IEnumerator SpecialSword()
+    {
+        swordAmount--;
+        bool isPlayerOnFar = layerSwitcher.IsOnFarSide();
+
+        Vector2 summonPoint = new Vector2(player.transform.position.x, player.transform.position.y + swordHeight);
+        GameObject sword = Instantiate(swordPrefab, summonPoint, Quaternion.identity);
+        if (!isPlayerOnFar)
+            layerSwitcher.HandleBoss(1f, 1.4f, isPlayerOnFar, sword.transform);
+        // audioManager.ThreeDSound(AudioManager.SoundList.HeightBossSword, sword.transform.position);
+        audioManager.ThreeDSound(AudioManager.SoundList.HeightBossPortal, sword.transform.position);
+
+        yield return new WaitForSeconds(specialSwordDelay);
+
+        if (swordAmount > 0)
+            StartCoroutine(SpecialSword());
+        else
+            swordAmount = swordAmountMax;
+    }
+
+    private IEnumerator SpecialSwordHorizontal()
+    {
+        swordAmount--;
+        bool isPlayerOnFar = layerSwitcher.IsOnFarSide();
+
+        float predictX = player.GetComponent<MovementPlatformer>().moveInput;
+        if (predictX != 0)
+            predictX = isPlayerOnFar ? predictX * 2f : predictX * 6f;
+        Vector2 summonLast = new Vector2(player.transform.position.x + 1.7f + predictX, player.transform.position.y);
+        GameObject sword = Instantiate(swordPrefab, summonLast, Quaternion.Euler(0, 0, -90));
+        summonLast = new Vector2(player.transform.position.x - 1.7f + predictX, player.transform.position.y);
+        GameObject sword2 = Instantiate(swordPrefab, summonLast, Quaternion.Euler(0, 0, 90));
+        if (!isPlayerOnFar)
+        {
+            layerSwitcher.HandleBoss(1f, 1.4f, isPlayerOnFar, sword.transform);
+            layerSwitcher.HandleBoss(1f, 1.4f, isPlayerOnFar, sword2.transform);
+        }
+        audioManager.ThreeDSound(AudioManager.SoundList.HeightBossPortal, sword.transform.position);
+        //audioManager.ThreeDSound(AudioManager.SoundList.HeightBossSword, sword.transform.position);
+        //audioManager.ThreeDSound(AudioManager.SoundList.HeightBossSword, sword2.transform.position);
+
+        yield return new WaitForSeconds(0.6f);
+
+        if (swordAmount > 0)
+            StartCoroutine(SpecialSwordHorizontal());
+        else
+            swordAmount = swordAmountMax;
     }
 
     private bool IsRightSide()
@@ -662,10 +905,30 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
     public IEnumerator DodgeCoroutine()
     {
         animator.SetTrigger("Blink");
+        BoxCollider2D collider = GetComponentInChildren<BoxCollider2D>();
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.25f);
 
-        transform.localPosition = GetDodgePoint().localPosition;
+        collider.enabled = false;
+
+        yield return new WaitForSeconds(0.25f);
+
+        collider.enabled = true;
+        if(state != State.Attack)
+            transform.localPosition = GetDodgePoint().localPosition;
+    }
+
+    private IEnumerator DissableColliderForTime(float colTime)
+    {
+        BoxCollider2D collider = GetComponentInChildren<BoxCollider2D>();
+
+        yield return new WaitForSeconds(colTime);
+
+        collider.enabled = false;
+
+        yield return new WaitForSeconds(colTime);
+
+        collider.enabled = true;
     }
 
     private Transform GetDodgePoint()
@@ -733,9 +996,13 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
 
     private void DodgeStart()
     {
+        if (!canDodge) return;
         int i = Random.Range(1, 11); // 1 - 10.
-        if (i < 5)
-            animator.SetTrigger("Dodge");
+        if (i < 3)
+        {
+            StartCoroutine(DodgeCoroutine());
+            audioManager.ThreeDSound(AudioManager.SoundList.HeightBossDodge, transform.position);
+        }
     }
 
     public void Dodge()
@@ -765,8 +1032,10 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
     public void SetStateDead()
     {
         state = State.Dead;
-        enemy.velocity = Vector2.zero;
-        bossDied.Invoke();
+        StopAllCoroutines();
+        StartCoroutine(blackOverlay.GetComponent<FadeIn>().FadeTo(0f, 0.6f));
+        StartCoroutine(DeathTeleports());
+        audioManager.FadeOutCurrent(3f);
     }
 
 
@@ -796,15 +1065,26 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
 
     public void HandlePhases(float hp)
     {
-        DodgeStart();
+        if (state == State.Attack) return;
+
         if (hp < phaseTwoHp && currentPhase == 1)
         {
             currentPhase++;
+            isQuaking = true;
+            StartCoroutine(DodgeCoroutine());
         }
         if (hp < phaseThreeHp && currentPhase == 2)
         {
             currentPhase++;
+            isQuaking = true;
+            StartCoroutine(DodgeCoroutine());
         }
+        if(!usedSpecialMove && hp < specialMoveHp)
+        {
+            usedSpecialMove = true;
+            StartCoroutine(StartSpecialMove());
+        }
+        DodgeStart();
     }
 
     private void OnDisable()
@@ -816,17 +1096,104 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
 
     public void PlayerHasRespawned()
     {
+        if (state == State.Dead) return;
+
         if (!playerRespawned)
         {
+            state = State.Waiting;
             playerRespawned = true;
             StartCoroutine(SetBack());
+            StopCoroutine(cooldownCoroutine);
+            HandleGroundRespawn();
+            RevertEdgeColliders();
         }
 
-        transform.position = originalPos;
-        state = State.Waiting;
-        currentSkillsInt = 60;
+        transform.localPosition = originalPos;
 
         currentPhase = 1;
+    }
+
+    private void HandleGroundRespawn()
+    {
+        GroundRespawnHelper(quakeObjectRight);
+        GroundRespawnHelper(quakeObjectLeft);
+        GroundRespawnHelper(quakeObjectRightClose);
+        GroundRespawnHelper(quakeObjectLeftClose);
+        GroundRespawnHelper(startQuakeObject);
+        triggerFightObject.SetActive(true);
+    }
+
+    void GroundRespawnHelper(GameObject gObject)
+    {
+        gObject.SetActive(true);
+        foreach (Transform child in gObject.transform)
+        {
+            child.gameObject.SetActive(true);
+        }
+    }
+
+    private IEnumerator DeathTeleports()
+    {
+        deathBlinkNumber--;
+        animator.SetTrigger("Blink");
+        audioManager.ThreeDSound(AudioManager.SoundList.HeightBossDodge, transform.position);
+
+        yield return new WaitForSeconds(deathTpWait);
+
+        deathTpWait = deathTpWait * 0.95f;
+        transform.localPosition = DeathTPPoint().localPosition;
+
+        if (deathBlinkNumber > 0)
+        {
+            StartCoroutine(DeathTeleports());
+        }
+        else
+        {
+            animator.SetBool("IsDead", true);
+            boxCollider.enabled = false;
+            state = State.Dead;
+            yield return new WaitForSeconds(1.5f + 0.5f - deathTpWait);
+            enemy.constraints = ~RigidbodyConstraints2D.FreezePositionY;
+            enemy.velocity = Vector2.down * 20f;
+            //audioManager.AddSoundToGameObject(AudioManager.SoundList.HeightBossDead, transform, 20f);
+            GetComponent<AudioClipsGameObject>().PlayAudioSource(0);
+
+            bossDied.Invoke();
+            bg_Gameobject.enabled = true;
+            audioManager.StartFadeInSource(bg_Gameobject, 2f);
+
+            yield return new WaitForSeconds(20f);
+
+            GetComponent<AudioClipsGameObject>().StopAudioSource(0);
+        }
+    }
+
+    public void PlayTPsfx()
+    {
+        audioManager.ThreeDSound(AudioManager.SoundList.HeightBossTeleport, transform.position);
+    }
+
+    private Transform DeathTPPoint()
+    {
+        
+        bool tpToFar = Random.Range(1, 3) == 1 ? true : false;
+        bool tpRight = Random.Range(1, 3) == 1 ? true : false;
+        if (!tpToFar)
+        {
+            if (isOnFarLayer) SwitchLayers();
+
+            if (deathBlinkNumber <= 0) return GetRandomInt(2) == 1 ? quakePosLeft : quakePosRight;
+            if (tpRight) return GetRandomInt(2) == 1 ? leftPosition : quakePosLeft;
+            else return GetRandomInt(2) == 1 ? rightPosition : quakePosRight;
+        }
+        else
+        {
+            if (!isOnFarLayer) SwitchLayers();
+
+            if (deathBlinkNumber <= 0) return GetRandomInt(2) == 1 ? quakePosLeftClose : quakePosRightClose;
+            if (tpRight) return GetRandomInt(2) == 1 ? leftPosClose : quakePosLeftClose;
+            else return GetRandomInt(2) == 1 ? rightPosClose : quakePosRightClose;
+        }
     }
 
     private IEnumerator SetBack()
@@ -837,5 +1204,9 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
         yield return new WaitForSeconds(.35f);
 
         playerRespawned = false;
+        if (isOnFarLayer)
+            SwitchLayers();
+
+        transform.position = originalPos;
     }
 }

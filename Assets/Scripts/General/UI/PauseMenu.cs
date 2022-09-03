@@ -184,7 +184,7 @@ public class PauseMenu : MonoBehaviour
 
        }*/
        
-    public void GoToNextLevel()
+    public static void GoToNextLevel()
     {
         Destroy(GameMaster.instance.gameObject);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);

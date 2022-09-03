@@ -184,6 +184,11 @@ MonoBehaviour:
   capsuleX: 0
   capsuleY: 0
   isVertical: 0
+  attackableLayers:
+    serializedVersion: 2
+    m_Bits: 2048
   damage: 4
   point: {fileID: 352210779779994149}
   knockBackForce: 15
+  playSoundWhenTriggered: 1
+  soundToPlay: 68
