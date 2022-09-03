@@ -29,6 +29,7 @@ public class GameMaster : MonoBehaviour
         brotherInstance = GameObject.FindGameObjectWithTag("Brother");
 
         Application.targetFrameRate = 60;
+        //Time.timeScale = 0.9f;
     }
 
     private void Start()

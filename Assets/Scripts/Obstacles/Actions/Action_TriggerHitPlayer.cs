@@ -50,6 +50,7 @@ public class Action_TriggerHitPlayer : MonoBehaviour
     {
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        GetComponent<CircleCollider2D>().enabled = false;
     }
 
     private void OnDisable()

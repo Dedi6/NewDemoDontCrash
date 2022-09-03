@@ -106,6 +106,19 @@ public class AudioManager : MonoBehaviour
         PlayerSpeak,
         BrotherSpeak,
         DefaultDialogueSpeak,
+        HeightBossTeleport,
+        HeightBossCannon,
+        HeightBossSword,
+        HeightBossFan,
+        HeightBossDashStart,
+        HeightBossDashing,
+        HeightBossQuake,
+        HeightBossQuakeStart,
+        HeightBossSummon,
+        HeightBossPortal,
+        HeightBossDodge,
+        HeightBossDead,
+        HeightFear_BossBG,
     }
 
     public enum AudioManagerList
@@ -166,6 +179,91 @@ public class AudioManager : MonoBehaviour
         s.source.Play();
     }
 
+    public void ThreeDSound(SoundList sound, Vector3 position)
+    {
+        Sounds s = GetAudioClip(sound);
+        int index = Random.Range(0, s.arrayOfClips.Length);
+        GameObject soundObject = new GameObject("Sound");
+        soundObject.transform.position = position;
+        AudioSource audioSource = soundObject.AddComponent<AudioSource>();
+        audioSource.clip = s.arrayOfClips[index].audioClip;
+        audioSource.volume = s.arrayOfClips[index].volume;
+        audioSource.pitch = s.arrayOfClips[index].pitch;
+        audioSource.maxDistance = 200f;
+        audioSource.spatialBlend = 0.5f;
+        audioSource.rolloffMode = AudioRolloffMode.Linear;
+        audioSource.dopplerLevel = 0f;
+        if (s.arrayOfClips[index].randomizeVolumeAndPitch)
+        {
+            float rndVolume = s.arrayOfClips[index].randomVolumeRate;
+            float rndPitch = s.arrayOfClips[index].randomPitchRate;
+            audioSource.volume = Random.Range(audioSource.volume - rndVolume, audioSource.volume + rndVolume);
+            audioSource.pitch = Random.Range(s.source.pitch - rndPitch, s.source.pitch + rndPitch);
+        }
+        audioSource.Play();
+        Destroy(soundObject, audioSource.clip.length + 1f);
+    }
+
+    public void ThreeDSoundAdvanced(SoundList sound, Vector3 position, float maxDistance, Transform parent, float spatialBlend)
+    {
+        Sounds s = GetAudioClip(sound);
+        int index = Random.Range(0, s.arrayOfClips.Length);
+        GameObject soundObject = new GameObject("Sound");
+        soundObject.transform.SetParent(parent);
+        soundObject.transform.position = position;
+        AudioSource audioSource = soundObject.AddComponent<AudioSource>();
+        audioSource.clip = s.arrayOfClips[index].audioClip;
+        audioSource.volume = s.arrayOfClips[index].volume;
+        audioSource.pitch = s.arrayOfClips[index].pitch;
+        audioSource.maxDistance = maxDistance;
+        audioSource.spatialBlend = spatialBlend;
+        audioSource.rolloffMode = AudioRolloffMode.Linear;
+        audioSource.dopplerLevel = 0f;
+        if (s.arrayOfClips[index].randomizeVolumeAndPitch)
+        {
+            float rndVolume = s.arrayOfClips[index].randomVolumeRate;
+            float rndPitch = s.arrayOfClips[index].randomPitchRate;
+            audioSource.volume = Random.Range(s.source.volume - rndVolume, s.source.volume + rndVolume);
+            audioSource.pitch = Random.Range(s.source.pitch - rndPitch, s.source.pitch + rndPitch);
+        }
+        audioSource.Play();
+        Destroy(soundObject, audioSource.clip.length + 1f);
+    }
+
+    public void AddSoundToGameObject(SoundList sound, Transform parent, float playTime)
+    {
+        StartCoroutine(StartAndStopSound(sound, parent, playTime));
+    }
+
+    private IEnumerator StartAndStopSound(SoundList sound, Transform parent, float playTime)
+    {
+        Sounds s = GetAudioClip(sound);
+        int index = Random.Range(0, s.arrayOfClips.Length);
+        GameObject soundObject = new GameObject("Sound");
+        soundObject.transform.position = parent.position;
+        soundObject.transform.SetParent(parent);
+        AudioSource audioSource = soundObject.AddComponent<AudioSource>();
+        audioSource.clip = s.arrayOfClips[index].audioClip;
+        audioSource.volume = s.arrayOfClips[index].volume;
+        audioSource.pitch = s.arrayOfClips[index].pitch;
+        audioSource.maxDistance = 200f;
+        audioSource.spatialBlend = 0.5f;
+        audioSource.rolloffMode = AudioRolloffMode.Linear;
+        audioSource.dopplerLevel = 0f;
+        if (s.arrayOfClips[index].randomizeVolumeAndPitch)
+        {
+            float rndVolume = s.arrayOfClips[index].randomVolumeRate;
+            float rndPitch = s.arrayOfClips[index].randomPitchRate;
+            audioSource.volume = Random.Range(audioSource.volume - rndVolume, audioSource.volume + rndVolume);
+            audioSource.pitch = Random.Range(s.source.pitch - rndPitch, s.source.pitch + rndPitch);
+        }
+        audioSource.Play();
+
+        yield return new WaitForSeconds(playTime);
+
+        Destroy(soundObject);
+    }
+    
     private Sounds GetAudioClip(SoundList sound)
     {
         foreach (Sounds currentSound in ListOfSounds)
@@ -215,6 +313,27 @@ public class AudioManager : MonoBehaviour
         }
 
         source.volume = BgMusicVolume;
+    }
+
+    private IEnumerator FadeInFromSource(AudioSource source, float fadeT)
+    {
+        while (source.volume < BgMusicVolume)
+        {
+            source.volume += Time.deltaTime / fadeT;
+            yield return null;
+        }
+
+        source.volume = BgMusicVolume;
+    }
+
+    public void StartFadeOutSource(AudioSource source, float fadeT)
+    {
+        StartCoroutine(FadeOut(source, fadeT));
+    }
+
+    public void StartFadeInSource(AudioSource source, float fadeT)
+    {
+        StartCoroutine(FadeInFromSource(source, fadeT));
     }
 
     private IEnumerator FadeOut(AudioSource source, float fadeT)

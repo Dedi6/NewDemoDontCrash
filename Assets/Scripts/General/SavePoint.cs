@@ -10,7 +10,7 @@ public class SavePoint : MonoBehaviour
     private GameMaster gm;
     private MovementPlatformer playerScript;
 
-    private bool isSaving = false;
+    private bool isSaving = false, canSave;
   
     void Start()
     {
@@ -19,13 +19,30 @@ public class SavePoint : MonoBehaviour
     }
 
 
-    private void OnCollisionStay2D(Collision2D col)
+    private void Update()
     {
-        if (InputManager.instance.KeyDown(Keybindings.KeyList.Down) && !isSaving && col.transform.position.y > (transform.position.y + 2f) && col.gameObject.layer == 11) // player collided from above
+        if (canSave && playerScript.isGrounded && IsPressingDown() && !isSaving) // player collided from above
         {
             isSaving = true;
             StartCoroutine(Save());
         }
+    }
+
+    private bool IsPressingDown()
+    {
+        return InputManager.instance.KeyDown(Keybindings.KeyList.Down) || Input.GetAxisRaw("Vertical") < 0;
+    }
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if(col.gameObject.layer == 11)
+            canSave = true;
+    }
+
+    private void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.gameObject.layer == 11)
+            canSave = false;
     }
 
     private IEnumerator Save()

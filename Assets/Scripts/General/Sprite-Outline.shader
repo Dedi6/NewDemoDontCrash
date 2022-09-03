@@ -98,7 +98,7 @@ Shader "Sprites/Outline"
                     fixed4 pixelLeft = tex2D(_MainTex, IN.texcoord - fixed2(_MainTex_TexelSize.x, 0));
 
                     // If one of the neighbouring pixels is invisible, we render an outline.
-                    if (pixelUp.a * pixelDown.a * pixelRight.a * pixelLeft.a == 0) {
+                    if (pixelUp.a * pixelDown.a * pixelRight.a * pixelLeft.a == 0) { // leave only pixel left or right when wanting to do lights from behind. change the allignment in update in the script
                         c.rgba = fixed4(1, 1, 1, 1) * _OutlineColor;
                     }
                 }

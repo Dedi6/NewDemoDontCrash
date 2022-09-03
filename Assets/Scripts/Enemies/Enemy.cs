@@ -49,7 +49,6 @@ public class Enemy : MonoBehaviour, IRespawnResetable
         if(canBeInterrupted)
             animator.SetTrigger("Hurt");
 
-       
         if(currentHealth > 0)
         {
             audioManager.PlaySound(AudioManager.SoundList.EnemyHit);
