@@ -178,6 +178,8 @@ public class RedDrake : MonoBehaviour, ISFXResetable, IKnockbackable
         delayHitGroundSFX = true;
         bodyHitGround = false;
         state = State.Normal;
+        animator.speed = 1;
+        GetComponent<SpriteRenderer>().enabled = true;
     }
 
     private IEnumerator AttackCoroutine(float cooldown)
@@ -250,14 +252,23 @@ public class RedDrake : MonoBehaviour, ISFXResetable, IKnockbackable
     }
     void OnEnable()
     {
-        InvokeRepeating("StateHandler", 0, 0.2f);
+        if (state != State.Dead)
+            InvokeRepeating("StateHandler", 0, 0.2f);
     }
 
     private void OnDisable()
     {
         CancelInvoke();
+        if (state == State.Dead)
+        {
+            animator.speed = 100;
+           // GetComponent<SpriteRenderer>().enabled = false;
+        }
+        else
+            ResetSFXCues();
     }
 
+  
     public void DisableOtherMovement()
     {
         StartCoroutine(SetStateStunnedFor(knockBackTime));

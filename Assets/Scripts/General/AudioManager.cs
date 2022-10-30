@@ -6,6 +6,8 @@ using MyBox;
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
+    private bool stopTransition;
+    private Coroutine transitionCoroutine;
 
     [System.Serializable]
     public class Sounds
@@ -119,6 +121,28 @@ public class AudioManager : MonoBehaviour
         HeightBossDodge,
         HeightBossDead,
         HeightFear_BossBG,
+        DrillBoss_BottomDrill,
+        DrillBoss_Explode,
+        DrillBoss_Prepare,
+        DrillBoss_Shoot,
+        DrillBoss_StopDrill,
+        DrillBoss_Move,
+        DrillBoss_DrillDown,
+        DrillBoss_SideDrill,
+        DrillBoss_FloaterProjectile,
+        Floater_Move,
+        Floater_Attack,
+        Floater_Died,
+        Floater_Projectile,
+        Gate_Activate,
+        Gate_Active,
+        Gate_Deactivate,
+        HealCrystal_Hit,
+        HealCrystal_Create,
+        Tp_Switch,
+        DrillBoss_bg_Start,
+        DrillBoss_bg_loop,
+        DrillBoss_bg_ending,
     }
 
     public enum AudioManagerList
@@ -279,6 +303,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlayTheme(SoundList theme, float fadeT)
     {
+        stopTransition = true;
         PlaySound(theme);
         if (currentTheme != null)
             StartCoroutine(FadeOut(currentTheme, fadeT));
@@ -290,21 +315,25 @@ public class AudioManager : MonoBehaviour
     {
         PlayTheme(transition, fadeT);
         AudioClip clip = GetAudioClip(transition).arrayOfClips[0].audioClip;
+        stopTransition = false;
 
         yield return new WaitForSecondsRealtime(clip.length);
 
-        PlayTheme(theme, 0);
+        if(!stopTransition)
+            PlayTheme(theme, 0);
     }
 
     public void StartTransitionCoroutine(SoundList transition, SoundList theme, float fadeT)
     {
-        StartCoroutine(PlayTransitionTheme(transition, theme, fadeT));
+        if (transitionCoroutine != null) StopCoroutine(transitionCoroutine);
+        transitionCoroutine = StartCoroutine(PlayTransitionTheme(transition, theme, fadeT));
     }
 
     
     private IEnumerator FadeIn(SoundList sound, float fadeT)
     {
         AudioSource source = GetAudioClip(sound).source;
+        source.ignoreListenerPause = true;
 
         while (source.volume < BgMusicVolume)
         {
@@ -345,7 +374,7 @@ public class AudioManager : MonoBehaviour
         }
 
         source.volume = 0f;
-        source.Stop();
+       // source.Stop();
     }
 
     public void FadeOutCurrent(float fadeT)
@@ -379,6 +408,16 @@ public class AudioManager : MonoBehaviour
     {
         mixer.SetFloat("SFXVolume", volume);
         mixerSFX = volume;
+    }
+
+    public void OpenedPauseMenu()
+    {
+        mixer.SetFloat("MusicVolume", mixerMusic - 10f);
+    }
+
+    public void ClosedPauseMenu()
+    {
+        mixer.SetFloat("MusicVolume", mixerMusic);
     }
 
     public void SaveMixerStats()

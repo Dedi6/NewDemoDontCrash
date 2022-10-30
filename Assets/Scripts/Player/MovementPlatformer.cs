@@ -120,7 +120,7 @@ public class MovementPlatformer : MonoBehaviour
     public UnityEvent OnLandEvent;
     [HideInInspector]
     public delegate void CustomEvent();
-    public CustomEvent teleportedNow, jumpedNow;
+    public CustomEvent teleportedNow, jumpedNow, savedNow;
 
     [System.Serializable]
     public class BoolEvent : UnityEvent<bool> { }
@@ -157,8 +157,8 @@ public class MovementPlatformer : MonoBehaviour
     {
         CashComponents();   // get all the components ready.
 
-        gm.lastCheckPointPosition = transform.position; // for testing :D
-        //RespawnAtSavePoint();                     
+        //gm.lastCheckPointPosition = transform.position; // for testing :D
+        RespawnAtSavePoint();          // active when building
         //  delete when building!!!!
         //SetForBuilding(); /// this is only active once before building
     }
@@ -1309,6 +1309,7 @@ public class MovementPlatformer : MonoBehaviour
     {
         audioManager.PlaySound(AudioManager.SoundList.RespawnSound);
         StartCoroutine(TransitionPrep(0.6f));
+        StartCoroutine(MakePlayerInvincible(timeToWait + 0.5f));
         rb.velocity = Vector2.zero;
         rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
         
@@ -1352,7 +1353,10 @@ public class MovementPlatformer : MonoBehaviour
         GetComponent<ManaBar>().SetManaFull();
         GetComponent<Health>().FullHeal();
         BulletReset();
-        currentRoom.GetComponent<RoomManagerOne>().PlayerRespawnReset2();
+        savedNow.Invoke();
+        if(currentRoom != null)
+            currentRoom.GetComponent<RoomManagerOne>().PlayerRespawnReset2();
+        
     }
 
 

@@ -55,5 +55,6 @@ public class MainMenu : MonoBehaviour
         GameSaveManager saveM = GameSaveManager.instance;
         Destroy(menuMaster);
         SceneManager.LoadScene(saveM.GetLastScene());
+        saveM.LoadGame();
     }
 }

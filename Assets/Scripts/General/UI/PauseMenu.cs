@@ -64,6 +64,8 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         gameIsPaused = false;
         Cursor.visible = false;
+        AudioListener.pause = false;
+        AudioManager.instance.ClosedPauseMenu();
     }
 
     void Pause(GameObject UIElement)
@@ -72,6 +74,8 @@ public class PauseMenu : MonoBehaviour
         UIElement.SetActive(true);
         Time.timeScale = 0f;
         gameIsPaused = true;
+        AudioListener.pause = true;
+        AudioManager.instance.OpenedPauseMenu();
     }
 
     public void HandleActiveMenu()
@@ -192,6 +196,7 @@ public class PauseMenu : MonoBehaviour
 
     public void SkipScene()
     {
+        GameSaveManager.instance.SaveGame();
         Destroy(GameMaster.instance.gameObject);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }

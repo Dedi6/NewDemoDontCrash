@@ -188,6 +188,8 @@ public class Bat : MonoBehaviour, ISFXResetable, IKnockbackable
         InvokeRepeating("StateHandler", 0, 0.2f);
         state = State.Normal;
         enemy.sharedMaterial = null;
+        animator.speed = 1;
+        GetComponent<SpriteRenderer>().enabled = true;
     }
 
     public void DisableOtherMovement()
@@ -203,5 +205,16 @@ public class Bat : MonoBehaviour, ISFXResetable, IKnockbackable
         yield return new WaitForSeconds(knockBackTime);
 
         state = currentState;
+    }
+
+    private void OnDisable()
+    {
+        if (state == State.Dead)
+        {
+            animator.speed = 100;
+           // GetComponent<SpriteRenderer>().enabled = false;
+        }
+        else
+            ResetSFXCues();
     }
 }

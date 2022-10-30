@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IRespawnResetable
+public class Enemy : MonoBehaviour
 {
     public int maxHealth = 100;
     public int currentHealth;
@@ -176,7 +176,7 @@ public class Enemy : MonoBehaviour, IRespawnResetable
             GetComponent<ISFXResetable>().ResetSFXCues();
         }
     }
-    void enemyDead()
+    public void enemyDead()
     {
         isDead = true;
         KnockBackEnemyHit(knockBackWhenDie, 1.5f, 1);
@@ -252,11 +252,6 @@ public class Enemy : MonoBehaviour, IRespawnResetable
     {
         bool b = triggerCollider.enabled;
         triggerCollider.enabled = !b;
-    }
-
-    public void PlayerHasRespawned()
-    {
-        PlayerRespawned();
     }
 
     public void PlayerTeleportedToEnemy()

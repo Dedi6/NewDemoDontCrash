@@ -28,6 +28,7 @@ public class BigFrog : MonoBehaviour, ISFXResetable, IKnockbackable
     public Transform attackPoint;
     public float attackCooldown, pauseBeforeAttack;
     private bool onCooldown = false;
+    [SerializeField] private Transform frogSpawnPos;
 
 
     public Animator animator;
@@ -86,6 +87,7 @@ public class BigFrog : MonoBehaviour, ISFXResetable, IKnockbackable
         if (turnAroundTimer > 0)
             turnAroundTimer -= Time.deltaTime;
 
+        
         StateHandler();
         HandleEnemyClassObjects();
     }
@@ -128,10 +130,13 @@ public class BigFrog : MonoBehaviour, ISFXResetable, IKnockbackable
     }
     private void StateHandler()
     {
-        if (rayToAttack && !onCooldown)
+        if (state != State.Dead)
         {
-            if (rayToAttack.transform.gameObject.layer == 11)
-                StartCoroutine(AttackCoroutine(attackCooldown));
+            if (rayToAttack && !onCooldown)
+            {
+                if (rayToAttack.transform.gameObject.layer == 11)
+                    StartCoroutine(AttackCoroutine(attackCooldown));
+            }
         }
     }
 
@@ -178,7 +183,9 @@ public class BigFrog : MonoBehaviour, ISFXResetable, IKnockbackable
         bodyHitGround = false;
         state = State.Normal;
         frogSpawnedAlready = false;
-       // Destroy(GetComponentInChildren<FrogEnemyBasic>().gameObject);
+        animator.speed = 1;
+        GetComponent<SpriteRenderer>().enabled = true;
+        // Destroy(GetComponentInChildren<FrogEnemyBasic>().gameObject);
     }
 
     private IEnumerator AttackCoroutine(float cooldown)
@@ -222,6 +229,7 @@ public class BigFrog : MonoBehaviour, ISFXResetable, IKnockbackable
     public void SetStateDead()
     {
         state = State.Dead;
+        animator.speed = 1;
     }
 
     public void SpawnFrog()
@@ -229,7 +237,7 @@ public class BigFrog : MonoBehaviour, ISFXResetable, IKnockbackable
         if(!frogSpawnedAlready)
         {
             frogSpawnedAlready = true;
-            GameObject frog = Instantiate(frogToSpawn, transform.position, Quaternion.identity, frogParent.transform);
+            GameObject frog = Instantiate(frogToSpawn, frogSpawnPos.position, Quaternion.identity, frogParent.transform);
             if (GetComponent<Enemy>().wasSpawnedBySpawnManager)
             {
                 frog.GetComponent<Enemy>().wasSpawnedBySpawnManager = true;
@@ -265,5 +273,14 @@ public class BigFrog : MonoBehaviour, ISFXResetable, IKnockbackable
     private void OnDisable()
     {
         Destroy(frogParent.gameObject);
+        if (state == State.Dead)
+        {
+            animator.speed = 0;
+            GetComponent<SpriteRenderer>().enabled = false;
+        }
+        else
+            ResetSFXCues();
     }
+
+
 }

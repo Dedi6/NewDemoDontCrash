@@ -48,6 +48,11 @@ public class GameMaster : MonoBehaviour
         StartCoroutine(currentRoom.GetComponent<RoomManagerOne>().virtualCam.GetComponent<ScreenShake>().ShakeyShakey(time, force));
     }
 
+    public void StopCameraShake()
+    {
+        currentRoom.GetComponent<RoomManagerOne>().virtualCam.GetComponent<ScreenShake>().StopShake();
+    }
+
     public void LoadSavePoint(Vector2 pos)
     {
         savePointPosition = pos;

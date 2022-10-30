@@ -6,14 +6,14 @@ public class WavesDoor : MonoBehaviour, IRespawnResetable
 {
 
     public Animator animator;
-    public bool boolValue = true, shouldOpenWhenRespawn;
+    public bool shouldOpen = true, shouldOpenWhenRespawn;
 
     public void OpenDoor()
     {
         AudioManager.instance.PlaySound(AudioManager.SoundList.DoorClose);
         GetComponent<BoxCollider2D>().enabled = false;
         animator.SetBool("IsOpen", true);
-        boolValue = true;
+        shouldOpen = true;
     }
 
     public void CloseDoor()
@@ -21,12 +21,12 @@ public class WavesDoor : MonoBehaviour, IRespawnResetable
         AudioManager.instance.PlaySound(AudioManager.SoundList.DoorClose);
         GetComponent<BoxCollider2D>().enabled = true;
         animator.SetBool("IsOpen", false);
-        boolValue = false;
+        shouldOpen = false;
     }
 
     void OnEnable()
     {
-        if(boolValue)
+        if(shouldOpen)
         {
             animator.SetBool("IsOpen", true);
             GetComponent<BoxCollider2D>().enabled = false;
@@ -40,7 +40,7 @@ public class WavesDoor : MonoBehaviour, IRespawnResetable
 
     void OnDisable()
     {
-        if (boolValue)
+        if (shouldOpen)
         {
             animator.SetBool("IsOpen", true);
             GetComponent<BoxCollider2D>().enabled = false;
@@ -54,7 +54,7 @@ public class WavesDoor : MonoBehaviour, IRespawnResetable
 
     public void PlayerHasRespawned(bool b)
     {
-        boolValue = b;  
+        shouldOpen = b;  
     }
 
     public void PlayerHasRespawned()
@@ -63,7 +63,7 @@ public class WavesDoor : MonoBehaviour, IRespawnResetable
         {
             GetComponent<BoxCollider2D>().enabled = false;
             animator.SetBool("IsOpen", true);
-            boolValue = true;
+            shouldOpen = true;
         }
     }
 }

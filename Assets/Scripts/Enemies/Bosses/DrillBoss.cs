@@ -1,34 +1,50 @@
 using System.Collections;
 using UnityEngine;
 
-public class DrillBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseable<float>, IRespawnResetable
+public class DrillBoss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRespawnResetable
 {
 
     [Header("General")]
     [Space]
     public Rigidbody2D enemy;
     public Transform rayCheckPointGround;
-    private bool facingRight = false, playerRespawned = false;
-    private RaycastHit2D wallCheckRaycast;
+    private bool facingRight = false, playerRespawned = false, fightHasStarted;
     private RaycastHit2D groundCheckRaycast;
     private Vector2 originalPos;
-    public float wallCheckDistance = 1, attackCheckDistance, knockBackTime, turnAroundTimer;
-    public float groundCheckDistance = 1, stallAnimation, phaseTwoHp, phaseThreeHp;
+    public float wallCheckDistance = 1, playerMassRunWind, spriteSize;
+    public float groundCheckDistance = 1, phaseTwoHp, phaseThreeHp;
     private int layerMaskGround = 1 << 8, currentPhase = 1;
-    private Collider2D waitingCast;
 
     [Header("Attacking")]
     [Space]
-    public float pauseBeforeAttack;
-    public float stompShakeTime, stompShakeForce, projectileSpeed;
-    private int currentSkillsInt;
+    public float projectileSpeed;
+    public float moveSpeed, sideDrillY, sideDrillXLeft, sideDrillXRight;
+    private int current_sideDrillAmount;
+    public int sideDrillAmount;
     public Transform leftPosition, rightPosition;
-    private Vector2 currentSpawnPoint;
-    [SerializeField]
-    private Transform topMovePos, shootPosLeft, shootPosRight;
+    private Vector2 moveTowardsPoint, drillSpecialPos;
+    private bool isWindActive, drillToLeft, isChangingPhase, isPreMoving;
     private IEnumerator stopDrillCoroutine;
+    private float cooldownTimer, orgSize;
+    private Color orgColor;
+
+    [Header("Positions")]
+    [Space]
+
+    [SerializeField]
+    private Transform topMovePos;
+    [SerializeField]
+    private Transform shootPosLeft, shootPosRight, moveTowardsSide, specialMovePos, secondIdlePos;
+    [SerializeField]
+    private Transform[] jumpStonePositions;
+
+    [Header("Objects Cashing")]
+    [Space]
+
     [SerializeField]
     private GameObject projectilePrefab;
+    [SerializeField]
+    private GameObject floaterProjectile, drillParticles, windParticles, specialPrefab, specialEndObject, createJumpstonePrefab, blackOverlay, specialDrillEndPrefab;
 
 
     [Header("Cooldowns")]
@@ -36,12 +52,16 @@ public class DrillBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseabl
     public float cannonSummonCD;
 
 
-    private System.Action currentSkill;
     public Animator animator;
-    private BoxCollider2D boxCollider;
-    public UnityEngine.Events.UnityEvent bossFightTriggered, bossDied;
+    private RuntimeAnimatorController orgAnimator;
+    public UnityEngine.Events.UnityEvent bossFightTriggered, bossDied, playerDied;
+    private AudioManager audio_M;
     public Transform enemiesParent;
+    [SerializeField]
+    private Transform windCollidersParent, jumpStonesParent;
     GameObject player;
+    [SerializeField]
+    private RuntimeAnimatorController animatorSecond;
 
     private State state;
 
@@ -52,20 +72,21 @@ public class DrillBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseabl
         Attack,
         Stunned,
         Moving,
+        SideMoving,
         Dead,
     }
     void Start()
     {
         enemy = GetComponent<Rigidbody2D>();
-        boxCollider = GetComponent<BoxCollider2D>();
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = GameMaster.instance.playerInstance;
         GetComponent<Enemy>().usePhases = true;
-        currentSkillsInt = 45;
         bool goRight = GetComponent<Enemy>().goRight;
         if ((goRight && !facingRight) || (!goRight && facingRight))
             Flip();
         originalPos = transform.position;
         stopDrillCoroutine = StopDrillDown();
+        orgAnimator = animator.runtimeAnimatorController;
+        audio_M = AudioManager.instance;
     }
 
     private void Awake()
@@ -78,21 +99,20 @@ public class DrillBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseabl
 
         if (state == State.Normal)
         {
-            if (Mathf.Abs(transform.position.x - player.transform.position.x) < 8 && turnAroundTimer <= 0 )
+            if (Mathf.Abs(transform.position.x - player.transform.position.x) < 8)
             {
                 ForceFlip();
             }
+
+            HandleCooldown();
         }
 
-        if (Input.GetKeyDown(KeyCode.I))
-            DrillDown();
+        if(Input.GetKeyDown(KeyCode.U))
+            audio_M.StartTransitionCoroutine(AudioManager.SoundList.DrillBoss_bg_Start, AudioManager.SoundList.DrillBoss_bg_loop, 10f);
         if (Input.GetKeyDown(KeyCode.J))
-            MoveSetUp();
+            audio_M.FadeOutCurrent(3f);
         if (Input.GetKeyDown(KeyCode.M))
-            StartShooting();
-
-        if (turnAroundTimer > 0)
-            turnAroundTimer -= Time.deltaTime;
+            audio_M.PlayTheme(AudioManager.SoundList.DrillBoss_bg_Start, 3f);
 
         HandleEnemyClassObjects();
     }
@@ -102,7 +122,6 @@ public class DrillBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseabl
         switch (state)
         {
             case State.Waiting:
-                CheckForPlayer();
                 break;
             case State.Normal:
                //StartCoroutine(PauseBeforeAttack(pauseBeforeAttack));
@@ -112,7 +131,10 @@ public class DrillBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseabl
                     StartCoroutine(stopDrillCoroutine);
                 break;
             case State.Moving:
-                Move();
+                MoveTop();
+                break;
+            case State.SideMoving:
+                MoveSide();
                 break;
         }
 
@@ -125,45 +147,98 @@ public class DrillBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseabl
 
     private void HandleRaycasts()
     {
-        groundCheckRaycast = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, 1 << 8);
+        groundCheckRaycast = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, layerMaskGround);
     }
 
-    private void CheckForPlayer()
+    private void HandleCooldown()
     {
-        waitingCast = Physics2D.OverlapCircle(transform.position, attackCheckDistance, 1 << 11);
-        if (!playerRespawned && waitingCast != null && waitingCast.transform.gameObject.layer == 11) // 11 is player
+        if(cooldownTimer > 0)
         {
-            state = State.Normal;
-            bossFightTriggered.Invoke();
+            cooldownTimer -= Time.deltaTime;
+        }
+        else
+        {
+            if(!isChangingPhase)
+                SetActionTrigger();
+            else
+            {
+                isChangingPhase = false;
+                if (currentPhase == 2) Shoot2nd();
+                else StartThirdPhase();
+            }
         }
     }
+
+    private IEnumerator StartFightCoroutine()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        enemy.velocity = Vector2.up * 20f;
+
+        yield return new WaitForSeconds(3f);
+
+        enemy.velocity = Vector2.zero;
+
+        SpriteRenderer s_Renderer = GetComponent<SpriteRenderer>();
+        orgSize = transform.localScale.x;
+        orgColor = s_Renderer.color;
+        transform.localScale = new Vector2(spriteSize, spriteSize);
+        s_Renderer.color = Color.white;
+        s_Renderer.sortingLayerName = "Default";
+        GetComponent<BoxCollider2D>().enabled = true;
+        /*enemy.transform.position = new Vector2(specialMovePos.position.x, specialMovePos.position.y + 10f);
+        MoveSetUp(specialMovePos.localPosition, true);*/
+        StartDrillDown();
+    }
+
+    void ResetSprite()
+    {
+        SpriteRenderer s_Renderer = GetComponent<SpriteRenderer>();
+        transform.localScale = new Vector2(orgSize, orgSize);
+        s_Renderer.color = orgColor;
+        s_Renderer.sortingLayerName = "Foreground";
+        GetComponent<BoxCollider2D>().enabled = false;
+    }
+
+    public void StartFight()
+    {
+        if(!fightHasStarted)
+        {
+            fightHasStarted = true;
+            StartCoroutine(StartFightCoroutine());
+            bossFightTriggered.Invoke();
+            audio_M.StartTransitionCoroutine(AudioManager.SoundList.DrillBoss_bg_Start, AudioManager.SoundList.DrillBoss_bg_loop, 10f);
+        }
+    }
+
     private void HandleEnemyClassObjects()
     {
         GetComponent<Enemy>().facingRight = facingRight;
+
+        if (isWindActive)
+        {
+            float playerXInput = player.GetComponent<MovementPlatformer>().moveInput;
+            Rigidbody2D playerRB = player.GetComponent<Rigidbody2D>();
+            if (playerXInput != 0)
+                playerRB.mass = playerMassRunWind;
+            else
+                playerRB.mass = 3;
+        }
     }
 
     private void Flip()
     {
-        turnAroundTimer = 0.3f;
         facingRight = !facingRight;
         transform.Rotate(0.0f, 180.0f, 0.0f);
+        windCollidersParent.Rotate(0.0f, 180.0f, 0.0f);
     }
 
     public void ResetSFXCues()
     {
         state = State.Waiting;
-        currentSkillsInt = 60;
-        if (currentPhase == 3)
-            GetComponentInChildren<LightZone>().Shrink();
         currentPhase = 1;
-    }
 
-    private IEnumerator CooldownCoroutine(float cooldown)
-    {
-        yield return new WaitForSeconds(cooldown);
-
-        if (state != State.Dead && state != State.Waiting)
-            state = State.Normal;
+        //clean orbs
     }
 
     private IEnumerator PauseBeforeAttack(float pauseTime)
@@ -180,102 +255,129 @@ public class DrillBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseabl
 
     private void SetActionTrigger()
     {
-        int max = currentPhase == 1 ? 65 : 100;
-        int i = Random.Range(1, max); // range is X to Y -1 for ints. [1-3]
+        int i = Random.Range(1, 65); 
 
         if (1 <= i && i <= 40)
         {
-            animator.SetTrigger("Enrage");
-            // AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossPrep);
-            SetEnrageSkill();
+            StartDrillDown();
         }
         else if (41 <= i && i <= 65)
         {
-            animator.SetTrigger("Slash");
-            // animator.SetBool("FirstSlash", SetSlashBool());
-        }
-        else if (66 <= i && i <= 100)
-        {
-            animator.SetTrigger("PunchStart");
-            // AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossPrepPunch);
-        }
-    }
-
-
-
-    private void SetEnrageSkill()
-    {
-
-        if (currentPhase != 3)             // not final phase
-        {
-            int i = Random.Range(1, currentSkillsInt + 1); // range is X to Y -1 for ints. 
-            if (1 <= i && i <= 15)
-            {
-                //   currentSkill = SummonRedFrogs;
-            }
-            else if (16 <= i && i <= 30)
-            {
-                // currentSkill = ShootInACircle;
-                currentSpawnPoint = new Vector2(player.transform.position.x, player.transform.position.y + 5f);
-            }
-            else if (31 <= i && i <= 45)
-            {
-                // currentSkill = ShootMeteor;
-            }
-        }
-        else                               // in final phase
-        {
-            int i = Random.Range(1, 3); // range is X to Y -1 for ints.  so 1-2 here.
-            if (i == 1)
-            {
-                //Meteor side to side
-                // currentSkill = StartMeteorFall;
-            }
+            if (currentPhase == 1)
+                StartShooting();
             else
-            {
-                //Meteor interlace
-                // currentSkill = StartMeteorInterlace;
-            }
+                StartSideDrill();
         }
     }
 
+    
     void StartShooting()
     {
+        state = State.Stunned;
         ForceFlip();
         animator.SetTrigger("Shoot");
+        audio_M.PlaySound(AudioManager.SoundList.DrillBoss_Shoot);
     }
 
-    private void Move()
+    void Shoot2nd()
     {
-        if (Vector2.Distance(transform.position, topMovePos.transform.position) > 1f)
-            transform.position = Vector2.MoveTowards(transform.position, topMovePos.transform.position, 30f * Time.deltaTime);
+        state = State.Stunned;
+        ForceFlip();
+        animator.SetTrigger("Shoot2nd");
+        audio_M.PlaySound(AudioManager.SoundList.DrillBoss_Shoot);
+    }
+
+    private void MoveTop()
+    {
+        if (Vector2.Distance(transform.localPosition, moveTowardsPoint) > 0.5f)
+            transform.localPosition = Vector2.MoveTowards(transform.localPosition, moveTowardsPoint, moveSpeed * Time.deltaTime);
         else
         {
+            if (isPreMoving)
+            {
+                state = State.Normal;
+                isPreMoving = false;
+                GetComponent<AfterImage>().enabled = false;
+                return;
+            }
+
             state = State.Attack;
             animator.SetTrigger("StartDrill");
+            audio_M.PlaySound(AudioManager.SoundList.DrillBoss_Prepare);
+            GetComponent<AudioClipsGameObject>().PlayAudioSource(1);
         }
     }
 
-    private void MoveSetUp()
+    private void MoveSide()
     {
-        ForceFlip();
-        StopCoroutine(stopDrillCoroutine);
-        stopDrillCoroutine = StopDrillDown();
-        animator.SetBool("DrillDown", false);
-        topMovePos.transform.position = new Vector2(player.transform.position.x, topMovePos.transform.position.y);
-        state = State.Moving;
+        if (Vector2.Distance(transform.localPosition, moveTowardsPoint) > 1f)
+            transform.localPosition = Vector2.MoveTowards(transform.localPosition, moveTowardsPoint, moveSpeed * Time.deltaTime);
+        else
+        {
+            if (current_sideDrillAmount < 0)
+            {
+                animator.SetBool("SideDrill", false);
+                RotateCollider(true);
+                state = State.Normal;
+                cooldownTimer = 1f;
+                if(currentPhase != 3)
+                    ReturnToHighpoint();
+                GetComponent<AudioClipsGameObject>().StopAudioSource(0);
+                return;
+            }
+            else if(current_sideDrillAmount == sideDrillAmount)
+            {
+                RotateCollider(false);
+                GetComponent<AudioClipsGameObject>().PlayAudioSource(0);
+            }
+
+            current_sideDrillAmount--;
+            drillToLeft = !drillToLeft;
+            if (drillToLeft)
+                moveTowardsSide.localPosition = new Vector2(sideDrillXLeft, sideDrillY);
+            else
+                moveTowardsSide.localPosition = new Vector2(sideDrillXRight, sideDrillY);
+            MoveSetUp(moveTowardsSide.localPosition, false);
+            animator.SetBool("SideDrill", true);
+            ForceFlip();
+        }
     }
 
-    public IEnumerator StartSkill()
+    private void MoveSetUp(Vector2 moveTo, bool isMovingTop)
     {
-        StartCoroutine(GetComponentInParent<RoomManagerOne>().virtualCam.GetComponent<ScreenShake>().ShakeyShakey(stompShakeTime, stompShakeForce));
-        GameObject pref = PrefabManager.instance.FindVFX(PrefabManager.ListOfVFX.RageBossSummon);
-        GameObject summonEffect = Instantiate(pref, currentSpawnPoint, Quaternion.identity);
+        if (isMovingTop)
+            ForceFlip();
+        else
+            FlipTowardsSide();
 
-        yield return new WaitForSeconds(0.5f);
+        StopCoroutine(stopDrillCoroutine);
+        HandleDrillStopValues();
+        moveTowardsPoint = moveTo;
+        state = isMovingTop ? State.Moving : State.SideMoving;
+        GetComponent<AfterImage>().enabled = true;
 
-        AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossEnrage);
-        currentSkill();
+        audio_M.PlaySound(AudioManager.SoundList.DrillBoss_Move);
+    }
+
+    void FlipTowardsSide()
+    {
+        if (enemy.transform.position.x > moveTowardsPoint.x && !facingRight)
+            Flip();
+        else if (enemy.transform.position.x < moveTowardsPoint.x && facingRight)
+            Flip();
+    }
+
+    void HandleDrillStopValues()
+    {
+        GameMaster.instance.StopCameraShake();
+        isWindActive = false;
+        stopDrillCoroutine = StopDrillDown();
+        windCollidersParent.gameObject.SetActive(false);
+        animator.SetBool("DrillDown", false);
+        drillParticles.SetActive(false);
+        windParticles.SetActive(false);
+        audio_M.PlaySound(AudioManager.SoundList.DrillBoss_StopDrill);
+        GetComponent<AudioClipsGameObject>().StopAudioSource(1);
     }
 
     private void DrillDown()
@@ -285,77 +387,200 @@ public class DrillBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseabl
         enemy.velocity = Vector2.down * 50f;
     }
 
+    private void StartDrillDown()
+    {
+        topMovePos.position = new Vector2(player.transform.position.x, topMovePos.position.y);
+        MoveSetUp(topMovePos.localPosition, true);
+    }
+
+    
     private IEnumerator StopDrillDown()
     {
         enemy.velocity = Vector2.zero;
         state = State.Stunned;
-        GameMaster.instance.ShakeCamera(1.5f, 1.5f);
+        GameMaster.instance.ShakeCamera(15f, 1.5f); // change for special attack
+        drillParticles.SetActive(true);
+        GetComponent<AfterImage>().enabled = false;
+
+        if(currentPhase == 2 && !isChangingPhase)
+            StartCoroutine(SpawnSpecialDrill());
+        if (currentPhase == 3)
+        {
+            // HandleSpecialObjects();
+            StartCoroutine(StartBottomDrills());
+            yield break;
+        }
+        if(currentPhase == 1)
+            windCollidersParent.gameObject.SetActive(true);
+
+        windParticles.SetActive(true);
+        isWindActive = true;
 
         yield return new WaitForSeconds(1.5f);
 
-        animator.SetBool("DrillDown", false);
         state = State.Normal;
+        cooldownTimer = 2f; // drillDownTimer
+        HandleDrillStopValues();
+
+       // if (currentPhase == 2)
+            ReturnToHighpoint();
     }
 
+    void ReturnToHighpoint()
+    {
+        cooldownTimer = 2f;
+        float phaseOneOffset = currentPhase == 1 ? 4f : 0;
+        secondIdlePos.position = new Vector2(topMovePos.transform.position.x, secondIdlePos.position.y - phaseOneOffset);
+        MoveSetUp(secondIdlePos.localPosition, true);
+        isPreMoving = true;
+        secondIdlePos.position = new Vector2(secondIdlePos.transform.position.x, secondIdlePos.position.y + phaseOneOffset);
+    }
+
+    private IEnumerator SpawnSpecialDrill()
+    {
+        yield return new WaitForSeconds(0.25f);
+
+        CreateSpecialDrill();
+
+        yield return new WaitForSeconds(0.35f);
+
+        CreateSpecialDrill();
+    }
+
+    private void CreateSpecialDrill()
+    {
+        float predictX = player.GetComponent<MovementPlatformer>().moveInput * 2f;
+        RaycastHit2D rayToGround = Physics2D.Raycast(player.transform.position, Vector2.down, 10f, 1 << 8);
+        Vector2 spawnPoint = new Vector2(rayToGround.point.x + predictX, rayToGround.point.y + 0.5f); // offset
+        GameObject drillSpawn = Instantiate(specialPrefab, spawnPoint, Quaternion.identity);
+        Animator spawnAnimator = drillSpawn.GetComponent<Animator>();
+        spawnAnimator.SetBool("Active", false);
+        audio_M.PlaySound(AudioManager.SoundList.DrillBoss_BottomDrill);
+    }
+
+
+    private void HandleSpecialObjects()
+    {
+        specialEndObject.SetActive(true);
+        specialEndObject.GetComponent<Animator>().SetBool("Active", true);
+    }
+
+    private IEnumerator StartBottomDrills()
+    {
+        specialEndObject.SetActive(true);
+        specialEndObject.GetComponent<Animator>().SetBool("Active", true);
+        Animator sAnimator = specialEndObject.GetComponent<Animator>();
+        sAnimator.SetBool("Active", true);
+        sAnimator.speed = 0.2f;
+
+        yield return new WaitForSeconds(0.5f);
+
+        sAnimator.speed = 1f;
+    }
+
+    private void CreateJumpStones()
+    {
+        foreach (Transform pos in jumpStonePositions)
+        {
+            GameObject spawner = Instantiate(createJumpstonePrefab, pos.position, Quaternion.identity, jumpStonesParent);
+        }
+    }
+
+    private IEnumerator SpecialMoveCoroutine()
+    {
+        StartCoroutine(blackOverlay.GetComponent<FadeIn>().FadeTo(0.8f, 0.5f));
+
+        yield return new WaitForSeconds(0.5f);
+
+        StartSideDrill();
+        CreateJumpStones();
+
+
+        while(state != State.Normal)
+        {
+            yield return null;
+        }
+
+        CreateDrillSpecial();
+        enemy.transform.position = new Vector2(specialMovePos.position.x, specialMovePos.position.y + 10f);
+        MoveSetUp(specialMovePos.localPosition, true);
+
+
+        yield return new WaitForSeconds(10f);
+
+        GetComponent<Enemy>().enemyDead();
+        animator.SetBool("IsDead", true);
+        drillParticles.SetActive(false);
+        GameMaster.instance.StopCameraShake();
+        AudioManager.instance.PlayTheme(AudioManager.SoundList.DrillBoss_bg_ending, 1f);
+
+        yield return new WaitForSeconds(1f);
+
+        StartCoroutine(blackOverlay.GetComponent<FadeIn>().FadeTo(0f, 0.5f));
+        specialEndObject.GetComponent<Animator>().SetBool("Active", false);
+
+        yield return new WaitForSeconds(1f);
+
+        bossDied.Invoke();
+    }
+
+    void CreateDrillSpecial()
+    {
+        RaycastHit2D rayToFloor = Physics2D.Raycast(specialMovePos.transform.position, Vector2.down, 20f, layerMaskGround);
+        GameObject specialDrill = Instantiate(specialDrillEndPrefab, rayToFloor.point, Quaternion.identity, transform.parent);
+        specialEndObject = specialDrill;
+    }
+
+    private void StartSideDrill()
+    {
+        current_sideDrillAmount = sideDrillAmount;
+        int rndInt = GetRandomInt(2);
+        float xPos = rndInt == 1 ? sideDrillXLeft : sideDrillXRight;
+        moveTowardsSide.localPosition = new Vector2(xPos, sideDrillY);
+        drillToLeft = rndInt == 1 ? false : true;
+        MoveSetUp(moveTowardsSide.localPosition, false);
+    }
 
     void Shoot()
     {
-        CreateProjectile(shootPosLeft.position);
-        CreateProjectile(shootPosRight.position);
+        CreateProjectile(shootPosLeft.position, projectilePrefab);
+        CreateProjectile(shootPosRight.position, projectilePrefab);
+
+        state = State.Normal;
+        cooldownTimer = 2f; // shoot cooldowntimer;
     }
 
-    void CreateProjectile(Vector3 shootPos)
+    void StartSecondsPhase()
+    {
+        CreateProjectile(shootPosLeft.position, floaterProjectile);
+        CreateProjectile(shootPosRight.position, floaterProjectile);
+        animator.runtimeAnimatorController = animatorSecond;
+        currentPhase = 2;
+       // moveSpeed = 50f;
+        GetComponent<BoxCollider2D>().size = new Vector2(1.1f, 2.56f);
+
+        state = State.Normal;
+        cooldownTimer = 2f; // shoot cooldowntimer;
+    }
+
+    private void StartThirdPhase()
+    {
+        //CreateJumpStones();
+        StopCoroutine(stopDrillCoroutine);
+        state = State.Stunned;
+        currentPhase = 3;
+        StartCoroutine(SpecialMoveCoroutine());
+    }
+
+    void CreateProjectile(Vector3 shootPos, GameObject prefab)
     {
         var pos = shootPos;
         var dir = player.transform.position - pos;
-        GameObject projectile = Instantiate(projectilePrefab, pos, Quaternion.identity);
+        GameObject projectile = Instantiate(prefab, pos, Quaternion.identity, jumpStonesParent);
         projectile.GetComponent<Action_TriggerHitPlayer>().SetMovement(dir.normalized, projectileSpeed);
     }
 
-
-    private bool IsRightSide()
-    {
-        float aDistance = Vector2.Distance(player.transform.position, leftPosition.transform.position);
-        float bDistance = Vector2.Distance(player.transform.position, rightPosition.transform.position);
-        if (aDistance > bDistance)
-            return true;
-        else
-            return false;
-    }
-
-
-
-    public void Dissapear()
-    {
-        ToggleColliders();
-        //AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossTeleport);
-        StartCoroutine(StallAnimationForTime(1f));
-    }
-
-    public void ToggleColliders()
-    {
-        GetComponent<Enemy>().ToggleTriggerCollider();
-        gameObject.layer = gameObject.layer == 12 ? 13 : 12;
-    }
-
-
-    private void DodgeStart()
-    {
-        if (Vector2.Distance(transform.position, player.transform.position) > 10)
-            return;
-        int i = Random.Range(1, 11); // 1 - 10.
-        if (i < 5)
-            animator.SetTrigger("Dodge");
-    }
-
-    public void Dodge()
-    {
-        //AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossTeleport);
-        //transform.position = new Vector2(GetDodgePointX(), transform.position.y);
-        ForceFlip();
-    }
-
-
+            
     private void ForceFlip()
     {
         if (player.transform.position.x > enemy.transform.position.x && !facingRight)
@@ -376,14 +601,8 @@ public class DrillBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseabl
     {
         state = State.Dead;
         enemy.velocity = Vector2.zero;
-        bossDied.Invoke();
     }
 
-
-    public void DisableOtherMovement()
-    {
-        StartCoroutine(SetStateStunnedFor(knockBackTime));
-    }
 
     private IEnumerator SetStateStunnedFor(float time)
     {
@@ -406,14 +625,21 @@ public class DrillBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseabl
 
     public void HandlePhases(float hp)
     {
-        DodgeStart();
+        //DodgeStart();
+        if (state == State.Waiting)
+            state = State.Normal;
         if (hp < phaseTwoHp && currentPhase == 1)
         {
             currentPhase++;
+            isChangingPhase = true;
+            Invoke("ReturnToHighpoint", 0.5f);
         }
         if (hp < phaseThreeHp && currentPhase == 2)
         {
             currentPhase++;
+            isChangingPhase = true;
+            cooldownTimer = 2f;
+            GetComponent<Enemy>().currentHealth = 1000;
         }
     }
 
@@ -434,9 +660,28 @@ public class DrillBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseabl
 
         transform.position = originalPos;
         state = State.Waiting;
-        currentSkillsInt = 60;
+        DestroyJumpstones();
+        HandleDrillStopValues();
+        StopAllCoroutines();
+        StartCoroutine(blackOverlay.GetComponent<FadeIn>().FadeTo(0f, 0.5f));
+        GetComponent<Enemy>().PlayerRespawned();
+        animator.runtimeAnimatorController = orgAnimator;
+        fightHasStarted = false;
+        ResetSprite();
+        playerDied.Invoke();
+        if(currentPhase == 3)
+            specialEndObject.GetComponent<Animator>().SetBool("Active", false);
 
         currentPhase = 1;
+        AudioManager.instance.FadeOutCurrent(3f);
+    }
+
+    void DestroyJumpstones()
+    {
+        foreach (Transform child in jumpStonesParent)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
     }
 
     private IEnumerator SetBack()
@@ -447,5 +692,25 @@ public class DrillBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseabl
         yield return new WaitForSeconds(.35f);
 
         playerRespawned = false;
+    }
+
+    private int GetRandomInt(int maxValue)
+    {
+        return Random.Range(1, maxValue + 1);
+    }
+
+    private void RotateCollider(bool isVertical)
+    {
+        BoxCollider2D boxCol = GetComponent<BoxCollider2D>();
+        float boxX = boxCol.size.x;
+        float boxY = boxCol.size.y;
+        if (isVertical && boxY > boxX)
+            return;
+        boxCol.size = new Vector2(boxY, boxX);
+    }
+
+    public void PlayExplodeSFX()
+    {
+        audio_M.PlaySound(AudioManager.SoundList.DrillBoss_Explode);
     }
 }

@@ -187,6 +187,8 @@ public class SwordDrake : MonoBehaviour, ISFXResetable, IKnockbackable
         delayHitGroundSFX = true;
         bodyHitGround = false;
         state = State.Normal;
+        animator.speed = 1;
+        GetComponent<SpriteRenderer>().enabled = true;
     }
 
     private IEnumerator AttackCoroutine(float cooldown)
@@ -261,6 +263,7 @@ public class SwordDrake : MonoBehaviour, ISFXResetable, IKnockbackable
     {
         state = State.Dead;
         StopCoroutine(attackCorou);
+        if (animator.speed != 1) animator.speed = 1;
     }
 
     public void DisableOtherMovement()
@@ -285,5 +288,17 @@ public class SwordDrake : MonoBehaviour, ISFXResetable, IKnockbackable
             state = State.Normal;
             onCooldown = false;
         }
+    }
+
+    private void OnDisable()
+    {
+        CancelInvoke();
+        if (state == State.Dead)
+        {
+            animator.speed = 0;
+            GetComponent<SpriteRenderer>().enabled = false;
+        }
+        else
+            ResetSFXCues();
     }
 }

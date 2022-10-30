@@ -5084,7 +5084,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.00007530302, y: -0.049153388}
+  m_Offset: {x: 0.0002357047, y: -0.03608747}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -5095,7 +5095,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.15068235, y: 0.22098827}
+  m_Size: {x: 0.102774054, y: 0.24712011}
   m_EdgeRadius: 0
 --- !u!114 &839845105652781758
 MonoBehaviour:
@@ -5120,6 +5120,7 @@ MonoBehaviour:
   fHorDmpTurning: 1
   speedMulitiplier: 1.25
   fallSpeed: 28
+  groundStuckCheckHeight: 0
   isGrounded: 0
   isAirborn: 0
   groundCheck: {fileID: 839845106267385419}

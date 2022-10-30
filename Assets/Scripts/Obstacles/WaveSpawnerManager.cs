@@ -153,7 +153,7 @@ public class WaveSpawnerManager : MonoBehaviour, IRespawnResetable
 
     private IEnumerator DampConfiners(float confineTime)
     {
-       Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 0.45f;
+        Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 0.45f;
 
         yield return new WaitForSeconds(confineTime);
 

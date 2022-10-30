@@ -233,6 +233,8 @@ public class FrogEnemyBasic : MonoBehaviour, ISFXResetable
         delayHitGroundSFX = true;
         bodyHitGround = false;
         state = State.Normal;
+        animator.speed = 1;
+        GetComponent<SpriteRenderer>().enabled = true;
     }
 
     public void SetStateDead()
@@ -244,6 +246,13 @@ public class FrogEnemyBasic : MonoBehaviour, ISFXResetable
     private void OnDisable()
     {
         CancelInvoke();
+        if (state == State.Dead)
+        {
+            animator.speed = 0;
+            GetComponent<SpriteRenderer>().enabled = false;
+        }
+        else
+            ResetSFXCues();
     }
 
     void OnEnable()

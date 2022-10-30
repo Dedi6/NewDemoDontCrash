@@ -586,8 +586,8 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
         if (state != State.Waiting)
             cooldownCoroutine = StartCoroutine(CooldownCoroutine(fanSummonCD));
 
-        yield return new WaitForSeconds(fanDuration);
-
+         yield return new WaitForSeconds(fanDuration);
+                 
         fan.GetComponent<AudioSource>().Stop();
         audioManager.ThreeDSound(AudioManager.SoundList.HeightBossPortal, fan.transform.position);
         fan.GetComponent<Animator>().SetBool("IsActive", false);
@@ -595,6 +595,7 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
         isFanActive = false;
         particles.Stop();
     }
+
     
     private IEnumerator StartQuake()
     {
@@ -1096,16 +1097,19 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
 
     public void PlayerHasRespawned()
     {
-        if (state == State.Dead) return;
+        if (state == State.Dead || state == State.Waiting) return;
 
         if (!playerRespawned)
         {
+            if (isDashing)
+                StartCoroutine(StopDash());
             state = State.Waiting;
             playerRespawned = true;
             StartCoroutine(SetBack());
             StopCoroutine(cooldownCoroutine);
             HandleGroundRespawn();
             RevertEdgeColliders();
+            enemy.GetComponent<Enemy>().PlayerRespawned();
         }
 
         transform.localPosition = originalPos;
@@ -1121,6 +1125,7 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
         GroundRespawnHelper(quakeObjectLeftClose);
         GroundRespawnHelper(startQuakeObject);
         triggerFightObject.SetActive(true);
+        triggerFightObject.GetComponent<BoxCollider2D>().enabled = true;
     }
 
     void GroundRespawnHelper(GameObject gObject)
@@ -1207,6 +1212,7 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
         if (isOnFarLayer)
             SwitchLayers();
 
+        audioManager.FadeOutCurrent(6f);
         transform.position = originalPos;
     }
 }

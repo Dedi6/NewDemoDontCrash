@@ -15,4 +15,11 @@ public class ScreenShake : MonoBehaviour
         yield return new WaitForSeconds(time);
         noise.m_AmplitudeGain = 0;
     }
+
+    public void StopShake()
+    {
+        StopAllCoroutines();
+        var noise = GetComponent<CinemachineVirtualCamera>().AddCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        noise.m_AmplitudeGain = 0;
+    }
 }

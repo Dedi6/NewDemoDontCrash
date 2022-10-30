@@ -54,6 +54,9 @@ MonoBehaviour:
   radiusClose: 3
   speedOffset: 0.5
   deactivatedColor: {r: 0.6784314, g: 0.6784314, b: 0.6784314, a: 1}
+  isOnFearOfHeights: 0
+  isOnFar: 0
+  layerSwitcher: {fileID: 0}
 --- !u!212 &1752884295623110469
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -119,6 +122,6 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.02, y: -0.06}
+  m_Offset: {x: 0.061222076, y: -0.060000002}
   serializedVersion: 2
-  m_Radius: 0.34
+  m_Radius: 0.40871048

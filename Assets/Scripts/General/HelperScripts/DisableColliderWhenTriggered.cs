@@ -4,6 +4,9 @@ public class DisableColliderWhenTriggered : MonoBehaviour
 {
     [SerializeField]
     private ColliderType colliderType;
+    [SerializeField]
+    private bool shouldDestroyCollider;
+
     private enum ColliderType
     {
         BoxCollider,
@@ -12,6 +15,30 @@ public class DisableColliderWhenTriggered : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (shouldDestroyCollider)
+            DestroyCollider();
+        else
+            DisableCollider();
+    }
+
+    void DisableCollider()
+    {
+        switch (colliderType)
+        {
+            case ColliderType.BoxCollider:
+                GetComponent<BoxCollider2D>().enabled = false;
+                break;
+            case ColliderType.CircleCollider:
+                GetComponent<CircleCollider2D>().enabled = false;
+                break;
+            case ColliderType.Capsule:
+                GetComponent<CapsuleCollider2D>().enabled = false;
+                break;
+        }
+    }
+
+    void DestroyCollider()
     {
         switch (colliderType)
         {

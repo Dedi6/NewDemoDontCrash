@@ -198,11 +198,15 @@ public class DialogueManager : MonoBehaviour
 
     private bool IsCutsceneActive()
     {
-        PlayableDirector pd = PrefabManager.instance.currentDirector;
-        if (pd.playableGraph.IsValid())
-            return true;
-        else 
-            return false;
+        if (PrefabManager.instance.currentDirector != null)
+        {
+            PlayableDirector pd = PrefabManager.instance.currentDirector;
+            if (pd.playableGraph.IsValid())
+                return true;
+            else
+                return false;
+        }
+        else return false;
     }
 
 

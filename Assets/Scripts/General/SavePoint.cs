@@ -80,7 +80,12 @@ public class SavePoint : MonoBehaviour
     public void ShakeTheCamera()
     {
         gm.ShakeCamera(0.1f, 1f);
-        GetComponentInChildren<UnityEngine.Rendering.Universal.Light2D>().enabled = true;
+        transform.parent.GetComponentInChildren<UnityEngine.Rendering.Universal.Light2D>().enabled = true;
         AudioManager.instance.PlaySound(AudioManager.SoundList.Save);
+    }
+
+    private void OnDisable()
+    {
+        transform.parent.GetComponentInChildren<UnityEngine.Rendering.Universal.Light2D>().enabled = false;
     }
 }

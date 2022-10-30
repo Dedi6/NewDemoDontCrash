@@ -7,14 +7,14 @@ public class Floater : MonoBehaviour, ISFXResetable, IKnockbackable
     [Header("General")]
     [Space]
     public Rigidbody2D enemy;
-    private bool facingRight = false;
+    private bool facingRight = false, moveSFXflag;
     private Vector2 raycastDirection, originalPos;
     public float wallCheckDistance = 1, attackCheckDistance, knockBackTime;
 
     [Header("Attacking")]
     [Space]
     public float speedMulitiplier;
-    public float playerCheckDistance, projectileSpeed;
+    public float playerCheckDistance, projectileSpeed, cooldown;
     private float attackTimer, idleTimer;
     [SerializeField]
     Transform attackPos;
@@ -78,9 +78,9 @@ public class Floater : MonoBehaviour, ISFXResetable, IKnockbackable
                 CheckFlip();
                 break;
             case State.Attack:
-                if (player.transform.position.x > enemy.transform.position.x && !facingRight && (Mathf.Abs(transform.position.x - player.transform.position.x) > 0.5))
+                if (player.transform.position.x < enemy.transform.position.x && !facingRight && (Mathf.Abs(transform.position.x - player.transform.position.x) > 0.5))
                     Flip();
-                else if (player.transform.position.x < enemy.transform.position.x && facingRight && (Mathf.Abs(transform.position.x - player.transform.position.x) > 0.5))
+                else if (player.transform.position.x > enemy.transform.position.x && facingRight && (Mathf.Abs(transform.position.x - player.transform.position.x) > 0.5))
                     Flip();
                 break;
         }
@@ -96,9 +96,9 @@ public class Floater : MonoBehaviour, ISFXResetable, IKnockbackable
 
     void CheckFlip()
     {
-        if (enemy.transform.position.x > idleTarget.x && facingRight)
+        if (enemy.transform.position.x < idleTarget.x && facingRight)
             Flip();
-        else if (enemy.transform.position.x < idleTarget.x && !facingRight)
+        else if (enemy.transform.position.x > idleTarget.x && !facingRight)
             Flip();
     }
 
@@ -112,7 +112,8 @@ public class Floater : MonoBehaviour, ISFXResetable, IKnockbackable
                 Idle();
                 break;
             case State.Attack:
-                Attack();
+                if(attackTimer <= 0)
+                    Attack();
                 break;
         }
     }
@@ -135,7 +136,6 @@ public class Floater : MonoBehaviour, ISFXResetable, IKnockbackable
     }
 
 
-
     private void StateHandler()
     {
         if (state == State.Normal && rayToPlayer)
@@ -146,7 +146,7 @@ public class Floater : MonoBehaviour, ISFXResetable, IKnockbackable
         }
         else if(doneMoving && state != State.Normal && !rayToPlayer)
         {
-            SetStateNormal();
+            SetStateNormal();  
         }
         if (state == State.Normal && idleTimer <= 0)
         {
@@ -164,13 +164,23 @@ public class Floater : MonoBehaviour, ISFXResetable, IKnockbackable
 
     private void Attack()
     {
+        if (!moveSFXflag)
+        {
+            moveSFXflag = true;
+            AudioManager.instance.PlaySound(AudioManager.SoundList.Floater_Move);
+        }
+
         if(Vector2.Distance(transform.position, attackPos.transform.position) > 1f)
             transform.position = Vector2.MoveTowards(transform.position, attackPos.transform.position, speedMulitiplier * Time.deltaTime);
         else
         {
             state = State.Firing;
             animator.SetTrigger("Attack");
+            attackTimer = cooldown;
+            AudioManager.instance.PlaySound(AudioManager.SoundList.Floater_Attack);
+            moveSFXflag = false;
         }
+
     }
     
 
@@ -207,7 +217,6 @@ public class Floater : MonoBehaviour, ISFXResetable, IKnockbackable
         attackPos.SetParent(player.transform);
         attackPos.localPosition = Vector2.zero;
         attackPos.SetParent(transform.parent);
-        attackTimer = 1.5f;
         doneMoving = false;
     }
 
@@ -223,6 +232,8 @@ public class Floater : MonoBehaviour, ISFXResetable, IKnockbackable
         CancelInvoke("StateHandler");
         enemy.gravityScale = 3f;
         GetComponent<Enemy>().KnockBackEnemyHit(6f, 1f, 0.2f);
+        AudioManager.instance.PlaySound(AudioManager.SoundList.Floater_Died);
+
     }
 
     public void SpawnStone()
@@ -232,6 +243,8 @@ public class Floater : MonoBehaviour, ISFXResetable, IKnockbackable
 
     public void ResetSFXCues()
     {
+        animator.speed = 1;
+        GetComponent<SpriteRenderer>().enabled = enabled;
         InvokeRepeating("StateHandler", 0, 0.2f);
         state = State.Normal;
         transform.position = originalPos;
@@ -252,5 +265,16 @@ public class Floater : MonoBehaviour, ISFXResetable, IKnockbackable
         yield return new WaitForSeconds(knockBackTime);
 
         state = currentState;
+    }
+
+    private void OnDisable()
+    {
+        if (state == State.Dead)
+        {
+            animator.speed = 0;
+            GetComponent<SpriteRenderer>().enabled = false;
+        }
+        else
+            ResetSFXCues();
     }
 }

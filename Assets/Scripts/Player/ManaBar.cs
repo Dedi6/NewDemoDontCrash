@@ -15,6 +15,7 @@ public class ManaBar : MonoBehaviour
     {
         SetManaBars(); // set the mana bars for the current amount
         currentManaAmount = maxManaAmount;
+        UpdateManaBars();
     }
 
     public void SetManaBars()

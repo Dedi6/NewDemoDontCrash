@@ -177,6 +177,8 @@ public class ShellDragon : MonoBehaviour, ISFXResetable, IKnockbackable
         delayHitGroundSFX = true;
         bodyHitGround = false;
         state = State.Normal;
+        animator.speed = 1;
+        GetComponent<SpriteRenderer>().enabled = true;
     }
 
     private IEnumerator CooldownCoroutine(float cooldown)
@@ -281,6 +283,13 @@ public class ShellDragon : MonoBehaviour, ISFXResetable, IKnockbackable
     private void OnDisable()
     {
         CancelInvoke();
+        if (state == State.Dead)
+        {
+            animator.speed = 100;
+           // GetComponent<SpriteRenderer>().enabled = false;
+        }
+        else
+            ResetSFXCues();
     }
 
     public void SetStateDead()
@@ -307,4 +316,5 @@ public class ShellDragon : MonoBehaviour, ISFXResetable, IKnockbackable
 
         state = State.Normal;
     }
+
 }

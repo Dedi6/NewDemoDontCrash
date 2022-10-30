@@ -15,7 +15,8 @@ public class JumpStone : MonoBehaviour, IRespawnResetable
     public float currentSpeed;
     public float speedClose, speedFar, radiusClose, speedOffset;
     private Vector2 originalPos;
-    private Tilemap tilemap;
+    [HideInInspector]
+    public Tilemap tilemap;
     private bool inTiles;
     public Color deactivatedColor;
     private SpriteRenderer sprt;
@@ -79,6 +80,9 @@ public class JumpStone : MonoBehaviour, IRespawnResetable
 
     private bool CanDeactivate()
     {
+        if(isOnFearOfHeights)
+            tilemap = CellOrganizer.instance.tileMap;
+
         if (!tilemap.HasTile(tilemap.WorldToCell(transform.position)))
             return true;
         else

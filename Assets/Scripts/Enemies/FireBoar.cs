@@ -215,10 +215,23 @@ public class FireBoar : MonoBehaviour, ISFXResetable
     {
         delayHitGroundSFX = true;
         bodyHitGround = false;
+        animator.speed = 1;
+        GetComponent<SpriteRenderer>().enabled = true;
     }
 
     public void SetStateDead()
     {
         state = State.Dead;
+    }
+
+    private void OnDisable()
+    {
+        if (state == State.Dead)
+        {
+            animator.speed = 100;
+            //GetComponent<SpriteRenderer>().enabled = false;
+        }
+        else
+            ResetSFXCues();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using MyBox;
 
 public class Action_TriggerHitPlayer : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class Action_TriggerHitPlayer : MonoBehaviour
     private int damage = 4;
     
     public bool useHitEffect, destroyWhenHit;
+    [SerializeField] private bool useHitSFX;
+    [ConditionalField("useHitSFX", false)] [SearchableEnum] public AudioManager.SoundList hitSound;
 
     private void OnTriggerEnter2D(Collider2D col)
     {
@@ -17,28 +20,15 @@ public class Action_TriggerHitPlayer : MonoBehaviour
             else
                 col.GetComponent<MovementPlatformer>().KnockBackPlayer(25f, 1f, 0.5f, false);
             col.GetComponent<MovementPlatformer>().GotHitByAnEnemy(damage);
-            if (useHitEffect)
-            {
-                animator.SetTrigger("HitPlayer");
-                StopMotion();
-            }
-            else if(destroyWhenHit)
-            {
-                Destroy(gameObject);
-            }
+            HandleHitChecks();
         }
-        else if(col.gameObject.layer == 8) // 8 is ground
-        {
-            if (useHitEffect)
-            {
-                animator.SetTrigger("HitPlayer");
-                StopMotion();
-            }
-            else if (destroyWhenHit)
-            {
-                Destroy(gameObject);
-            }
-        }
+        else if (col.gameObject.layer == 8) // 8 is ground
+            HandleHitChecks();
+    }
+
+    private void OnTriggerStay2D(Collider2D col)
+    {
+        OnTriggerEnter2D(col);
     }
 
     public void DestroyObject()
@@ -69,5 +59,30 @@ public class Action_TriggerHitPlayer : MonoBehaviour
     {
         transform.position = position;
         SetMovement(direction, speed);
+    }
+
+    public void EnableBoxCollider()
+    {
+        GetComponent<BoxCollider2D>().enabled = true;
+    }
+
+    public void DisableBoxCollider()
+    {
+        GetComponent<BoxCollider2D>().enabled = false;
+    }
+
+    void HandleHitChecks()
+    {
+        if (useHitEffect)
+        {
+            animator.SetTrigger("HitPlayer");
+            StopMotion();
+        }
+        else if (destroyWhenHit)
+        {
+            Destroy(gameObject);
+        }
+        if (useHitSFX)
+            AudioManager.instance.PlaySound(hitSound);
     }
 }

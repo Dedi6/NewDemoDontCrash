@@ -76,7 +76,7 @@ public class Health : MonoBehaviour
         if (health <= 0)
         {
             AudioManager.instance.PlaySound(AudioManager.SoundList.RespawnSound);
-            health = numberOfHearts;
+            health = numberOfHearts * 4;
             StartCoroutine(GetComponent<MovementPlatformer>().TransitionStart());  // respawn 
         }
     }
@@ -107,7 +107,7 @@ public class Health : MonoBehaviour
         if (PlayerPrefs.HasKey("HP"))
             hp = PlayerPrefs.GetInt("HP");
         else
-            hp = 7;
+            hp = 6; // starting HP
         health = hp * 4;
         numberOfHearts = hp;
     }

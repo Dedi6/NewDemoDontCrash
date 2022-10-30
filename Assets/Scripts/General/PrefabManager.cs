@@ -48,6 +48,8 @@ public class PrefabManager : MonoBehaviour
         SwordSummon, 
         CannonSummon,
         FanSummon,
+        Tp_Switch,
+        Tp_Switch_close,
     }
 
     public enum ListOfSprites

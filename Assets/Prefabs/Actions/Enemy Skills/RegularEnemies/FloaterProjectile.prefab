@@ -104,6 +104,8 @@ MonoBehaviour:
   damage: 4
   useHitEffect: 1
   destroyWhenHit: 0
+  useHitSFX: 1
+  hitSound: 91
 --- !u!50 &7560714197636356290
 Rigidbody2D:
   serializedVersion: 4

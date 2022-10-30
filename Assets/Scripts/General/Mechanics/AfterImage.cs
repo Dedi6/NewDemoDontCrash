@@ -20,6 +20,7 @@ public class AfterImage : MonoBehaviour
         GameObject trailPart = new GameObject();
         SpriteRenderer trailPartRenderer = trailPart.AddComponent<SpriteRenderer>();
         trailPartRenderer.sprite = GetComponent<SpriteRenderer>().sprite;
+        trailPartRenderer.sortingOrder -= 5;
         trailPartRenderer.color = newColor;
         trailPart.transform.position = transform.position;
         trailPart.transform.localScale = transform.localScale;
@@ -35,7 +36,6 @@ public class AfterImage : MonoBehaviour
         Color color = trailPartRenderer.color;
         color.a -= alphaChange; 
         trailPartRenderer.color = color;
-        Debug.Log("D");
 
         yield return new WaitForSeconds(alphaInterval);
 

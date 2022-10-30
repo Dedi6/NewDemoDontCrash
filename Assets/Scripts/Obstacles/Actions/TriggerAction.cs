@@ -34,11 +34,31 @@ public class TriggerAction : MonoBehaviour
 
         isActive = true;
         if (shouldDisableTrigger)
-            gameObject.SetActive(false);
+        {
+            if (TryGetComponent(out BoxCollider2D colBox))
+                colBox.enabled = false;
+            if (TryGetComponent(out CircleCollider2D colCircle))
+                colCircle.enabled = false;
+        }
+        //gameObject.SetActive(false);
     }
 
     public void TriggerActionNow()
     {
         triggered.Invoke();
+    }
+
+    void RevertColliders()
+    {
+        if (TryGetComponent(out BoxCollider2D colBox))
+            colBox.enabled = true;
+        if (TryGetComponent(out CircleCollider2D colCircle))
+            colCircle.enabled = true;
+    }
+
+    private void OnEnable()
+    {
+        if (shouldDisableTrigger)
+            RevertColliders();
     }
 }

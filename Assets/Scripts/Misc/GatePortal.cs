@@ -17,6 +17,7 @@ public class GatePortal : MonoBehaviour
         {
             animator.SetTrigger("Activate");
             isActive = true;
+            AudioManager.instance.PlaySound(AudioManager.SoundList.Gate_Activate);
         }
     }
 
@@ -26,6 +27,7 @@ public class GatePortal : MonoBehaviour
         {
             animator.SetTrigger("Deactivate");
             isActive = false;
+            AudioManager.instance.PlaySound(AudioManager.SoundList.Gate_Deactivate);
         }
     }
 
@@ -40,8 +42,8 @@ public class GatePortal : MonoBehaviour
 
     private IEnumerator SwitchScenes()
     {
-        StartCoroutine(overlay.FadeTo(0.5f, 0.25f));
-        yield return new WaitForSeconds(0.25f);
+        StartCoroutine(overlay.FadeTo(1f, 0.25f));
+        yield return new WaitForSeconds(0.35f);
         PauseMenu.GoToNextLevel();
     }
 
@@ -49,5 +51,17 @@ public class GatePortal : MonoBehaviour
     {
         overlay.SetFull();
         StartCoroutine(overlay.FadeTo(0f, 0.75f));
+        GameMaster gm = GameMaster.instance;
+        gm.savePointPosition = gm.spawnPoint.position;
+    }
+
+    public void StartActiveSFX()
+    {
+        GetComponent<AudioSource>().Play();
+    }
+
+    public void StopActiveSFX()
+    {
+        GetComponent<AudioSource>().Stop();
     }
 }

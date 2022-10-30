@@ -25,18 +25,27 @@ public class LayerSwitcher : MonoBehaviour
     [SerializeField]
     private Material closeMat;
 
-
+    [SerializeField]
+    private AudioSource[] bgAudioSource;
 
     public void SwitchLayer()
     {
         StartCoroutine(StartSwitching());
     }
 
-    private void Update()
+    private void Start()
     {
-        if (Input.GetKeyDown(KeyCode.L))
-            SwitchLayer();
+        foreach (AudioSource source in bgAudioSource)
+        {
+            source.ignoreListenerPause = true;
+        }
     }
+
+    /*   private void Update()
+       {
+           if (Input.GetKeyDown(KeyCode.L))
+               SwitchLayer();
+       }*/
 
     private IEnumerator StartSwitching()
     {
@@ -44,8 +53,11 @@ public class LayerSwitcher : MonoBehaviour
         StartCoroutine(playerScript.SwitchStateIgnore(0.2f));
         StartCoroutine(playerScript.PauseMovement(0.2f));
         player.GetComponent<Animator>().SetTrigger("Heal");
+        Vector2 playerPos = player.transform.position;
+
         yield return new WaitForSeconds(0.2f);
 
+        HandleSwitchFX(playerPos);
 
         if (switchToFar)
         {
@@ -57,13 +69,25 @@ public class LayerSwitcher : MonoBehaviour
             SwitchData(false, 12f, speedClose, colorClose);
         }
 
+
         switchToFar = !switchToFar;
+    }
+
+    void HandleSwitchFX(Vector2 playerPos)
+    {
+        if(!switchToFar)
+            PrefabManager.instance.PlayVFX(PrefabManager.ListOfVFX.Tp_Switch, playerPos);
+        else
+            PrefabManager.instance.PlayVFX(PrefabManager.ListOfVFX.Tp_Switch_close, playerPos);
+
+        AudioManager.instance.PlaySound(AudioManager.SoundList.Tp_Switch);
     }
 
     private void SwitchData(bool switchToFar, float newSize, float newSpeed, Color newColour)
     {
         layerFar.enabled = switchToFar;
         layerClose.enabled = !switchToFar;
+        ChangeCurrentTilemap(switchToFar);
         HandleHealCrystals(switchToFar);
         SwitchCollidersOfChildren(switchToFar);
         Transform playerTransform = player.GetComponent<Transform>();
@@ -81,6 +105,12 @@ public class LayerSwitcher : MonoBehaviour
         GetComponent<BlurControl>().SwitchBlur(!switchToFar);
         HandleJumpOrbs();
         StartCoroutine(SwitchBirdValues(switchToFar, newColour));
+    }
+
+    void ChangeCurrentTilemap(bool switchToFar)
+    {
+        TilemapCollider2D currentTilemap = switchToFar ? layerFar : layerClose;
+        CellOrganizer.instance.tileMap = currentTilemap.GetComponent<Tilemap>(); 
     }
 
     void HandleHealCrystals(bool switchToFar)
@@ -166,8 +196,14 @@ public class LayerSwitcher : MonoBehaviour
                 GetComponent<BlurControl>().ChangeMatOfObject(currentCell, switchToFar);
                 currentCell.GetComponent<SpriteRenderer>().sortingLayerName = newSortingLayer;
                 currentCell.transform.localScale = new Vector3(1f, 1f, 0f);
+                
             }
         }
+    }
+
+    void ChangeJumpstoneTilemap(JumpStone jumpStone)
+    {
+        jumpStone.tilemap = CellOrganizer.instance.tileMap;
     }
 
     public void ResetJumpStones(GameObject jumpStone, bool shouldBeOnFar)

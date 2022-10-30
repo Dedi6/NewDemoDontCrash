@@ -149,6 +149,7 @@ public class RegularBoar : MonoBehaviour, ISFXResetable, IKnockbackable
         delayHitGroundSFX = true;
         bodyHitGround = false;
         state = State.Normal;
+        animator2.speed = 1;
     }
 
     public void SetStateDead()
@@ -169,5 +170,16 @@ public class RegularBoar : MonoBehaviour, ISFXResetable, IKnockbackable
         yield return new WaitForSeconds(knockBackTime);
 
         state = currentState;
+    }
+
+    private void OnDisable()
+    {
+        if (state == State.Dead)
+        {
+            animator2.speed = 100;
+            //GetComponent<SpriteRenderer>().enabled = false;
+        }
+        else
+            ResetSFXCues();
     }
 }
