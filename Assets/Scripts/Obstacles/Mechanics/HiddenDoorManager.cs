@@ -6,6 +6,7 @@ public class HiddenDoorManager : MonoBehaviour
 {
     public GameObject[] hiddenDoors;
     public GameObject[] doorCranks;
+    public GameObject[] HpPickUp;
 
     public bool resetDoors;
 
@@ -28,6 +29,16 @@ public class HiddenDoorManager : MonoBehaviour
             if (resetDoors)
             {
                 PlayerPrefs.DeleteKey(crank.GetComponent<DoorCrank>().nameForSave);
+            }
+        }
+
+        foreach (GameObject hp_Pick in HpPickUp)
+        {
+            hp_Pick.SetActive(true);
+
+            if (resetDoors)
+            {
+                PlayerPrefs.DeleteKey(hp_Pick.GetComponent<Hp_Pickable>().nameForSave);
             }
         }
     }

@@ -162,10 +162,10 @@ public class GameSaveManager : MonoBehaviour
         PlayerData data = LoadPlayerData();
         
         
-       /* string[] d = new string[2];  //fix 1
+        /*string[] d = new string[2];  //fix 1
         d[0] = "ThunderBolt";
         d[1] = "ThunderWave";
-        skillsLoader.LoadSkills("ThunderBolt", "ThunderWave", d);*/
+        skillsLoader.LoadSkills("ThunderBolt", "ThunderBolt", d);*/
 
         skillsLoader.LoadSkills(data.aSkillName, data.bSkillName, data.arrayOfSkills);
     }

@@ -8,7 +8,7 @@ public class BrotherMoveEnable : MonoBehaviour
         brotherM = GameMaster.instance.brotherInstance.GetComponent<BrotherMove>();
     }
 
-    private void OnTriggerEnter2D(Collider2D col)
+    private void OnTriggerStay2D(Collider2D col)
     {
         if (col.gameObject.layer == 11) // 11 is player
             brotherM.enabled = true;

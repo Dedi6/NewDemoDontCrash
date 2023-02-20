@@ -97,7 +97,7 @@ public class Health : MonoBehaviour
 
     public void SetHpAsInt(int hp)
     {
-        health = hp;
+        health = hp * 4;
         numberOfHearts = hp;
     }
 

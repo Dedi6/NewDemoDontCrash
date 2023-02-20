@@ -48,6 +48,6 @@ public class CheatTeleport : MonoBehaviour
 
     public void SetHpNormal()
     {
-        GameMaster.instance.playerInstance.GetComponent<Health>().SetHpAsInt(7);
+        GameMaster.instance.playerInstance.GetComponent<Health>().SetHpAsInt(6);
     }
 }

@@ -32,7 +32,7 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
     [Header("Positions")]
     [Space]
     public Transform leftPosition;
-    public Transform rightPosition, quakePosLeft, quakePosRight, leftPosClose, rightPosClose, quakePosLeftClose, quakePosRightClose, startingQuake;
+    public Transform rightPosition, quakePosLeft, quakePosRight, leftPosClose, rightPosClose, quakePosLeftClose, quakePosRightClose, startingQuake, checkpointAfterFight;
     [SerializeField]
     private GameObject quakeObjectRight, quakeObjectLeft, quakeObjectRightClose, quakeObjectLeftClose, startQuakeObject, triggerFightObject, firstQuakeCollider, secondQuakeCollider, seperateQuakeCol;
 
@@ -601,6 +601,7 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
     {
         animator.SetTrigger("Blink");
         StartCoroutine(DissableColliderForTime(0.25f));
+        canDodge = false;
 
         yield return new WaitForSeconds(0.5f);
 
@@ -647,6 +648,7 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
         {
             currentQuake = 0;
             isQuaking = false;
+            canDodge = true;
             StartCoroutine(DodgeCoroutine());
             if (state != State.Waiting)
                 cooldownCoroutine = StartCoroutine(CooldownCoroutine(2f));
@@ -733,6 +735,7 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
     private IEnumerator StartingQuake()
     {
         animator.SetTrigger("Blink");
+        canDodge = false;
 
         yield return new WaitForSeconds(0.5f);
 
@@ -778,6 +781,7 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
 
         animator.SetTrigger("Blink");
         cooldownCoroutine = StartCoroutine(CooldownCoroutine(2f));
+        canDodge = true;
 
         yield return new WaitForSeconds(2f);
 
@@ -1139,6 +1143,7 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
 
     private IEnumerator DeathTeleports()
     {
+        GameMaster.instance.lastCheckPointPosition = checkpointAfterFight.position;
         deathBlinkNumber--;
         animator.SetTrigger("Blink");
         audioManager.ThreeDSound(AudioManager.SoundList.HeightBossDodge, transform.position);

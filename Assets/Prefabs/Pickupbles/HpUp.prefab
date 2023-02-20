@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1172454840121549616}
   - component: {fileID: 1172454840121549617}
   - component: {fileID: 1172454840121549621}
+  - component: {fileID: 1174349378544841420}
   m_Layer: 31
   m_Name: HpUp
   m_TagString: Untagged
@@ -138,9 +139,9 @@ MonoBehaviour:
   OnTrigger:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1172454840121549621}
-        m_TargetAssemblyTypeName: UnlockSpell, Assembly-CSharp
-        m_MethodName: IncreaseHP
+      - m_Target: {fileID: 1174349378544841420}
+        m_TargetAssemblyTypeName: Hp_Pickable, Assembly-CSharp
+        m_MethodName: HpPickUp
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -150,3 +151,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1174349378544841420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1172454840121549582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de35adb57fc8186439bd7d2ed77492db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameForSave: Hp_Pickup_Heights_1

@@ -38,6 +38,7 @@ public class BrotherMove : MonoBehaviour
                 pointToFollow.localPosition = originalPos;
                 player.SetStateNormal();
                 GetComponent<CircleCollider2D>().enabled = true;
+                GetComponent<SkillsManager>().isUsingSkill = false;
             }
             else
             {
@@ -63,6 +64,7 @@ public class BrotherMove : MonoBehaviour
         currentCam.m_Follow = transform;
         GetComponent<CircleCollider2D>().enabled = false;
         player.StartIgnoreInput();
+        GetComponent<SkillsManager>().isUsingSkill = true;
     }
     
    private void HandleMoveInput()
