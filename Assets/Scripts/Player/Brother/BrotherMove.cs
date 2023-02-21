@@ -58,7 +58,8 @@ public class BrotherMove : MonoBehaviour
 
     void StartControl()
     {
-       // mainScript.SetStateSkill();
+        // mainScript.SetStateSkill();
+        ResetAxis();
         isActive = true;
         currentCam = GameMaster.instance.currentRoom.GetComponent<RoomManagerOne>().virtualCam.GetComponent<Cinemachine.CinemachineVirtualCamera>();
         currentCam.m_Follow = transform;
@@ -68,16 +69,16 @@ public class BrotherMove : MonoBehaviour
     }
     
    private void HandleMoveInput()
-    {
+   {
         if (usingKeyboard)
         {
-            if (inputM.GetKey(Keybindings.KeyList.Up))
+            if (inputM.KeyDown(Keybindings.KeyList.Up))
                 axisVert = 1;
-            if (inputM.GetKey(Keybindings.KeyList.Down))
+            if (inputM.KeyDown(Keybindings.KeyList.Down))
                 axisVert = -1;
-            if (inputM.GetKey(Keybindings.KeyList.Right))
+            if (inputM.KeyDown(Keybindings.KeyList.Right))
                 axisHori = 1;
-            if (inputM.GetKey(Keybindings.KeyList.Left))
+            if (inputM.KeyDown(Keybindings.KeyList.Left))
                 axisHori = -1;
             if (inputM.KeyUp(Keybindings.KeyList.Up))
                 axisVert = 0;
@@ -99,5 +100,11 @@ public class BrotherMove : MonoBehaviour
             if (axisVert > 0) axisVert = 1;
             else if (axisVert < 0) axisVert = -1;
         }
+    }
+
+    private void ResetAxis()
+    {
+        axisHori = 0;
+        axisVert = 0;
     }
 }
