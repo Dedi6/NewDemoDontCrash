@@ -30,7 +30,7 @@ public class RoomManagerOne : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.Find("Dirt");
+        player = GameMaster.instance.playerInstance;
     }
     private void OnTriggerEnter2D(Collider2D other)
     {

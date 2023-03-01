@@ -80,4 +80,9 @@ public class MovingPlatform_Jump : MonoBehaviour
         if (mp.groundedMemory >= 0)
             shouldMove = true;
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(transform.position, endPos.position);
+    }
 }
