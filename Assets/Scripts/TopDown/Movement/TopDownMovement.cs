@@ -117,6 +117,8 @@ public class TopDownMovement : MonoBehaviour
     {
         if (usingKeyboard)
         {
+            moveX = Input.GetAxisRaw("Horizontal");
+            moveY = Input.GetAxisRaw("Vertical");
 
             if (input.GetKey(Keybindings.KeyList.Up))
             {

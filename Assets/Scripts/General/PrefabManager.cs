@@ -50,12 +50,22 @@ public class PrefabManager : MonoBehaviour
         FanSummon,
         Tp_Switch,
         Tp_Switch_close,
+        PlayerSkill_CannonBall,
+        PlayerSkill_CannonBall_Shoot,
     }
 
     public enum ListOfSprites
     {
         ThunderBolt,
         ThunderWave,
+        PlayerSkill_CannonBall,
+        Rice,
+        Seaweed,
+        Tuna, 
+        Beef,
+        Pork,
+        Veggies,
+        Tofu,
     }
 
     void Awake()

@@ -7,6 +7,9 @@ public class EditorRoomSpawner : EditorWindow
 {
     GameObject previousRoom;
     BuildPath buildTo;
+    GameObject roomToMove;
+
+
 
     [System.Serializable]
     enum BuildPath
@@ -34,9 +37,13 @@ public class EditorRoomSpawner : EditorWindow
         buildTo = (BuildPath)EditorGUILayout.EnumPopup("Build To", buildTo);
 
 
-        if (GUILayout.Button("Spawn Room"))
+        if (GUILayout.Button("Spawn Room", GUILayout.Height(30)))
             SpawnRoom();
 
+        GUILayout.Space(40);
+        roomToMove = EditorGUILayout.ObjectField("Room To Move", previousRoom, typeof(GameObject), true) as GameObject;
+        if (GUILayout.Button("Move Room", GUILayout.Height(30)))
+            SetRoomPosition(roomToMove);
     }
 
     private void SpawnRoom()

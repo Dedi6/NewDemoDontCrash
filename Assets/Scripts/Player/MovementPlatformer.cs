@@ -158,7 +158,7 @@ public class MovementPlatformer : MonoBehaviour
         CashComponents();   // get all the components ready.
 
         gm.lastCheckPointPosition = transform.position; // for testing :D
-       // RespawnAtSavePoint();          // active when building
+        //RespawnAtSavePoint();          // active when building
         //  delete when building!!!!
         //SetForBuilding(); /// this is only active once before building
     }

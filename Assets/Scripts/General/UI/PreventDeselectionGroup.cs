@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using MyBox;
 public class PreventDeselectionGroup : MonoBehaviour
 {
     EventSystem evt;
     public GameObject firstButton;
     GameObject sel;
+    [SerializeField]
+    private bool isUsingPointer;
+    [ConditionalField("isUsingPointer")] public RectTransform pointer;
 
     private void Start()
     {
@@ -21,6 +25,13 @@ public class PreventDeselectionGroup : MonoBehaviour
             sel = evt.currentSelectedGameObject;
         else if (sel != null && evt.currentSelectedGameObject == null)
             evt.SetSelectedGameObject(sel);
+
+        if(isUsingPointer && Input.anyKeyDown)
+        {
+            float buttonY = sel.GetComponent<RectTransform>().position.y;
+            if (pointer.position.y != buttonY)
+                pointer.position = new Vector3(pointer.position.x, buttonY, pointer.position.x);
+        }
         
         if (InputManager.instance.KeyDown(Keybindings.KeyList.Jump))
         {
@@ -32,6 +43,7 @@ public class PreventDeselectionGroup : MonoBehaviour
                 t.isOn = !t.isOn;
         }
     }
+
     private void OnEnable()
     {
         sel = firstButton;

@@ -165,11 +165,12 @@ public class RegularBoar : MonoBehaviour, ISFXResetable, IKnockbackable
     private IEnumerator KnockBackState()
     {
         State currentState = state;
-        state = State.Dead;
+        state = State.Stunned;
 
         yield return new WaitForSeconds(knockBackTime);
 
-        state = currentState;
+        if(state != State.Dead)
+            state = currentState;
     }
 
     private void OnDisable()

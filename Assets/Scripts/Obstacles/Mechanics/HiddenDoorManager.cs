@@ -7,6 +7,7 @@ public class HiddenDoorManager : MonoBehaviour
     public GameObject[] hiddenDoors;
     public GameObject[] doorCranks;
     public GameObject[] HpPickUp;
+    public GameObject[] cannonBall_Walls;
 
     public bool resetDoors;
 
@@ -41,6 +42,17 @@ public class HiddenDoorManager : MonoBehaviour
                 PlayerPrefs.DeleteKey(hp_Pick.GetComponent<Hp_Pickable>().nameForSave);
             }
         }
+
+        foreach (GameObject cannonWall in cannonBall_Walls)
+        {
+            cannonWall.SetActive(true);
+
+            if (resetDoors)
+            {
+                PlayerPrefs.DeleteKey(cannonWall.GetComponent<CannonBall_Wall>().nameForSave);
+            }
+        }
+
     }
 
 }

@@ -9,6 +9,9 @@ TagManager:
   - EnemyDead
   - Tilemap
   - Brother
+  - CannonBall
+  - Minigame_triggers
+  - CookingGame_Marker
   layers:
   - Default
   - TransparentFX

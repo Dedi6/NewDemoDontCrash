@@ -8,21 +8,38 @@ using UnityEditor.SceneManagement;
 public class SpikesScriptEditor : Editor
 {
 
-    [Range(0, 20)]
+    [Range(0, 60)]
     float xSize = 1;
+    int sliderSize = 30;
 
     private void OnEnable()
     {
         Spikes spikeScript = (Spikes)target;
         xSize = spikeScript.GetComponent<SpriteRenderer>().size.x;
+        if(xSize > 30)
+            sliderSize = (int)xSize;
     }
+
 
     public override void OnInspectorGUI()
     {
         Spikes spikeScript = (Spikes)target;
 
-        xSize = (int)EditorGUILayout.Slider(xSize, 0, 20);
+        xSize = (int)EditorGUILayout.Slider(xSize, 0, sliderSize);
         
+
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Double"))
+        {
+            xSize *= 2;
+            sliderSize *= 2;
+        }
+        if (GUILayout.Button("-"))
+            xSize--;
+        if (GUILayout.Button("+"))
+            xSize++;
+        GUILayout.EndHorizontal();
+
         SpriteRenderer _sprite = spikeScript.GetComponent<SpriteRenderer>();
         _sprite.size = new Vector2(xSize, _sprite.size.y);
         spikeScript._xSize = xSize;
@@ -48,7 +65,8 @@ public class SpikesScriptEditor : Editor
         GUILayout.EndHorizontal();
 
         spikeScript.dontDealDamage = EditorGUILayout.Toggle("Don't Deal Damage", spikeScript.dontDealDamage);
-       // EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());   // make changes requiring a save
-    }
 
+        EditorUtility.SetDirty(target);
+        // EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());   // make changes requiring a save
+    }
 }
