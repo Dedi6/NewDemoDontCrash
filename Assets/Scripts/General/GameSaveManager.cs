@@ -4,10 +4,12 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Newtonsoft.Json;
 
 public class GameSaveManager : MonoBehaviour
 {
     public static GameSaveManager instance;
+    private static readonly string keyword = "p";
     
     [System.Serializable]
     public class KeybindForPlatforms
@@ -17,6 +19,8 @@ public class GameSaveManager : MonoBehaviour
     }
 
     public KeybindForPlatforms[] arrayOfBindings;
+    [HideInInspector]
+    public Slot[] playerInventoryHolder;
 
     [System.Serializable]
     public class PlayerData {
@@ -37,7 +41,20 @@ public class GameSaveManager : MonoBehaviour
         }
     }
 
+    [System.Serializable]
+    public class InventoryData
+    {
+        public Slot[] slotsArray;
+        public float testFloat;
+        public Inventory_Item itemTest;
+        public Inventory_Item[] itemArray;
+        public int[] itemEmumInt;
+        public int[] amountOfItem;
+        public bool[] isFree;
+    }
+
     public SkillsUI skillsLoader;
+    public InventoryController inventoryController;
 
     [HideInInspector]
     public int lastScene;
@@ -229,9 +246,117 @@ public class GameSaveManager : MonoBehaviour
             return null;
     }
 
+    
     public void DeleteSaveFile()
     {
         Directory.Delete(Application.persistentDataPath + "/game_save", true);
         PlayerPrefs.DeleteKey("FirstTimePlaying");
+    }
+
+
+
+    public void Save_Inventory(string path, Inventory_Base playerInventory)
+    {
+        if (!Directory.Exists(Application.persistentDataPath + "/game_save/player_inventory"))
+        {
+            Directory.CreateDirectory(Application.persistentDataPath + "/game_save/player_inventory");
+        }
+
+        string savePath = Application.persistentDataPath + "/game_save/player_inventory/" + path + ".txt";
+
+        var saveObject = new InventoryData
+        {
+            slotsArray = playerInventory.slots,
+            itemEmumInt = playerInventory.GetItemIntArray(),
+            amountOfItem = playerInventory.GetAmountArray(),
+            isFree = playerInventory.GetIsFreeArray(),
+            itemArray = playerInventory.GetItemsArray()
+        };
+
+        FileStream stream = File.Create(savePath);
+        stream.Dispose();
+        var json = JsonUtility.ToJson(saveObject);
+        var ecnryptedJson = EncryptDecrypt(json);
+        File.WriteAllText(savePath, ecnryptedJson);
+        stream.Close();
+    }
+
+    private static string EncryptDecrypt(string data)
+    {
+        string result = "";
+
+        for (int i = 0; i < data.Length; i++)
+        {
+            result += (char)(data[i] ^ keyword[i % keyword.Length]);
+        }
+
+        return result;
+    }
+
+    public Slot[] Load_Inventory(string path)
+    {
+        string _pathOfInventory = Application.persistentDataPath + "/game_save/player_inventory/" + path + ".txt";
+        if (File.Exists(_pathOfInventory))
+        {
+         //   BinaryFormatter bf = new BinaryFormatter();
+          //  var data = new InventoryData();
+            FileStream stream = File.Open(_pathOfInventory, FileMode.Open);
+            stream.Dispose();
+            //    File.ReadAllText(_pathOfInventory);
+            string json = EncryptDecrypt(File.ReadAllText(_pathOfInventory));
+            Debug.Log(json);
+            InventoryData data = JsonUtility.FromJson<InventoryData>(json);
+            //InventoryData data = JsonUtility.FromJson<InventoryData>(File.ReadAllText(_pathOfInventory));
+            stream.Close();
+            for (int i = 0; i < data.slotsArray.Length; i++)
+            {
+                // if(data.itemEmumInt[i] != -1)
+                //  data.slotsArray[i].currentItem.item = (Inventory_Item.Item)data.itemEmumInt[i];
+                data.slotsArray[i].currentItem = data.itemArray[i];
+                data.slotsArray[i].amount = data.amountOfItem[i];
+                data.slotsArray[i].isFree = data.isFree[i];
+                if (data.itemArray[i] != null)
+                    data.slotsArray[i].UpdateSlot(data.itemArray[i], data.amountOfItem[i]);
+                else
+                    data.slotsArray[i].ClearSlot();
+            }
+            return data.slotsArray;
+        }
+        else
+            return null;
+    }
+
+
+
+    public void Save_Inventory_Storage(Storage_Interact storage, string path)
+    {
+        string _pathOfInventory = Application.persistentDataPath + "/game_save/player_inventory/" + path + ".txt";
+
+        if (!Directory.Exists(Application.persistentDataPath + "/game_save/player_inventory/"))
+        {
+            Directory.CreateDirectory(Application.persistentDataPath + "/game_save/player_inventory/");
+        }
+
+        FileStream stream = File.Create(_pathOfInventory);
+        stream.Dispose();
+
+        using (
+            var writer = new BinaryWriter(File.Open(_pathOfInventory, FileMode.Open))
+        )
+        {
+            storage.Save(new GameDataWriter(writer));
+        }
+    }
+
+    public void Load_Inventory_Storage(Storage_Interact storage, string path)
+    {
+        string _pathOfInventory = Application.persistentDataPath + "/game_save/player_inventory/" + path + ".txt";
+
+        using (
+            var reader = new BinaryReader(File.Open(_pathOfInventory, FileMode.Open))
+        )
+        {
+            storage.Load(new GameDataReader(reader));
+        }
     }
 }

@@ -15,7 +15,6 @@ MonoBehaviour:
   itemName: Seaweeed
   artwork: {fileID: 21300000, guid: ef04e25f873e24c48bd7e032010abdd0, type: 3}
   item: 1
-  storageIn: 0
-  isStackable: 1
+  storageIn: 26
   maxStackSize: 5
   isItemUsable: 0

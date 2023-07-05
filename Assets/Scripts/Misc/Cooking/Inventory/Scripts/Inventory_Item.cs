@@ -9,10 +9,9 @@ public class Inventory_Item : ScriptableObject
     public string itemName;
 
     public Sprite artwork;
-
+    
     [SearchableEnum]
     public Item item;
-    [SearchableEnum]
     public StorageSpace storageIn;
 
     public int maxStackSize = 1;
@@ -30,10 +29,12 @@ public class Inventory_Item : ScriptableObject
         Fishing_Rod,
     }
 
+    [System.Flags]
     public enum StorageSpace
     {
-        Fridge,
-        Closet, 
-        Chest,
+        PlayerInventory = 1 << 1,
+        Fridge = 1 << 2,
+        Closet = 1 << 3, 
+        Chest = 1 << 4,
     }
 }

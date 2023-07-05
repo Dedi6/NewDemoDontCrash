@@ -19,6 +19,7 @@ public class PrefabManager : MonoBehaviour
     [System.Serializable]
     public struct ManageSprites
     {
+        public string name;
         [SearchableEnum]
         public ListOfSprites spriteName;
         public Sprite sprite;
@@ -66,6 +67,9 @@ public class PrefabManager : MonoBehaviour
         Pork,
         Veggies,
         Tofu,
+        ChestBorder,
+        FridgeBorder,
+        ClosetBorder,
     }
 
     void Awake()

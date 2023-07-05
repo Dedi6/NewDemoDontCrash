@@ -15,7 +15,6 @@ MonoBehaviour:
   itemName: TestItem1
   artwork: {fileID: 21300000, guid: 4d8dd9c756135e84faf10b74b4fae51f, type: 3}
   item: 0
-  storageIn: 0
-  isStackable: 1
+  storageIn: -1
   maxStackSize: 1
   isItemUsable: 0

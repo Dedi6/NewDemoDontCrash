@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
+[System.Serializable]
 public class Slot : MonoBehaviour
 {
     public TextMeshProUGUI amountText;
@@ -57,6 +58,12 @@ public class Slot : MonoBehaviour
 
         if (amount > 1 && amount <= currentItem.maxStackSize)
             GetComponentInChildren<TextMeshProUGUI>().text = (amount).ToString();
+    }
+
+    public void UpdateSlot(Inventory_Item item, int amountToAdd)
+    {
+        ClearSlot();
+        AssignItem(item, amountToAdd);
     }
 
     private void CheckIfFull(Pickup itemHolder)
@@ -137,6 +144,11 @@ public class Slot : MonoBehaviour
         {
             AssignItem(mouseHolder.currentItem, mouseHolder.currentAmount);
             mouseHolder.ClearSlot();
+
+            if(!isShiftPressed)
+                return;
+            else if(amount > 1)
+                SplitStack(mouseHolder);
             return;
         }
 

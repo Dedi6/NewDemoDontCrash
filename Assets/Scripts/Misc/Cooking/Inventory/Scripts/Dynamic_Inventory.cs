@@ -3,24 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Inventory_Base : MonoBehaviour
+public class Dynamic_Inventory : MonoBehaviour
 {
+    public Inventory_Item.StorageSpace storageType;
     [SerializeField]
     private Vector2 slotsArraySize;
     [SerializeField]
     private GameObject slotPrefab, border;
-
     [SerializeField]
     private Vector2 borderOffset;
+
+    private Inventory_Base slotsBase;
+
+    [SerializeField]
+    private string savePath;
 
     void Start()
     {
         int slotsAmount = (int)(slotsArraySize.x * slotsArraySize.y);
+        slotsBase = gameObject.AddComponent<Inventory_Base>();
+        slotsBase.slots = new Slot[slotsAmount];
+
         for (int i = 0; i < slotsAmount; i++)
         {
-            Instantiate(slotPrefab, transform);
+            GameObject dynamicSlot = Instantiate(slotPrefab, transform);
+            slotsBase.slots[i] = dynamicSlot.GetComponent<Slot>();
         }
 
+        slotsBase.savePath = savePath;
         HandleBorderDimensions();
     }
 
@@ -37,5 +47,16 @@ public class Inventory_Base : MonoBehaviour
         slotsRect.sizeDelta = slotsSize;
 
         borderRect.sizeDelta = new Vector2((slotsSize.x * difference) + borderOffset.x, (slotsSize.y * difference) + borderOffset.y);
+    }
+    
+    public void SetNewInventory()
+    {
+
+    }
+
+    public void ClearCurrentInventory()
+    {
+        GameSaveManager.instance.Save_Inventory(savePath, slotsBase);
+        slotsBase.ClearAllSlots();
     }
 }

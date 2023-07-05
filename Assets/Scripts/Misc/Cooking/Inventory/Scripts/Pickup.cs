@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Pickup : MonoBehaviour
 {
-    private InventoryController inventory;
+    //private InventoryController inventory;
+    private Slot[] inventory;
     public GameObject itemButton;
     public Inventory_Item item;
     public int amountOfItem = 1;
@@ -13,7 +14,8 @@ public class Pickup : MonoBehaviour
 
     void Start()
     {
-        inventory = InventoryController.instance;
+        // inventory = InventoryController.instance;
+        inventory = InventoryController.instance.playerInventory.slots;
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -23,11 +25,11 @@ public class Pickup : MonoBehaviour
 
     private void HandleChecks()
     {
-        for (int i = 0; i < inventory.slots.Length; i++)
+        for (int i = 0; i < inventory.Length; i++)
         {
             if (item.maxStackSize <= 1) break;
 
-            Slot currentSlot = inventory.slots[i];
+            Slot currentSlot = inventory[i];
             if (!currentSlot.isFree && !currentSlot.IsFull()) // there's an item there and it isn't fully stacked
             {
                 if (currentSlot.IsTheSameItem(item.item))
@@ -37,9 +39,9 @@ public class Pickup : MonoBehaviour
                 }
             }
         }
-        for (int i = 0; i < inventory.slots.Length; i++)
+        for (int i = 0; i < inventory.Length; i++)
         {
-            Slot currentSlot = inventory.slots[i];
+            Slot currentSlot = inventory[i];
             if (currentSlot.isFree)
             {
                 currentSlot.AddItemToSlot(this, amountOfItem, i);
