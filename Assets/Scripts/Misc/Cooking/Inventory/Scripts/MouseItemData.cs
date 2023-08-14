@@ -15,6 +15,7 @@ public class MouseItemData : MonoBehaviour
     public int currentAmount;
     [HideInInspector]
     public Inventory_Item currentItem;
+    public GameObject pickupPrefab, pickupHolder;
 
     private void Awake()
     {
@@ -48,7 +49,26 @@ public class MouseItemData : MonoBehaviour
         transform.position = Mouse.current.position.ReadValue();
 
         if (Mouse.current.leftButton.wasPressedThisFrame && !IsPointerOverUIObject())   // dropping - touching somewhere with no UI
-            ClearSlot();
+            DropItem();
+    }
+
+    private void DropItem()
+    {
+        Vector2 mousePosWorld = Camera.main.ScreenToWorldPoint(transform.position);
+        Ray ray = Camera.main.ScreenPointToRay(transform.position);
+        RaycastHit2D hit_cast;
+        // bool isHittingSomething = Physics.Raycast(ray, out hit_cast);
+        RaycastHit2D isHittingSomething = Physics2D.Raycast(mousePosWorld, Vector3.forward);
+        Debug.Log(ray.GetPoint(100));
+        Debug.Log(ray);
+        Debug.DrawRay(mousePosWorld, Vector3.forward, Color.red, 5f);
+
+        if (isHittingSomething) Debug.Log(isHittingSomething.transform.gameObject.layer);
+
+
+        GameObject itemDrop = Instantiate(pickupPrefab, mousePosWorld, Quaternion.identity);
+        itemDrop.GetComponent<Pickup>().Update_Pickup(currentItem, currentAmount);
+        ClearSlot();
     }
 
     public void ClearSlot()

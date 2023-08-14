@@ -50,4 +50,10 @@ public class Pickup : MonoBehaviour
         }
     }
 
+    public void Update_Pickup(Inventory_Item newItem, int newAmount)
+    {
+        item = newItem;
+        amountOfItem = newAmount;
+        GetComponent<SpriteRenderer>().sprite = item.artwork;
+    }
  }

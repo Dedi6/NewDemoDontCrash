@@ -17,6 +17,10 @@ public class Inventory_Item : ScriptableObject
     public int maxStackSize = 1;
     public bool isItemUsable;
 
+    [Header("Attributes")]
+    public int energyRestored;
+    public int sellValue;
+
     public enum Item
     {
         Rice,
@@ -27,6 +31,10 @@ public class Inventory_Item : ScriptableObject
         Tuna,
         Tofu,
         Fishing_Rod,
+        Gimbap_Beef,
+        Gimbap_Pork,
+        Gimbap_Tuna,
+        Gimbap_Tofu,
     }
 
     [System.Flags]

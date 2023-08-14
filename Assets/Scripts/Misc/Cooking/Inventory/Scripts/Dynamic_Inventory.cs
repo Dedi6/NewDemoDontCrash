@@ -13,10 +13,10 @@ public class Dynamic_Inventory : MonoBehaviour
     [SerializeField]
     private Vector2 borderOffset;
 
-    private Inventory_Base slotsBase;
+    public Inventory_Base slotsBase;
 
-    [SerializeField]
-    private string savePath;
+//    [SerializeField]
+    public string savePath;
 
     void Start()
     {
@@ -31,6 +31,8 @@ public class Dynamic_Inventory : MonoBehaviour
         }
 
         slotsBase.savePath = savePath;
+        slotsBase.storageType = storageType;
+        GameSaveManager.instance.Load_Storage_Independent(savePath, slotsBase.slots);
         HandleBorderDimensions();
     }
 
@@ -58,5 +60,10 @@ public class Dynamic_Inventory : MonoBehaviour
     {
         GameSaveManager.instance.Save_Inventory(savePath, slotsBase);
         slotsBase.ClearAllSlots();
+    }
+
+    private void OnDisable()
+    {
+        GameSaveManager.instance.Save_Inventory(savePath, slotsBase);
     }
 }

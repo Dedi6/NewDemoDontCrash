@@ -44,17 +44,12 @@ public class GameSaveManager : MonoBehaviour
     [System.Serializable]
     public class InventoryData
     {
-        public Slot[] slotsArray;
-        public float testFloat;
-        public Inventory_Item itemTest;
-        public Inventory_Item[] itemArray;
         public int[] itemEmumInt;
         public int[] amountOfItem;
-        public bool[] isFree;
     }
 
     public SkillsUI skillsLoader;
-    public InventoryController inventoryController;
+  //  public InventoryController inventoryController;
 
     [HideInInspector]
     public int lastScene;
@@ -266,11 +261,8 @@ public class GameSaveManager : MonoBehaviour
 
         var saveObject = new InventoryData
         {
-            slotsArray = playerInventory.slots,
-            itemEmumInt = playerInventory.GetItemIntArray(),
             amountOfItem = playerInventory.GetAmountArray(),
-            isFree = playerInventory.GetIsFreeArray(),
-            itemArray = playerInventory.GetItemsArray()
+            itemEmumInt = playerInventory.GetItemIntArray(),
         };
 
         FileStream stream = File.Create(savePath);
@@ -293,37 +285,28 @@ public class GameSaveManager : MonoBehaviour
         return result;
     }
 
-    public Slot[] Load_Inventory(string path)
+
+    public void Load_Storage_Independent(string path, Slot[] slots)
     {
         string _pathOfInventory = Application.persistentDataPath + "/game_save/player_inventory/" + path + ".txt";
         if (File.Exists(_pathOfInventory))
         {
-         //   BinaryFormatter bf = new BinaryFormatter();
-          //  var data = new InventoryData();
             FileStream stream = File.Open(_pathOfInventory, FileMode.Open);
             stream.Dispose();
-            //    File.ReadAllText(_pathOfInventory);
             string json = EncryptDecrypt(File.ReadAllText(_pathOfInventory));
-            Debug.Log(json);
             InventoryData data = JsonUtility.FromJson<InventoryData>(json);
-            //InventoryData data = JsonUtility.FromJson<InventoryData>(File.ReadAllText(_pathOfInventory));
             stream.Close();
-            for (int i = 0; i < data.slotsArray.Length; i++)
+            for (int i = 0; i < slots.Length; i++)
             {
-                // if(data.itemEmumInt[i] != -1)
-                //  data.slotsArray[i].currentItem.item = (Inventory_Item.Item)data.itemEmumInt[i];
-                data.slotsArray[i].currentItem = data.itemArray[i];
-                data.slotsArray[i].amount = data.amountOfItem[i];
-                data.slotsArray[i].isFree = data.isFree[i];
-                if (data.itemArray[i] != null)
-                    data.slotsArray[i].UpdateSlot(data.itemArray[i], data.amountOfItem[i]);
+                if (data.itemEmumInt[i] != -1) // isn't null
+                {
+                    Inventory_Item currentItem = InventoryController.instance.GetItem_Base((Inventory_Item.Item)data.itemEmumInt[i]);
+                    slots[i].UpdateSlot(currentItem, data.amountOfItem[i]);
+                }
                 else
-                    data.slotsArray[i].ClearSlot();
+                    slots[i].LoadEmptySlot();
             }
-            return data.slotsArray;
         }
-        else
-            return null;
     }
 
 
@@ -358,5 +341,40 @@ public class GameSaveManager : MonoBehaviour
         {
             storage.Load(new GameDataReader(reader));
         }
+    }
+
+
+    public void Save_Storage_List(List<string> list, string path)
+    {
+        if (!Directory.Exists(Application.persistentDataPath + "/game_save/player_inventory"))
+        {
+            Directory.CreateDirectory(Application.persistentDataPath + "/game_save/player_inventory");
+        }
+
+        string savePath = Application.persistentDataPath + "/game_save/player_inventory/" + path + ".txt";
+
+        FileStream stream = File.Create(savePath);
+        stream.Dispose();
+        var json = JsonConvert.SerializeObject(list);
+        var ecnryptedJson = EncryptDecrypt(json);
+        File.WriteAllText(savePath, ecnryptedJson);
+        stream.Close();
+    }
+
+    public List<string> Get_Storage_List(string path)
+    {
+        string _pathOfInventory = Application.persistentDataPath + "/game_save/player_inventory/" + path + ".txt";
+
+        if (File.Exists(_pathOfInventory))
+        {
+            FileStream stream = File.Open(_pathOfInventory, FileMode.Open);
+            stream.Dispose();
+            string json = EncryptDecrypt(File.ReadAllText(_pathOfInventory));
+            var value = JsonConvert.DeserializeObject<List<string>>(json);
+            return value;
+        }
+
+        else
+            return null;
     }
 }

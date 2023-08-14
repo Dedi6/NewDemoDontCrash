@@ -461,6 +461,7 @@ public class TopDownMovement : MonoBehaviour
     public void StartIgnoreInput()
     {
         ResetAxis();
+        rb.velocity = Vector2.zero;
         state = State.IgnoreInput;
     }
 
@@ -485,5 +486,27 @@ public class TopDownMovement : MonoBehaviour
     {
         moveY = 0;
         moveX = 0;
+    }
+
+    public void UseItem(Inventory_Item.Item item)
+    {
+        switch(item)
+        {
+            case Inventory_Item.Item.Gimbap_Beef:
+                Debug.Log("used beef gimbap");
+                break;
+            case Inventory_Item.Item.Gimbap_Pork:
+                Debug.Log("used pork gimbap");
+                break;
+            case Inventory_Item.Item.Gimbap_Tofu:
+                Debug.Log("used Tofu gimbap");
+                break;
+            case Inventory_Item.Item.Gimbap_Tuna:
+                Debug.Log("used Tuna gimbap");
+                break;
+            case Inventory_Item.Item.Fishing_Rod:
+                Debug.Log("FISHHHHHHH");
+                break;
+        }
     }
 }

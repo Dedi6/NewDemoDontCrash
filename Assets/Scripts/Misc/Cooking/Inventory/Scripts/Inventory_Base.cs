@@ -68,4 +68,9 @@ public class Inventory_Base : MonoBehaviour
             currentSlot.ClearSlot();
         }
     }
+
+    public void LoadInventory()
+    {
+        GameSaveManager.instance.Load_Storage_Independent(savePath, slots);
+    }
 }

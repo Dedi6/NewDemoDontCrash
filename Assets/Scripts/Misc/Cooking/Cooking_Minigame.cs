@@ -17,7 +17,10 @@ public class Cooking_Minigame : MonoBehaviour
     private Animator panAnimator;
     private float yBar;
     private RectTransform rectTransform;
-    private int successCounter, successCounterMax, currentLetter, sideSwitcher = 1; // if it's positive, than the bar will go right
+    private int successCounter, currentLetter, sideSwitcher = 1; // if it's positive, than the bar will go right
+    
+    private Cooking_Recipe currentRecipe;
+    private float successCounterMax;
 
     private void Awake()
     {
@@ -108,16 +111,16 @@ public class Cooking_Minigame : MonoBehaviour
 
     private void HitMarker()
     {
-        Debug.Log("Hit");
         successCounter++;
-        panAnimator.SetTrigger("NextStage");
+        if(successCounter != successCounterMax)
+            panAnimator.SetTrigger("NextStage");
+
         AudioManager.instance.PlaySound(AudioManager.SoundList.ClankTriggered);
     }
 
 
     private void FailedToHit()
     {
-        Debug.Log("Fail");
         ResetMinigame();
         GameMaster.instance.ShakeCameraTopDown(0.1f, 5f);
         AudioManager.instance.PlaySound(AudioManager.SoundList.PlayerHit);
@@ -132,6 +135,9 @@ public class Cooking_Minigame : MonoBehaviour
     private void CompletedMinigame()
     {
         Debug.Log("Completed!");
+        RemoveIngredientsFromInventory();
+        InventoryController.instance.Add_ItemToInventory(currentRecipe.recipeFor_Item, 1);
+        ResetMinigame();
     }
 
     private void GetRandomKey()
@@ -141,9 +147,21 @@ public class Cooking_Minigame : MonoBehaviour
         letterHolder.sprite = lettersSprites[rndKey];
     }
 
-    public void SetSpeed(float newSpeed)
+    public void SetSpeed(float newSpeed, Cooking_Recipe recipeToCook)
     {
         speed = newSpeed;
+        currentRecipe = recipeToCook;
+        successCounterMax = recipeToCook.numberOfSteps;
+    }
+
+    private void RemoveIngredientsFromInventory()
+    {
+        for (int i = 0; i < currentRecipe.listOfIngredients.Length; i++)
+        {
+            Inventory_Item.Item itemToRemove = currentRecipe.listOfIngredients[i].ingredient;
+            int amountToRemove = currentRecipe.listOfIngredients[i].amount;
+            InventoryController.instance.Remove_Items(itemToRemove, amountToRemove);
+        }
     }
 
 }

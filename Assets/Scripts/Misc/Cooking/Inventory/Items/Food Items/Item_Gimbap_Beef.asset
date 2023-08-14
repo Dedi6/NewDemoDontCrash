@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a712571817f8004cb5c1947b5239d69, type: 3}
-  m_Name: TestItem2
+  m_Name: Item_Gimbap_Beef
   m_EditorClassIdentifier: 
-  itemName: Seaweeed
-  artwork: {fileID: 21300000, guid: ef04e25f873e24c48bd7e032010abdd0, type: 3}
-  item: 1
+  itemName: Beef Gimbap
+  artwork: {fileID: 21300000, guid: aadbae001b4e5984083d313cc2fb4732, type: 3}
+  item: 8
   storageIn: 26
   maxStackSize: 5
-  isItemUsable: 0
+  isItemUsable: 1

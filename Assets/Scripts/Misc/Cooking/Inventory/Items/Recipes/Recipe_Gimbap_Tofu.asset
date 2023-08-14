@@ -10,11 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9551a7d73cee4664b876bda55f746379, type: 3}
-  m_Name: Gimbap_Pork
+  m_Name: Recipe_Gimbap_Tofu
   m_EditorClassIdentifier: 
-  name: Pork Gimbap
-  artwork: {fileID: 21300000, guid: 953fc7024e141e5489b51b941734327b, type: 3}
-  recipeFor: 3
+  recipeFor_Item: {fileID: 11400000, guid: 8d52106fec676ea489042822ebf01420, type: 2}
+  numberOfSteps: 5
   listOfIngredients:
   - ingredient: 0
     amount: 1
@@ -24,6 +23,4 @@ MonoBehaviour:
     amount: 1
   - ingredient: 6
     amount: 1
-  energyRestored: 10
-  sellValue: 15
-  minigameSpeed: 100
+  minigameSpeed: 300

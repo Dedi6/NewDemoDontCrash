@@ -10,11 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9551a7d73cee4664b876bda55f746379, type: 3}
-  m_Name: Gimbap_Tuna
+  m_Name: Recipe_Gimbap_Beef
   m_EditorClassIdentifier: 
-  name: Tuna Gimbap
-  artwork: {fileID: 21300000, guid: 12a34d2be18f75a499a1a855ce802cd1, type: 3}
-  recipeFor: 0
+  recipeFor_Item: {fileID: 11400000, guid: 128a53e660f4d3c4c9addfc839d64ec1, type: 2}
+  numberOfSteps: 1
   listOfIngredients:
   - ingredient: 0
     amount: 1
@@ -24,6 +23,4 @@ MonoBehaviour:
     amount: 1
   - ingredient: 3
     amount: 1
-  energyRestored: 10
-  sellValue: 15
-  minigameSpeed: 200
+  minigameSpeed: 150

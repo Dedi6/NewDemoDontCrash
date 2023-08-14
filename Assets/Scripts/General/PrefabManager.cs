@@ -67,9 +67,8 @@ public class PrefabManager : MonoBehaviour
         Pork,
         Veggies,
         Tofu,
-        ChestBorder,
-        FridgeBorder,
-        ClosetBorder,
+        v_Sign,
+        x_Sign,
     }
 
     void Awake()
