@@ -15,7 +15,6 @@ public class Dynamic_Inventory : MonoBehaviour
 
     public Inventory_Base slotsBase;
 
-//    [SerializeField]
     public string savePath;
 
     void Start()
@@ -49,17 +48,6 @@ public class Dynamic_Inventory : MonoBehaviour
         slotsRect.sizeDelta = slotsSize;
 
         borderRect.sizeDelta = new Vector2((slotsSize.x * difference) + borderOffset.x, (slotsSize.y * difference) + borderOffset.y);
-    }
-    
-    public void SetNewInventory()
-    {
-
-    }
-
-    public void ClearCurrentInventory()
-    {
-        GameSaveManager.instance.Save_Inventory(savePath, slotsBase);
-        slotsBase.ClearAllSlots();
     }
 
     private void OnDisable()

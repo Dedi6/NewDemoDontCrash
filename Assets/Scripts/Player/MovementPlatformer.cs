@@ -129,7 +129,6 @@ public class MovementPlatformer : MonoBehaviour
     private enum State              // all of the states available for the character
     {
         Normal,
-        WallJumping,
         DashingToEnemy,
         IgnorePlayerInput,
     }

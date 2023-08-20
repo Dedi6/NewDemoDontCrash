@@ -10,8 +10,8 @@ TagManager:
   - Tilemap
   - Brother
   - CannonBall
-  - Minigame_triggers
   - CookingGame_Marker
+  - Minigame_Triggers
   layers:
   - Default
   - TransparentFX

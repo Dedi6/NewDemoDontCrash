@@ -1,17 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MyBox;
 
 public class Storage_Interact : MonoBehaviour
 {
     private bool isPlayerNear;
     public Inventory_Item.StorageSpace storageType;
-    /*[ConditionalField(("storageType"), true, Inventory_Item.StorageSpace.Fridge)]   // only display size if not fridge
-    public Vector2 sizeOfBox;*/
     
-    [SerializeField]
-    private GameObject dynamicInventory_prefab;
     private GameObject inventoryHolder;
     public string savePath;
 
@@ -19,12 +14,7 @@ public class Storage_Interact : MonoBehaviour
 
     void Start()
     {
-        //    inventoryHolder = transform.GetChild(0).gameObject;
-       // savePath = GetComponent<UniqueID>()._id;
         inventoryHolder = InventoryController.instance.GetStorageHolder(storageType);
-      /*  slotsBase = inventoryHolder.GetComponentInChildren<Inventory_Base>();
-        if(storageType == Inventory_Item.StorageSpace.Fridge) 
-            slotsBase.savePath = savePath;*/
     }
 
     void HandleSavePaths()
@@ -40,11 +30,6 @@ public class Storage_Interact : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
-            GameSaveManager.instance.Save_Inventory_Storage(this, savePath);
-        if (Input.GetKeyDown(KeyCode.J))
-            GameSaveManager.instance.Load_Inventory_Storage(this, savePath);
-
         if (!isPlayerNear)
             return;
 
@@ -58,35 +43,47 @@ public class Storage_Interact : MonoBehaviour
 
     void HandleStorage()
     {
+        Debug.Log("can add SFX opening/ closing storage. Can be dependent on type of storage");
+
         inventoryHolder.SetActive(!inventoryHolder.activeSelf);
-        if(inventoryHolder.activeSelf)  HandleSavePaths();
+        HandleOpeningOrClosing(inventoryHolder.activeSelf);
 
         InventoryController.instance.HandleStorage_Interact(inventoryHolder.activeSelf, storageType);
 
-        if (storageType != Inventory_Item.StorageSpace.Fridge) return;
+        
+        if (storageType != Inventory_Item.StorageSpace.Fridge) return;  // code from here applys for fridge
 
-       // Inventory_Base slotsBase = inventoryHolder.GetComponentInChildren<Inventory_Base>();
+        GameSaveManager saveManager = GameSaveManager.instance;
 
-        if(inventoryHolder.activeSelf)
+        if(inventoryHolder.activeSelf)  // opening fridge
         {
-            GameSaveManager.instance.Load_Storage_Independent(savePath, slotsBase.slots);
+            saveManager.Load_Storage_Independent(savePath, slotsBase.slots);
         }
-        else if(!inventoryHolder.activeSelf)
+        else if(!inventoryHolder.activeSelf)  // closing
         {
-            GameSaveManager.instance.Save_Inventory(slotsBase.savePath, slotsBase);
+            saveManager.Save_Inventory(slotsBase.savePath, slotsBase);
             slotsBase.savePath = savePath;
-            GameSaveManager.instance.Load_Storage_Independent(savePath, slotsBase.slots);
+            saveManager.Load_Storage_Independent(savePath, slotsBase.slots);
+            InventoryController.instance.Revert_FridgeButtons(0);   
         }
+    }
+
+    void HandleOpeningOrClosing(bool isStorageOpen)
+    {
+        if (isStorageOpen)
+        {
+            HandleSavePaths();
+            GameMaster.instance.playerInstance.GetComponent<TopDownMovement>().StartIgnoreInput();
+        }
+        else
+            GameMaster.instance.playerInstance.GetComponent<TopDownMovement>().EndIgnoreInput();
     }
 
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
-        {
-            // here you can add an animation for interact key or anything that happens when the player is need
+        if (collision.CompareTag("Player")) // here you can add an animation for interact key or anything that happens when the player is need
             isPlayerNear = true;
-        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)

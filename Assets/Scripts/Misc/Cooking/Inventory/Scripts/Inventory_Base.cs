@@ -9,7 +9,7 @@ public class Inventory_Base : MonoBehaviour
     public string savePath;
     public Slot[] slots;
 
-    public int[] GetItemIntArray()
+    public int[] GetItemIntArray()  // get the int of the Enum of items. (Inventory_Item.Item)
     {
         int[] intArray = new int[slots.Length];
 
@@ -34,30 +34,6 @@ public class Inventory_Base : MonoBehaviour
         }
 
         return intArray;
-    }
-
-    public bool[] GetIsFreeArray()
-    {
-        bool[] boolArray = new bool[slots.Length];
-
-        for (int i = 0; i < slots.Length; i++)
-        {
-            boolArray[i] = slots[i].isFree;
-        }
-
-        return boolArray;
-    }
-
-    public Inventory_Item[] GetItemsArray()
-    {
-        Inventory_Item[] itemArray = new Inventory_Item[slots.Length];
-
-        for (int i = 0; i < slots.Length; i++)
-        {
-            itemArray[i] = slots[i].currentItem;
-        }
-
-        return itemArray;
     }
 
 

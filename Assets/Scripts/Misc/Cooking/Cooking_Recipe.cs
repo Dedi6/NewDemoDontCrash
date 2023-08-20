@@ -6,26 +6,12 @@ using MyBox;
 [CreateAssetMenu(fileName = "New Recipe", menuName = "Recipe")]
 public class Cooking_Recipe : ScriptableObject
 {
-   // public new string name;
-
-  //  public Sprite artwork;
-
-  //  [SearchableEnum]
-  //  public Recipe recipeFor;
 
     public Inventory_Item recipeFor_Item;
     public int numberOfSteps;
     public Ingredient[] listOfIngredients;
-   // public Ingredient2[] listOfIngredients2;
 
     public int minigameSpeed;
-
-    [System.Serializable]
-    public class Ingredient2
-    {
-        [SearchableEnum] public IngredientList ingredient;
-        public int amount = 1;
-    }
 
     [System.Serializable]
     public class Ingredient

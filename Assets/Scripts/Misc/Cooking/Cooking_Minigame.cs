@@ -70,10 +70,9 @@ public class Cooking_Minigame : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("Minigame_triggers")) // tag needs to be the same name as the triggers.
-        { 
+        if(collision.CompareTag("Minigame_Triggers")) // tag needs to be the same name as the triggers.
             SwitchDirection();
-        }
+
         if (collision.CompareTag("CookingGame_Marker")) // tag needs to be the same name as the Marker.
             HitMarker();
     }
@@ -115,6 +114,7 @@ public class Cooking_Minigame : MonoBehaviour
         if(successCounter != successCounterMax)
             panAnimator.SetTrigger("NextStage");
 
+        Debug.Log("MarkerHit SFX");
         AudioManager.instance.PlaySound(AudioManager.SoundList.ClankTriggered);
     }
 
@@ -124,20 +124,22 @@ public class Cooking_Minigame : MonoBehaviour
         ResetMinigame();
         GameMaster.instance.ShakeCameraTopDown(0.1f, 5f);
         AudioManager.instance.PlaySound(AudioManager.SoundList.PlayerHit);
+        Debug.Log("player missed SFX");
     }
 
     public void ResetMinigame()
     {
         successCounter = 0;
+        panAnimator.ResetTrigger("NextStage");
         panAnimator.SetTrigger("Failed");
     }
 
     private void CompletedMinigame()
     {
-        Debug.Log("Completed!");
         RemoveIngredientsFromInventory();
         InventoryController.instance.Add_ItemToInventory(currentRecipe.recipeFor_Item, 1);
         ResetMinigame();
+        Debug.Log("Completed SFX and or animation");
     }
 
     private void GetRandomKey()

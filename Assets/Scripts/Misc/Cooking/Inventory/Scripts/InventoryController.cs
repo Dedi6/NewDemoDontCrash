@@ -15,6 +15,9 @@ public class InventoryController : MonoBehaviour
     public RectTransform _playerInventory_Placement;    // UI position for when interacting with a storage
     private Vector3 original_RectPosition;
     public GameObject fridgeHolder, chestHolder, closetHolder;
+    [SerializeField]
+    private Transform fridgeButtonsHolder;
+    private UnityEngine.UI.Button[] _fridge_Buttons;
 
     public Item_Helper[] itemList;
     public static List<string> storage_List = new List<string>();
@@ -46,6 +49,8 @@ public class InventoryController : MonoBehaviour
         LoadPlayerInventory();
         original_RectPosition = GetComponent<RectTransform>().position;
         fridgeHolder.GetComponentInChildren<Inventory_Base>().LoadInventory();
+
+        SetFridgeButtons();
 
         InitiateStorageList();
     }
@@ -344,17 +349,41 @@ public class InventoryController : MonoBehaviour
     {
         Inventory_Base slotsBase = fridgeHolder.GetComponentInChildren<Inventory_Base>();
         string currentSaveString = slotsBase.savePath;
-        Debug.Log(selectedPage + "  v " + currentSaveString);
         GameSaveManager.instance.Save_Inventory(currentSaveString, slotsBase);   // saving current page
         slotsBase.ClearAllSlots();
 
         string newPagePath =
             currentSaveString.Substring(0, currentSaveString.Length - 1) + selectedPage.ToString();
 
-        Debug.Log(currentSaveString + " v " + newPagePath);
         slotsBase.savePath = newPagePath;
         GameSaveManager.instance.Load_Storage_Independent(newPagePath, slotsBase.slots);
+
+        Revert_FridgeButtons(selectedPage - 1);
     }
-    
+
+    void SetFridgeButtons()
+    {
+        _fridge_Buttons = new UnityEngine.UI.Button[5];
+
+        for (int i = 0; i < 5; i++)
+        {
+            _fridge_Buttons[i] = fridgeButtonsHolder.GetChild(i).GetComponent<UnityEngine.UI.Button>();
+        }
+    }
+
+    public void SetAllButtonsInteractable()
+    {
+        foreach (UnityEngine.UI.Button button in _fridge_Buttons)
+        {
+            button.interactable = true;
+        }
+    }
+
+    public void Revert_FridgeButtons(int buttonToSwitchOff)
+    {
+        SetAllButtonsInteractable();
+        fridgeButtonsHolder.GetChild(buttonToSwitchOff).GetComponent<UnityEngine.UI.Button>().interactable = false;
+    }
+
 }
 

@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 20085608}
   - component: {fileID: 20085607}
   m_Layer: 0
-  m_Name: RecipeDisplay
+  m_Name: Recipe Page
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -406,7 +406,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -5814,10 +5814,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781e4eaf8ba92d047b0f160c5bb5a284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemButton: {fileID: 0}
   item: {fileID: 11400000, guid: ca9b6a05ea0bba849b68677f09ff88e9, type: 2}
   amountOfItem: 10
-  itemName: 
 --- !u!61 &100596853
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6640,7 +6638,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -7403,10 +7401,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781e4eaf8ba92d047b0f160c5bb5a284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemButton: {fileID: 0}
   item: {fileID: 11400000, guid: ca9b6a05ea0bba849b68677f09ff88e9, type: 2}
   amountOfItem: 1
-  itemName: 
 --- !u!61 &221022418
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -17977,10 +17973,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781e4eaf8ba92d047b0f160c5bb5a284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemButton: {fileID: 0}
   item: {fileID: 11400000, guid: ca9b6a05ea0bba849b68677f09ff88e9, type: 2}
   amountOfItem: 1
-  itemName: 
 --- !u!61 &389817638
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -20406,10 +20400,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781e4eaf8ba92d047b0f160c5bb5a284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemButton: {fileID: 0}
   item: {fileID: 11400000, guid: 546c3444464e13e4d843de9c5e4e0582, type: 2}
   amountOfItem: 10
-  itemName: 
 --- !u!61 &592849876
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -20752,10 +20744,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781e4eaf8ba92d047b0f160c5bb5a284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemButton: {fileID: 0}
   item: {fileID: 11400000, guid: b0d25710a701012428a3e07a2bd94fff, type: 2}
   amountOfItem: 10
-  itemName: 
 --- !u!61 &623417007
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -20892,10 +20882,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781e4eaf8ba92d047b0f160c5bb5a284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemButton: {fileID: 0}
   item: {fileID: 11400000, guid: 130c0cfb2df3ac44387c2a3883906514, type: 2}
   amountOfItem: 10
-  itemName: 
 --- !u!61 &640140246
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -21551,8 +21539,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1159084398}
-        m_TargetAssemblyTypeName: CookingStation, Assembly-CSharp
+      - m_Target: {fileID: 1524054048}
+        m_TargetAssemblyTypeName: Cooking_Controller, Assembly-CSharp
         m_MethodName: InitializeFromButton
         m_Mode: 3
         m_Arguments:
@@ -21632,10 +21620,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781e4eaf8ba92d047b0f160c5bb5a284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemButton: {fileID: 0}
   item: {fileID: 11400000, guid: 8e7b181423a9a4f4dab416435c7c69de, type: 2}
   amountOfItem: 10
-  itemName: 
 --- !u!61 &754810412
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -22408,8 +22394,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1159084398}
-        m_TargetAssemblyTypeName: CookingStation, Assembly-CSharp
+      - m_Target: {fileID: 1524054048}
+        m_TargetAssemblyTypeName: Cooking_Controller, Assembly-CSharp
         m_MethodName: InitializeFromButton
         m_Mode: 3
         m_Arguments:
@@ -22523,7 +22509,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -22537,7 +22523,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 830209648}
   m_OnClick:
     m_PersistentCalls:
@@ -22826,10 +22812,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781e4eaf8ba92d047b0f160c5bb5a284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemButton: {fileID: 0}
   item: {fileID: 11400000, guid: ca9b6a05ea0bba849b68677f09ff88e9, type: 2}
   amountOfItem: 1
-  itemName: 
 --- !u!61 &856812045
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -23084,8 +23068,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1159084398}
-        m_TargetAssemblyTypeName: CookingStation, Assembly-CSharp
+      - m_Target: {fileID: 1524054048}
+        m_TargetAssemblyTypeName: Cooking_Controller, Assembly-CSharp
         m_MethodName: InitializeFromButton
         m_Mode: 3
         m_Arguments:
@@ -36237,7 +36221,7 @@ GameObject:
   - component: {fileID: 970756790}
   m_Layer: 5
   m_Name: Borders_Triggers
-  m_TagString: Minigame_triggers
+  m_TagString: Minigame_Triggers
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -36797,10 +36781,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781e4eaf8ba92d047b0f160c5bb5a284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemButton: {fileID: 0}
   item: {fileID: 11400000, guid: b0d25710a701012428a3e07a2bd94fff, type: 2}
   amountOfItem: 1
-  itemName: 
 --- !u!61 &994806993
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -36959,7 +36941,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -49768,7 +49750,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -50897,28 +50879,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 957eea3ad36d8f6419bdb040f66bc9cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  miniGame_Holder: {fileID: 1524054046}
-  miniGameArea: {fileID: 1826060095}
-  recipeSelector: {fileID: 1279299029}
-  recipePage: {fileID: 20085605}
-  cookButton: {fileID: 2091029600}
-  minigameScript: {fileID: 1954752631}
-  buttonsArray:
-  - {fileID: 1045351979}
-  - {fileID: 941484186}
-  - {fileID: 1885851118}
-  - {fileID: 1454988132}
-  ingredientDisplayArray:
-  - {fileID: 184693232}
-  - {fileID: 1061518064}
-  - {fileID: 1879345366}
-  - {fileID: 407748113}
-  - {fileID: 1017634412}
   recipeArray:
   - {fileID: 11400000, guid: 131114fbde989774f8cd2b2dc333d1a3, type: 2}
   - {fileID: 11400000, guid: 4d2a3e872e7809f4181d0e38e92706aa, type: 2}
   - {fileID: 11400000, guid: ce98b4c84f672d14fb6d75efb6052b26, type: 2}
   - {fileID: 11400000, guid: 9a898dc5bc77607409cab8518f09fc97, type: 2}
+  _cooking_Controller: {fileID: 1524054048}
 --- !u!212 &1159084399
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -51453,10 +51419,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781e4eaf8ba92d047b0f160c5bb5a284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemButton: {fileID: 0}
   item: {fileID: 11400000, guid: ca9b6a05ea0bba849b68677f09ff88e9, type: 2}
   amountOfItem: 1
-  itemName: 
 --- !u!61 &1173552202
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -54959,10 +54923,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781e4eaf8ba92d047b0f160c5bb5a284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemButton: {fileID: 0}
   item: {fileID: 11400000, guid: ca9b6a05ea0bba849b68677f09ff88e9, type: 2}
   amountOfItem: 10
-  itemName: 
 --- !u!61 &1510201628
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -55065,6 +55027,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1524054047}
+  - component: {fileID: 1524054048}
   m_Layer: 5
   m_Name: Cooking_Canvas
   m_TagString: Untagged
@@ -55094,6 +55057,34 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1524054048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1524054046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52b8112603ce994e94e85f278b687a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  miniGameArea: {fileID: 1826060095}
+  recipeSelector: {fileID: 1279299029}
+  recipePage: {fileID: 20085605}
+  cookButton: {fileID: 2091029600}
+  minigameScript: {fileID: 1954752631}
+  buttonsArray:
+  - {fileID: 1045351979}
+  - {fileID: 941484186}
+  - {fileID: 1885851118}
+  - {fileID: 1454988132}
+  ingredientDisplayArray:
+  - {fileID: 184693232}
+  - {fileID: 1061518064}
+  - {fileID: 1879345366}
+  - {fileID: 407748113}
+  - {fileID: 1017634412}
 --- !u!1001 &1532135063
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -59260,6 +59251,7 @@ MonoBehaviour:
   - name: Tofu Gimbap
     itemFor: 11
     baseItem: {fileID: 11400000, guid: 8d52106fec676ea489042822ebf01420, type: 2}
+  fridgeButtonsHolder: {fileID: 1199221999}
 --- !u!1 &1791427928
 GameObject:
   m_ObjectHideFlags: 0
@@ -65132,10 +65124,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781e4eaf8ba92d047b0f160c5bb5a284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemButton: {fileID: 0}
   item: {fileID: 11400000, guid: b0d25710a701012428a3e07a2bd94fff, type: 2}
   amountOfItem: 1
-  itemName: 
 --- !u!61 &1886846714
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -65260,10 +65250,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781e4eaf8ba92d047b0f160c5bb5a284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemButton: {fileID: 0}
   item: {fileID: 11400000, guid: ca9b6a05ea0bba849b68677f09ff88e9, type: 2}
   amountOfItem: 1
-  itemName: 
 --- !u!61 &1900479840
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -65540,10 +65528,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781e4eaf8ba92d047b0f160c5bb5a284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemButton: {fileID: 0}
   item: {fileID: 11400000, guid: ca9b6a05ea0bba849b68677f09ff88e9, type: 2}
   amountOfItem: 1
-  itemName: 
 --- !u!61 &1903125718
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -66637,7 +66623,7 @@ GameObject:
   - component: {fileID: 1954752635}
   - component: {fileID: 1954752636}
   m_Layer: 15
-  m_Name: Bar
+  m_Name: Bar - Cooking Minigame Script
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66968,10 +66954,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781e4eaf8ba92d047b0f160c5bb5a284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemButton: {fileID: 0}
   item: {fileID: 11400000, guid: b0d25710a701012428a3e07a2bd94fff, type: 2}
   amountOfItem: 1
-  itemName: 
 --- !u!61 &1965036880
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -67806,8 +67790,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1159084398}
-        m_TargetAssemblyTypeName: CookingStation, Assembly-CSharp
+      - m_Target: {fileID: 1524054048}
+        m_TargetAssemblyTypeName: Cooking_Controller, Assembly-CSharp
         m_MethodName: InitializeFromButton
         m_Mode: 3
         m_Arguments:
@@ -68233,10 +68217,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781e4eaf8ba92d047b0f160c5bb5a284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemButton: {fileID: 0}
   item: {fileID: 11400000, guid: ab55970cdeb0b464e946ec3ee810419b, type: 2}
   amountOfItem: 10
-  itemName: 
 --- !u!61 &2046786053
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -68361,10 +68343,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781e4eaf8ba92d047b0f160c5bb5a284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemButton: {fileID: 0}
   item: {fileID: 11400000, guid: ca9b6a05ea0bba849b68677f09ff88e9, type: 2}
   amountOfItem: 1
-  itemName: 
 --- !u!61 &2050325992
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -68750,8 +68730,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1159084398}
-        m_TargetAssemblyTypeName: CookingStation, Assembly-CSharp
+      - m_Target: {fileID: 1524054048}
+        m_TargetAssemblyTypeName: Cooking_Controller, Assembly-CSharp
         m_MethodName: TransitionToMinigame
         m_Mode: 1
         m_Arguments:
@@ -71264,7 +71244,6 @@ MonoBehaviour:
     path: /game_save/keybindings/joystick_binding_save.txt
   playerInventoryHolder: []
   skillsLoader: {fileID: 0}
-  inventoryController: {fileID: 1786048302}
   lastScene: 0
 --- !u!114 &5775251179994201666
 MonoBehaviour:

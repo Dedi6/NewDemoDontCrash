@@ -490,19 +490,25 @@ public class TopDownMovement : MonoBehaviour
 
     public void UseItem(Inventory_Item.Item item)
     {
+        Debug.Log("You can add item specific SFX here");
+
         switch(item)
         {
             case Inventory_Item.Item.Gimbap_Beef:
                 Debug.Log("used beef gimbap");
+                InventoryController.instance.Remove_Items(item, 1);
                 break;
             case Inventory_Item.Item.Gimbap_Pork:
                 Debug.Log("used pork gimbap");
+                InventoryController.instance.Remove_Items(item, 1);
                 break;
             case Inventory_Item.Item.Gimbap_Tofu:
                 Debug.Log("used Tofu gimbap");
+                InventoryController.instance.Remove_Items(item, 1);
                 break;
             case Inventory_Item.Item.Gimbap_Tuna:
                 Debug.Log("used Tuna gimbap");
+                InventoryController.instance.Remove_Items(item, 1);
                 break;
             case Inventory_Item.Item.Fishing_Rod:
                 Debug.Log("FISHHHHHHH");

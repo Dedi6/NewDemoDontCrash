@@ -56,7 +56,6 @@ public class MouseItemData : MonoBehaviour
     {
         Vector2 mousePosWorld = Camera.main.ScreenToWorldPoint(transform.position);
         Ray ray = Camera.main.ScreenPointToRay(transform.position);
-        RaycastHit2D hit_cast;
         // bool isHittingSomething = Physics.Raycast(ray, out hit_cast);
         RaycastHit2D isHittingSomething = Physics2D.Raycast(mousePosWorld, Vector3.forward);
         Debug.Log(ray.GetPoint(100));

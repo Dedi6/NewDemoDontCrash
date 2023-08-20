@@ -215,11 +215,6 @@ public class Slot : MonoBehaviour
         }
     }
 
-    private Inventory_Item.StorageSpace GetBaseStorageType()
-    {
-        return GetComponentInParent<Inventory_Base>().storageType;
-    }
-
     private void Handle_CtrlPressed()
     {
         int nextFreeSpot =
@@ -289,7 +284,7 @@ public class Slot : MonoBehaviour
     {
         if(currentItem == null || !currentItem.isItemUsable)
         {
-            // sound effect? nothing?
+            Debug.Log("SFX for can't use item?");
             return;
         }
 

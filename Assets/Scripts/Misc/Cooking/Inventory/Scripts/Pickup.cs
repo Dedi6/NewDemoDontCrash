@@ -4,17 +4,13 @@ using UnityEngine;
 
 public class Pickup : MonoBehaviour
 {
-    //private InventoryController inventory;
     private Slot[] inventory;
-    public GameObject itemButton;
     public Inventory_Item item;
     public int amountOfItem = 1;
 
-    public string itemName;
 
     void Start()
     {
-        // inventory = InventoryController.instance;
         inventory = InventoryController.instance.playerInventory.slots;
     }
     private void OnTriggerEnter2D(Collider2D other)
@@ -35,6 +31,7 @@ public class Pickup : MonoBehaviour
                 if (currentSlot.IsTheSameItem(item.item))
                 {
                     currentSlot.AddStack(this, amountOfItem);
+                    Debug.Log("can add SFX for picking up items");
                     return;
                 }
             }
@@ -45,6 +42,7 @@ public class Pickup : MonoBehaviour
             if (currentSlot.isFree)
             {
                 currentSlot.AddItemToSlot(this, amountOfItem, i);
+                Debug.Log("can add SFX for picking up items");
                 break;
             }
         }

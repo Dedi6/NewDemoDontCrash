@@ -331,7 +331,7 @@ public class GameSaveManager : MonoBehaviour
         }
     }
 
-    public void Load_Inventory_Storage(Storage_Interact storage, string path)
+    public void Load_Inventory_Storage(Storage_Interact storage, string path)   // might delete
     {
         string _pathOfInventory = Application.persistentDataPath + "/game_save/player_inventory/" + path + ".txt";
 
