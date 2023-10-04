@@ -15,6 +15,8 @@ public class MovementPlatformer : MonoBehaviour
     public Vector2 directionPressed;
     [HideInInspector]
     public float jumpMemory = 0.2f, groundedMemory = 0.2f, moveInput, moveInputVertical;
+    [SerializeField]
+    private float groundMemoryMax;
     public float fHorDmpBasic;
     public float fHorDmpStopping;
     public float fHorDmpTurning;
@@ -493,12 +495,12 @@ public class MovementPlatformer : MonoBehaviour
             if (isAirborn && cellO.HaveOrbs() && !IsNearGround())
             {
                 cellO.ReleaseLatest();
-                groundedMemory = 0.05f;
+                groundedMemory = groundMemoryMax;
             }
         }
         if (isGrounded)
         {
-            groundedMemory = 0.05f;
+            groundedMemory = groundMemoryMax;
             if (isAirborn)
             {
                 isAirborn = false;
@@ -527,7 +529,7 @@ public class MovementPlatformer : MonoBehaviour
         if(isGrounded)
         {
             isAirborn = false;
-            groundedMemory = 0.05f;
+            groundedMemory = groundMemoryMax;
             animator.SetBool("IsFalling", false);
             GetComponent<Footsteps>().PlayerLanded();
             CreateDust();
