@@ -37,7 +37,7 @@ TagManager:
   - PlayerSkills
   - BulletGoThrough
   - Hittable
-  - 
+  - DistortionEffect
   - 
   - 
   - black
@@ -72,4 +72,7 @@ TagManager:
     locked: 0
   - name: Tilemap
     uniqueID: 3976079329
+    locked: 0
+  - name: Distortion
+    uniqueID: 336649213
     locked: 0

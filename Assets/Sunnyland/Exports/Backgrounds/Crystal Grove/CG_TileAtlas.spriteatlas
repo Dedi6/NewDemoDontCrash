@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: CG_TileAtlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: 4c2b9fecdf5cd824ba44d0fd5789cc00, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: -201823600, guid: 4c2b9fecdf5cd824ba44d0fd5789cc00, type: 3}
+  - {fileID: -1356116199, guid: 4c2b9fecdf5cd824ba44d0fd5789cc00, type: 3}
+  - {fileID: -2031834293, guid: 4c2b9fecdf5cd824ba44d0fd5789cc00, type: 3}
+  - {fileID: 355255356, guid: 4c2b9fecdf5cd824ba44d0fd5789cc00, type: 3}
+  - {fileID: 1153445383, guid: 4c2b9fecdf5cd824ba44d0fd5789cc00, type: 3}
+  - {fileID: 2073693650, guid: 4c2b9fecdf5cd824ba44d0fd5789cc00, type: 3}
+  - {fileID: 1491140222, guid: 4c2b9fecdf5cd824ba44d0fd5789cc00, type: 3}
+  - {fileID: 1599674460, guid: 4c2b9fecdf5cd824ba44d0fd5789cc00, type: 3}
+  - {fileID: -2093007079, guid: 4c2b9fecdf5cd824ba44d0fd5789cc00, type: 3}
+  - {fileID: 325452518, guid: 4c2b9fecdf5cd824ba44d0fd5789cc00, type: 3}
+  - {fileID: 1426649427, guid: 4c2b9fecdf5cd824ba44d0fd5789cc00, type: 3}
+  - {fileID: -2081378048, guid: 4c2b9fecdf5cd824ba44d0fd5789cc00, type: 3}
+  - {fileID: 1039016512, guid: 4c2b9fecdf5cd824ba44d0fd5789cc00, type: 3}
+  - {fileID: 1970634218, guid: 4c2b9fecdf5cd824ba44d0fd5789cc00, type: 3}
+  - {fileID: 1209244797, guid: 4c2b9fecdf5cd824ba44d0fd5789cc00, type: 3}
+  - {fileID: 52872478, guid: 4c2b9fecdf5cd824ba44d0fd5789cc00, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - CG_Terrain_Tiles_13
+  - CG_Terrain_Tiles_12
+  - CG_Terrain_Tiles_11
+  - CG_Terrain_Tiles_10
+  - CG_Terrain_Tiles_15
+  - CG_Terrain_Tiles_14
+  - CG_Terrain_Tiles_8
+  - CG_Terrain_Tiles_9
+  - CG_Terrain_Tiles_0
+  - CG_Terrain_Tiles_1
+  - CG_Terrain_Tiles_2
+  - CG_Terrain_Tiles_3
+  - CG_Terrain_Tiles_4
+  - CG_Terrain_Tiles_5
+  - CG_Terrain_Tiles_6
+  - CG_Terrain_Tiles_7
+  m_RenderDataMap: {}
+  m_Tag: CG_TileAtlas
+  m_IsVariant: 0

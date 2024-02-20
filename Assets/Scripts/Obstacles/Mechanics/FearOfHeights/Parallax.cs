@@ -9,6 +9,8 @@ public class Parallax : MonoBehaviour
     private Transform cloudsMoving;
     [SerializeField]
     private float cloudsSpeed = 0.01f;
+    [SerializeField]
+    private CloudsHelper[] cloudsArray;
 
     private float textureUnitSize;
 
@@ -20,10 +22,19 @@ public class Parallax : MonoBehaviour
     {
         public Transform layer;
         public float parallaxDivider;
+        [HideInInspector]
         public Vector3 lastPos;
     }
 
-    // Start is called before the first frame update
+    [System.Serializable]
+    public class CloudsHelper
+    {
+        public Transform cloudsTransform;
+        public float cloudsSpeed;
+        [HideInInspector]
+        public float current_TextureUnitSize;
+    }
+
     void Start()
     {
         HandleCloudsData();
@@ -52,17 +63,25 @@ public class Parallax : MonoBehaviour
    
     private void CloudsMove()
     {
-        cloudsMoving.Translate(Vector3.left * cloudsSpeed * Time.deltaTime);
-        
-        if(transform.position.x - cloudsMoving.position.x >= textureUnitSize)
+        foreach (CloudsHelper currentClouds in cloudsArray)
         {
-            cloudsMoving.localPosition = new Vector3(cloudsMoving.localPosition.x + textureUnitSize, cloudsMoving.localPosition.y, cloudsMoving.localPosition.z);
+            currentClouds.cloudsTransform.Translate(Vector3.left * currentClouds.cloudsSpeed * Time.deltaTime);
+            
+            if (transform.position.x - currentClouds.cloudsTransform.position.x >= currentClouds.current_TextureUnitSize)
+            {
+                currentClouds.cloudsTransform.localPosition = new Vector3(currentClouds.cloudsTransform.localPosition.x + currentClouds.current_TextureUnitSize, currentClouds.cloudsTransform.localPosition.y, currentClouds.cloudsTransform.localPosition.z);
+            }
         }
+
     }
     private void HandleCloudsData()
     {
-        Sprite sprite = cloudsMoving.GetComponent<SpriteRenderer>().sprite;
-        Texture2D texture = sprite.texture;
-        textureUnitSize = (texture.width / sprite.pixelsPerUnit)*cloudsMoving.localScale.x;
+
+        foreach (CloudsHelper currentCloud in cloudsArray)
+        {
+            Sprite sprite = currentCloud.cloudsTransform.GetComponent<SpriteRenderer>().sprite;
+            Texture2D texture = sprite.texture;
+            currentCloud.current_TextureUnitSize = (texture.width / sprite.pixelsPerUnit) * currentCloud.cloudsTransform.localScale.x;
+        }
     }
 }
