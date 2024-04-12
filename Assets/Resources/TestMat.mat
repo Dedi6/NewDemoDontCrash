@@ -59,12 +59,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Cutoff: 0
     - _EnableExternalAlpha: 0
-    - _NoiseScale: 0.5
+    - _NoiseScale: 2.29
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DistortionPower: {r: 0.01, g: 0, b: 0, a: 0}
-    - _DistortionSpeed: {r: 5, g: 0, b: 0, a: 0}
+    - _DistortionPower: {r: 0.015, g: 0.005, b: 0, a: 0}
+    - _DistortionSpeed: {r: 2, g: 1, b: 0, a: 0}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

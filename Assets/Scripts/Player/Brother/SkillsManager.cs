@@ -98,11 +98,11 @@ public class SkillsManager : MonoBehaviour
             skillsUI.SetStartingSkillsButton();
             //GameSaveManager.instance.SavePLayerData();
         }
-        else
+      /*  else      I merged the Load Skills and Load Player
         {
             GameSaveManager.instance.LoadSkills();
             //GameSaveManager.instance.LoadSkills();
-        }
+        }*/
     }
 
     private bool IsFirstTimePlaying()

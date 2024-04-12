@@ -548,6 +548,10 @@ public class MovementPlatformer : MonoBehaviour
             CreateDust();
             audioManager.PlaySound(AudioManager.SoundList.PlayerJump);
             jumpedNow?.Invoke();
+
+            animator.SetTrigger("JumpTrigger");
+            animator.ResetTrigger("JumpTrigger");
+            animator.SetBool("IsFalling", false);
         }
     } 
 
@@ -627,6 +631,8 @@ public class MovementPlatformer : MonoBehaviour
 
     private IEnumerator DelayShoot()
     {
+        animator.SetTrigger("ShootOrb");
+
         yield return new WaitForSeconds(0.05f);
 
         if (shootMemoryTimer > 0 && !canTeleport && canShootTimer <= 0 && canShoot)

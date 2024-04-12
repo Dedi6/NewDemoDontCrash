@@ -76,3 +76,6 @@ TagManager:
   - name: Distortion
     uniqueID: 336649213
     locked: 0
+  - name: CameraSortingLayer
+    uniqueID: 2468532999
+    locked: 0

@@ -63,6 +63,12 @@ public class GameSaveManager : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+            LoadGame();
+    }
+
     public void ForceCreateFile()
     {
         Directory.CreateDirectory(Application.persistentDataPath + "/game_save");
@@ -85,10 +91,15 @@ public class GameSaveManager : MonoBehaviour
         }
         foreach (KeybindForPlatforms binding in arrayOfBindings)
         {
-            BinaryFormatter binaryF = new BinaryFormatter();
-            FileStream stream = File.Create(Application.persistentDataPath + binding.path);
-            var json = JsonUtility.ToJson(binding.keybindings);
-            binaryF.Serialize(stream, json);
+            string savePath = Application.persistentDataPath + binding.path;
+            var saveObject = binding.keybindings.Get_KeybindsDict();
+
+
+            FileStream stream = File.Create(savePath);
+            stream.Dispose();
+            var json = JsonConvert.SerializeObject(saveObject);
+            var ecnryptedJson = EncryptDecrypt(json);
+            File.WriteAllText(savePath, ecnryptedJson);
             stream.Close();
         }
         SavePLayerData();
@@ -112,21 +123,32 @@ public class GameSaveManager : MonoBehaviour
         
         foreach (KeybindForPlatforms binding in arrayOfBindings)
         {
-            BinaryFormatter binaryF = new BinaryFormatter();
-            FileStream stream = File.Create(Application.persistentDataPath + binding.path);
-            var json = JsonUtility.ToJson(binding.keybindings);
-            binaryF.Serialize(stream, json);
+
+            string savePath = Application.persistentDataPath + binding.path;
+            var saveObject = binding.keybindings.Get_KeybindsDict();
+
+
+            FileStream stream = File.Create(savePath);
+            stream.Dispose();
+            var json = JsonConvert.SerializeObject(saveObject);
+            var ecnryptedJson = EncryptDecrypt(json);
+            File.WriteAllText(savePath, ecnryptedJson);
             stream.Close();
+
         }
-       // SavePLayerData();
+        // SavePLayerData();
     }
 
     public void SavePLayerData()
     {
-        BinaryFormatter binaryF = new BinaryFormatter();
-        FileStream stream = File.Create(Application.persistentDataPath + "/game_save/playerData/playerData.txt");
-        PlayerData data = new PlayerData(skillsLoader.unlockedSkillsArray);
-        binaryF.Serialize(stream, data);
+        string savePath = Application.persistentDataPath + "/game_save/playerData/playerData.txt";
+        var saveObject = new PlayerData(skillsLoader.unlockedSkillsArray); ;
+
+        FileStream stream = File.Create(savePath);
+        stream.Dispose();
+        var json = JsonUtility.ToJson(saveObject);
+        var ecnryptedJson = EncryptDecrypt(json);
+        File.WriteAllText(savePath, ecnryptedJson);
         stream.Close();
     }
 
@@ -148,28 +170,26 @@ public class GameSaveManager : MonoBehaviour
         {
             Directory.CreateDirectory(Application.persistentDataPath + "/game_save/keybindings");
         }
-        BinaryFormatter bf = new BinaryFormatter();
         foreach (KeybindForPlatforms binding in arrayOfBindings)
         {
             if(File.Exists(Application.persistentDataPath + binding.path))
             {
-                FileStream file = File.Open(Application.persistentDataPath + binding.path, FileMode.Open);
-                JsonUtility.FromJsonOverwrite((string)bf.Deserialize(file), binding.keybindings);
-                file.Close();
+                string savePath = Application.persistentDataPath + binding.path;
+
+                FileStream stream = File.Open(savePath, FileMode.Open);
+                stream.Dispose();
+                string json = EncryptDecrypt(File.ReadAllText(savePath));
+                Dictionary<string, string> loaded_Data = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                stream.Close();
+             
+                binding.keybindings.Load_DictToBinds(loaded_Data);
             }
         }
-        if (File.Exists(Application.persistentDataPath + "/game_save/playerData/playerData.txt"))
-        {
-            FileStream file = File.Open(Application.persistentDataPath + "/game_save/playerData/playerData.txt", FileMode.Open);
-            PlayerData data = bf.Deserialize(file) as PlayerData;
-            //PlayerData data = JsonUtility.FromJsonOverwrite((string)bf.Deserialize(file), binding.keybindings);
-            file.Close();
-        }
-        LoadSkills();
+       
         LoadPlayer();
     }
 
-    public void LoadSkills()
+   /* public void LoadSkills()
     {
         PlayerData data = LoadPlayerData();
         
@@ -177,18 +197,26 @@ public class GameSaveManager : MonoBehaviour
         /*string[] d = new string[2];  //fix 1
         d[0] = "ThunderBolt";
         d[1] = "ThunderWave";
-        skillsLoader.LoadSkills("ThunderBolt", "ThunderBolt", d);*/
+        skillsLoader.LoadSkills("ThunderBolt", "ThunderBolt", d);
 
-        skillsLoader.LoadSkills(data.aSkillName, data.bSkillName, data.arrayOfSkills);
-    }
+      //  skillsLoader.LoadSkills(data.aSkillName, data.bSkillName, data.arrayOfSkills);
+    }*/
 
     public void LoadPlayer()
     {
         PlayerData data = LoadPlayerData();
+        skillsLoader.LoadSkills(data.aSkillName, data.bSkillName, data.arrayOfSkills);
+
         Vector2 point = new Vector2(data.savePointX, data.savePointY);
         GameMaster gm = GameMaster.instance;
         gm.savePointPosition = point;
         gm.TeleportPlayerToSave(point);
+
+
+        /*string[] d = new string[2];  //fix 1
+        d[0] = "ThunderBolt";
+        d[1] = "ThunderWave";
+        skillsLoader.LoadSkills("ThunderBolt", "ThunderBolt", d);*/
     }
 
     public int GetLastScene()
@@ -201,13 +229,13 @@ public class GameSaveManager : MonoBehaviour
     {
         if (File.Exists(Application.persistentDataPath + "/game_save/playerData/playerData.txt"))
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + "/game_save/playerData/playerData.txt", FileMode.Open);
+            string savePath = Application.persistentDataPath + "/game_save/playerData/playerData.txt";
 
-            PlayerData data = bf.Deserialize(file) as PlayerData;
-
-            file.Close();
-
+            FileStream stream = File.Open(savePath, FileMode.Open);
+            stream.Dispose();
+            string json = EncryptDecrypt(File.ReadAllText(savePath));
+            PlayerData data = JsonUtility.FromJson<PlayerData>(json);
+            stream.Close();
             return data;
         }
         else
@@ -273,8 +301,10 @@ public class GameSaveManager : MonoBehaviour
         stream.Close();
     }
 
-    private static string EncryptDecrypt(string data)
+    private static string EncryptDecrypt(string data)   // if i'll decide to encrypt the data
     {
+        return data;
+
         string result = "";
 
         for (int i = 0; i < data.Length; i++)

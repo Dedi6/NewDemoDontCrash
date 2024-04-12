@@ -17,7 +17,7 @@ public class LayerSwitcher : MonoBehaviour
     private Color colorClose, colorFar;
 
     [SerializeField]
-    private float height, speedFar, speedClose, jumpFar, jumpClose;
+    private float switchDelay, height, speedFar, speedClose, jumpFar, jumpClose;
 
     [SerializeField]
     private Transform[] roomsFar, roomsClose;
@@ -41,21 +41,22 @@ public class LayerSwitcher : MonoBehaviour
         }
     }
 
-    /*   private void Update()
+   /*    private void Update()
        {
-           if (Input.GetKeyDown(KeyCode.L))
+          if (Input.GetKeyDown(KeyCode.L))
                SwitchLayer();
+
        }*/
 
     private IEnumerator StartSwitching()
     {
         MovementPlatformer playerScript = player.GetComponent<MovementPlatformer>();
-        StartCoroutine(playerScript.SwitchStateIgnore(0.2f));
-        StartCoroutine(playerScript.PauseMovement(0.2f));
+        StartCoroutine(playerScript.SwitchStateIgnore(switchDelay));
+        StartCoroutine(playerScript.PauseMovement(switchDelay));
         player.GetComponent<Animator>().SetTrigger("Heal");
         Vector2 playerPos = player.transform.position;
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(switchDelay);
 
         HandleSwitchFX(playerPos);
 

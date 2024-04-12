@@ -87,5 +87,40 @@ public class Keybindings : ScriptableObject
         controllerKeys.Add("JoystickButton13", "PadPress");
     }
 
-   
+    public Dictionary<string, string> Get_KeybindsDict()
+    {
+        Dictionary<string, string> _dict = new Dictionary<string, string>();
+
+        for (int i = 0; i < arrayOfKeys.Length; i++)
+        {
+            string keyfor_Enum = arrayOfKeys[i].KeyFor.ToString();
+            string binding_Enum = arrayOfKeys[i].keyBinding.ToString();
+
+            _dict.Add(keyfor_Enum, binding_Enum);
+        }
+
+        return _dict;
+    }
+
+    public void Load_DictToBinds(Dictionary<string, string> _dict)
+    {
+        Debug.Log(_dict.Count);
+      //  arrayOfKeys = new KeysArray[_dict.Count];
+
+        for (int i = 0; i < arrayOfKeys.Length; i++)
+        {
+        }
+        int pointer = 0;
+        foreach (var Keys in _dict)
+        {
+
+            KeyList binding_Key = (KeyList)System.Enum.Parse(typeof(KeyList), Keys.Key);
+            KeyCode keyfor_Value = (KeyCode)System.Enum.Parse(typeof(KeyCode), Keys.Value);
+
+            arrayOfKeys[pointer].KeyFor = binding_Key;
+            arrayOfKeys[pointer].keyBinding = keyfor_Value;
+
+            pointer++;
+        }
+    }
 }

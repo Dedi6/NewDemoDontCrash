@@ -14,28 +14,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arrayOfKeys:
   - KeyFor: 0
-    keyBinding: 99
-  - KeyFor: 1
-    keyBinding: 122
-  - KeyFor: 2
-    keyBinding: 120
-  - KeyFor: 3
-    keyBinding: 306
-  - KeyFor: 4
-    keyBinding: 115
-  - KeyFor: 5
-    keyBinding: 100
-  - KeyFor: 6
-    keyBinding: 107
-  - KeyFor: 7
-    keyBinding: 27
-  - KeyFor: 12
-    keyBinding: 97
-  - KeyFor: 8
-    keyBinding: 273
-  - KeyFor: 9
-    keyBinding: 274
-  - KeyFor: 11
+    keyBinding: 283
+  - KeyFor: 0
+    keyBinding: 268
+  - KeyFor: 0
+    keyBinding: 271
+  - KeyFor: 0
     keyBinding: 275
-  - KeyFor: 10
-    keyBinding: 276
+  - KeyFor: 0
+    keyBinding: 280
+  - KeyFor: 0
+    keyBinding: 282
+  - KeyFor: 0
+    keyBinding: 286
+  - KeyFor: 0
+    keyBinding: 286
+  - KeyFor: 0
+    keyBinding: 289
+  - KeyFor: 0
+    keyBinding: 289
+  - KeyFor: 0
+    keyBinding: 291
+  - KeyFor: 0
+    keyBinding: 291
+  - KeyFor: 0
+    keyBinding: 292

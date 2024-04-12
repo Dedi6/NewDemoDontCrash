@@ -8,8 +8,12 @@ public class Footsteps : MonoBehaviour
     public Transform footstepPosition;
     private float footstepTime = 0.1f;
     public float stepsPerT;
-    AudioManager.SoundList currentSound;
+    private AudioManager.SoundList currentSound_Walking, currentSound_Landing;
     private AudioManager audioManager;
+
+    [SerializeField]
+    private LayerMask groundLayerMask;
+
 
     void Start()
     {
@@ -30,37 +34,42 @@ public class Footsteps : MonoBehaviour
    
     private void checkGroundType()
     {
-        TileTerrain currentTerrain = currentTileMap.GetTile(currentTileMap.WorldToCell(footstepPosition.position)) as TileTerrain;
-        if (currentTerrain != null)
+        TileTerrain.TerrainList current_Type = TileTerrain.TerrainList.Stone;
+
+        Collider2D platform = Physics2D.OverlapCircle(footstepPosition.position, 0.1f, groundLayerMask);
+        if (platform == null)
+            return;
+
+        if(!platform.gameObject.Equals(currentTileMap.gameObject))
         {
-            switch (currentTerrain.TerrainType)
+            if(platform.TryGetComponent(out Set_StepAudio audioData))
             {
-                case TileTerrain.TerrainList.Grass:
-                    //gm.GetComponent<AudioManager>().PlaySound(AudioManager.SoundList.StepGrass);
-                    currentSound = AudioManager.SoundList.StepGrass;
-                    break;
-                case TileTerrain.TerrainList.Stone:
-                    currentSound = AudioManager.SoundList.StepStone;
-                    break;
-                case TileTerrain.TerrainList.Wood:
-                    break;
+                current_Type = audioData.GetTerrainType();
             }
-            audioManager.PlaySound(currentSound);
         }
-        else
-            audioManager.PlaySound(AudioManager.SoundList.StepStone);
-            //audioManager.PlaySound(currentSound);
+        else // is on tilemap
+        {
+            TileTerrain currentTerrain = currentTileMap.GetTile(currentTileMap.WorldToCell(footstepPosition.position)) as TileTerrain;
+            if (currentTerrain != null)
+                current_Type = currentTerrain.TerrainType;
+        }
 
-        // will play the landing sound if it's the last sound it got. Should be an easy fix 
+        switch (current_Type)
+        {
+            case TileTerrain.TerrainList.Grass:
+                currentSound_Walking = AudioManager.SoundList.StepGrass;
+                break;
+            case TileTerrain.TerrainList.Stone:
+                currentSound_Walking = AudioManager.SoundList.StepStone;
+                break;
+            case TileTerrain.TerrainList.Wood:
+                break;
+        }
+
+        audioManager.PlaySound(currentSound_Walking);
     }
 
-    public void SetCurrentSound(AudioManager.SoundList newSound) // use this for the fix later to set every steppable object manually
-    {
-        currentSound = newSound;
-    }
-
-
-    public void PlayerLanded()
+    void TomarkinTest()
     {
         TileTerrain currentTerrain = currentTileMap.GetTile(currentTileMap.WorldToCell(footstepPosition.position)) as TileTerrain;
         if (currentTerrain != null)
@@ -68,23 +77,65 @@ public class Footsteps : MonoBehaviour
             switch (currentTerrain.TerrainType)
             {
                 case TileTerrain.TerrainList.Grass:
-                 //   gm.GetComponent<AudioManager>().PlaySound(AudioManager.SoundList.LandGrass);
-                    currentSound = AudioManager.SoundList.LandGrass;
+                    //   gm.GetComponent<AudioManager>().PlaySound(AudioManager.SoundList.LandGrass);
+                    currentSound_Walking = AudioManager.SoundList.StepGrass;
                     break;
                 case TileTerrain.TerrainList.Stone:
-               //     gm.GetComponent<AudioManager>().PlaySound(AudioManager.SoundList.LandStone);
-                    currentSound = AudioManager.SoundList.LandStone;
+                    //     gm.GetComponent<AudioManager>().PlaySound(AudioManager.SoundList.LandStone);
+                    currentSound_Walking = AudioManager.SoundList.StepStone;
                     break;
                 case TileTerrain.TerrainList.Wood:
                     //  gm.GetComponent<AudioManager>().PlaySound(AudioManager.SoundList.LandGrass);
                     break;
             }
-            audioManager.PlaySound(currentSound);
+            audioManager.PlaySound(currentSound_Walking);
         }
         else
-            audioManager.PlaySound(AudioManager.SoundList.LandStone);
-            //audioManager.PlaySound(currentSound);
+            audioManager.PlaySound(currentSound_Walking);
+    }
 
+    public void SetCurrentSound(AudioManager.SoundList newSound_Walking, AudioManager.SoundList newSound_Landing) // use this for the fix later to set every steppable object manually
+    {
+        currentSound_Walking = newSound_Walking;
+    }
+
+
+    public void PlayerLanded()
+    {
+        TileTerrain.TerrainList current_Type = TileTerrain.TerrainList.Stone;
+
+        Collider2D platform = Physics2D.OverlapCircle(footstepPosition.position, 0.1f, groundLayerMask);
+        if (platform == null)
+            return;
+
+        if (!platform.gameObject.Equals(currentTileMap.gameObject))
+        {
+            if (platform.TryGetComponent(out Set_StepAudio audioData))
+            {
+                current_Type = audioData.GetTerrainType();
+            }
+        }
+        else // is on tilemap
+        {
+            TileTerrain currentTerrain = currentTileMap.GetTile(currentTileMap.WorldToCell(footstepPosition.position)) as TileTerrain;
+            if (currentTerrain != null)
+                current_Type = currentTerrain.TerrainType;
+        }
+
+        switch (current_Type)
+        {
+            case TileTerrain.TerrainList.Grass:
+                currentSound_Landing = AudioManager.SoundList.LandGrass;
+                break;
+            case TileTerrain.TerrainList.Stone:
+                currentSound_Landing = AudioManager.SoundList.LandStone;
+                break;
+            case TileTerrain.TerrainList.Wood:
+                break;
+        }
+
+        audioManager.PlaySound(currentSound_Landing);
     }
 
 }
+

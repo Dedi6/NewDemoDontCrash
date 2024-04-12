@@ -56,6 +56,7 @@ MonoBehaviour:
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
+  m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
@@ -151,6 +152,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2123265115202541854}
   - component: {fileID: 2123265115202541848}
+  - component: {fileID: 7832565202364079892}
   m_Layer: 8
   m_Name: SaveRock
   m_TagString: Untagged
@@ -209,6 +211,19 @@ PolygonCollider2D:
       - {x: 3.531128, y: -0.6524658}
       - {x: 1.8473511, y: 0.4799347}
       - {x: 0.9571533, y: 1.8889618}
+--- !u!114 &7832565202364079892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2123265115202541850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fda625ae06e0fd945929d395ddc87245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrainType: 2
 --- !u!1 &7768553342263661552
 GameObject:
   m_ObjectHideFlags: 0
