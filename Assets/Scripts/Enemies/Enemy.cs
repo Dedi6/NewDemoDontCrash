@@ -266,4 +266,9 @@ public class Enemy : MonoBehaviour
         //enemy.constraints = RigidbodyConstraints2D.FreezeAll
     }
 
+    public void SetHpMax()
+    {
+        currentHealth = maxHealth;
+    }
+
 }

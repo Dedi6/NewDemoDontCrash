@@ -248,6 +248,7 @@ public class RedDrake : MonoBehaviour, ISFXResetable, IKnockbackable
         state = State.Dead;
         StopAllCoroutines();
         animator.speed = 1;
+        animator.Play("RedDrake_Dead");
         CancelInvoke();
     }
     void OnEnable()

@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class FixedJump : MonoBehaviour
 {
-    public float fallMultiplayer = 3f;
-    public float lowJumpMultiplayer = 2.5f;
-    
+    [SerializeField]
+    private float fallMultiplayer = 3f, lowJumpMultiplayer = 2.5f;
+    private float lowJumpBase;
+
     Rigidbody2D rb;
 
-    void Awake()
+    void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        lowJumpBase = lowJumpMultiplayer;
     }
 
     void FixedUpdate()
@@ -25,5 +27,15 @@ public class FixedJump : MonoBehaviour
             rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplayer - 1) * Time.deltaTime;
             //rb.GetComponent<MovementPlatformer>().animator.SetBool("IsJumping", true);
         }
+    }
+
+    public void Set_Multiply_Equal()
+    {
+        lowJumpMultiplayer = fallMultiplayer;
+    }
+
+    public void ResetMultiplayer()
+    {
+        lowJumpMultiplayer = lowJumpBase;
     }
 }

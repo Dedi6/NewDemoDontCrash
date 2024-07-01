@@ -66,6 +66,7 @@ public class PauseMenu : MonoBehaviour
         Cursor.visible = false;
         AudioListener.pause = false;
         AudioManager.instance.ClosedPauseMenu();
+       // GameMaster.instance.playerInstance.GetComponent<MovementPlatformer>().input try get component
     }
 
     void Pause(GameObject UIElement)

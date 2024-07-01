@@ -16,6 +16,7 @@ public class GameMaster : MonoBehaviour
     [HideInInspector]
     public GameObject brotherInstance;
 
+
     void Awake()
     {
         if (instance == null)
@@ -39,6 +40,7 @@ public class GameMaster : MonoBehaviour
             StartCoroutine(GameSaveManager.instance.LoadGameAfterDelay(0.2f));
             PlayerPrefs.DeleteKey("LoadPlayer");
         }
+
     }
 
     public void UpdateSkillsName(string a, string b) { aSkillString = a; bSkillString = b;}

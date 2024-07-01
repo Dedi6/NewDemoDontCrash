@@ -27,6 +27,9 @@ public class MovementPlatformer : MonoBehaviour
     [SerializeField]
     private float groundStuckCheckHeight;
 
+    private Footsteps footsteps_Script;
+    private FixedJump fixJump_Script;
+
 
     private bool facingRight = true;
     //[HideInInspector]
@@ -158,6 +161,7 @@ public class MovementPlatformer : MonoBehaviour
     {
         CashComponents();   // get all the components ready.
 
+      //  gm.GetComponent<GameSaveManager>().LoadGame();
         gm.lastCheckPointPosition = transform.position; // for testing :D
         //RespawnAtSavePoint();          // active when building
         //  delete when building!!!!
@@ -173,6 +177,8 @@ public class MovementPlatformer : MonoBehaviour
         input = InputManager.instance;
         manaBar = GetComponent<ManaBar>();
         currentRoom = GameMaster.instance.firstRoom;
+        footsteps_Script = GetComponent<Footsteps>();
+        fixJump_Script = GetComponent<FixedJump>();
 
         orbType = OrbType.Normal;
         defaultOrb = PrefabManager.instance.defaultBulletPrefab;
@@ -401,7 +407,8 @@ public class MovementPlatformer : MonoBehaviour
     {
         if (rb.velocity.y > 0 && !isGrounded && atkAnimationStallTimer <= 0)
             animator.SetBool("IsJumping", true);
-        else if (rb.velocity.y < 0 && !isGrounded && atkAnimationStallTimer <= 0)
+        //else if (rb.velocity.y < 0 && !isGrounded && atkAnimationStallTimer <= 0) // i changed it to stall the animation while the player can still jump
+        else if (rb.velocity.y < 0 && groundedMemory <= 0 && atkAnimationStallTimer <= 0)
             animator.SetBool("IsFalling", true);
         else if (rb.velocity.y == 0)
             animator.SetBool("IsJumping", false);
@@ -417,7 +424,7 @@ public class MovementPlatformer : MonoBehaviour
         else if (facingRight == true && moveInput < 0 && atkAnimationStallTimer <= 0)
             Flip();
     }
-    void Flip()
+    public void Flip()
     {
         if (!thrustHappening)
         {
@@ -496,19 +503,17 @@ public class MovementPlatformer : MonoBehaviour
             {
                 cellO.ReleaseLatest();
                 groundedMemory = groundMemoryMax;
+                Vector2 vfxPos = new Vector2(transform.position.x, transform.position.y - 1f);
+                PrefabManager.instance.PlayVFX(PrefabManager.ListOfVFX.VFX_Jumpstone, vfxPos);
+                fixJump_Script.Set_Multiply_Equal();
             }
         }
         if (isGrounded)
         {
             groundedMemory = groundMemoryMax;
             if (isAirborn)
-            {
-                isAirborn = false;
-                animator.SetBool("IsFalling", false);
-                GetComponent<Footsteps>().PlayerLanded();
-                CreateDust();
-                OnLandEvent.Invoke();
-            }
+                LandedNow();
+
         }
         else if (!isGrounded)
         {
@@ -528,13 +533,19 @@ public class MovementPlatformer : MonoBehaviour
     {
         if(isGrounded)
         {
-            isAirborn = false;
             groundedMemory = groundMemoryMax;
-            animator.SetBool("IsFalling", false);
-            GetComponent<Footsteps>().PlayerLanded();
-            CreateDust();
-            OnLandEvent.Invoke();
+            LandedNow();
         }
+    }
+
+    void LandedNow()
+    {
+        isAirborn = false;
+        animator.SetBool("IsFalling", false);
+        footsteps_Script.PlayerLanded();
+        CreateDust();
+        OnLandEvent.Invoke();
+        fixJump_Script.ResetMultiplayer();
     }
 
     public void JumpNow()  // the action of jumping
@@ -1304,7 +1315,7 @@ public class MovementPlatformer : MonoBehaviour
         state = State.Normal;
     }
 
-    void ResetAxis()
+    public void ResetAxis()
     {
         moveInputVertical = 0;
         moveInput = 0;
@@ -1342,7 +1353,7 @@ public class MovementPlatformer : MonoBehaviour
             if(health.health > 1)
                 StartCoroutine(RespawnAtCheckpoint(0.8f));
             health.DealDamage(1);
-            GameMaster.instance.brotherInstance.GetComponent<Follow>().PlayerRespawned();
+            GameMaster.instance.brotherInstance.GetComponent<Theo_Follow>().PlayerRespawned();
         }
     }
 

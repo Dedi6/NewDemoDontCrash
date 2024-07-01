@@ -10,11 +10,11 @@ public class ThunderWaveSkill : MonoBehaviour
     private Vector2 thunderSpawnPos;
     public GameObject thunderPrefab;
     private bool facingRight, finishedAnimation, finishedWave;
-    private Follow brotherScript;
+    private Theo_Follow brotherScript;
 
     private void Start()
     {
-        brotherScript = GameObject.FindGameObjectWithTag("Brother").GetComponent<Follow>();
+        brotherScript = GameObject.FindGameObjectWithTag("Brother").GetComponent<Theo_Follow>();
         facingRight = SetFacingRightBool();
         SetOffset();
         if (facingRight)

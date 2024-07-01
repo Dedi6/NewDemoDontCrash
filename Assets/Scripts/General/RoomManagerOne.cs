@@ -63,17 +63,23 @@ public class RoomManagerOne : MonoBehaviour
             GameMaster.instance.currentRoom = gameObject;
             PrefabManager.instance.roomNumber.GetComponent<UnityEngine.UI.Text>().text = roomNumber.ToString();
         }
+
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
+        if (other.CompareTag("Untagged"))
+            return;
+
         if (other.CompareTag("Player") && !other.isTrigger)
         {
             virtualCam.SetActive(false);
             corou = StartCoroutine(FreezeGame(freezeWhenSwitchingRoomTime));
             CellOrganizer.instance.ReleaseAll();
+            return;
         }
-        else
+        
+        if(other.CompareTag("Orb_Tp"))
         {
             bullet = other.gameObject;
 
@@ -81,6 +87,14 @@ public class RoomManagerOne : MonoBehaviour
                 b.SlowBullet(2f);
             else if(other.TryGetComponent(out BulletGhost bG))
                 bG.DestroyBulletAndReset();
+
+            return;
+        }
+
+        if (other.CompareTag("EnemyDead"))
+        {
+            other.gameObject.SetActive(false);
+            return;
         }
     }
 

@@ -362,10 +362,21 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
 
     private void Dash()
     {
-        enemy.velocity = dashDir * dashSpeed * dashSpeedMultiplier;
+        float passedPlayerAddSpeed = Dash_DidPassPlayer_Multiplayer();
+
+        enemy.velocity = dashDir * dashSpeed * dashSpeedMultiplier * passedPlayerAddSpeed;
 
         if (isDashing && Vector2.Distance(enemy.transform.localPosition, dashEndPos) < 2f)
             StartCoroutine(StopDash());
+    }
+
+    private float Dash_DidPassPlayer_Multiplayer()
+    {
+
+        bool isOnThePlayersRight = transform.position.x > player.transform.position.x ? true : false;
+        bool dashingRight = dashDir == Vector2.right ? true : false;
+
+        return isOnThePlayersRight == dashingRight ? 1.5f : 1f;
     }
 
     public void ActivateDashBool()
@@ -720,6 +731,7 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
 
     public void StartFight()
     {
+        GetComponent<Enemy>().SetHpMax();
         StartCoroutine(StartingQuake());
         state = State.Normal;
     }
@@ -1070,7 +1082,7 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
 
     public void HandlePhases(float hp)
     {
-        if (state == State.Attack) return;
+        if (state == State.Attack || state == State.Waiting) return;
 
         if (hp < phaseTwoHp && currentPhase == 1)
         {

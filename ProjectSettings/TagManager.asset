@@ -12,6 +12,7 @@ TagManager:
   - CannonBall
   - CookingGame_Marker
   - Minigame_Triggers
+  - Orb_Tp
   layers:
   - Default
   - TransparentFX

@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6631028446786895952}
   - component: {fileID: 6631028446786895953}
   - component: {fileID: 6631028446786895954}
-  - component: {fileID: 6631028446786895957}
   - component: {fileID: 6631028446786895956}
   - component: {fileID: 1626548000}
   - component: {fileID: 1524437723087969006}
@@ -122,32 +121,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d261078c1d4055488d016275b066295, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  closeRadius: 5
   speedWhenClose: 5
   speedWhenFar: 12
   speedWhenSkill: 30
   facingRight: 0
   playerFacingRight: 0
   target: {fileID: 0}
-  crystal: {fileID: 0}
+  healCrystal_Prefab: {fileID: 9208722209829391289, guid: 56555b02c25edb4459646d692212a7d5,
+    type: 3}
   animator: {fileID: 6631028446786895953}
   currentSkillPrefab: 0
   skillDirection: {x: 0, y: 0}
---- !u!58 &6631028446786895957
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6631028446786895982}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.48598862, y: 0}
-  serializedVersion: 2
-  m_Radius: 4.9859734
 --- !u!50 &6631028446786895956
 Rigidbody2D:
   serializedVersion: 4

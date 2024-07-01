@@ -84,6 +84,8 @@ public class InputManager : MonoBehaviour
         {
             keybindings = keyboardKeybinds;
         }
+
+        GameSaveManager.instance.Load_Keybinds();
         HandleKeyWords();
     }
 

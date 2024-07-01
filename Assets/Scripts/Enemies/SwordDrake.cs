@@ -262,8 +262,10 @@ public class SwordDrake : MonoBehaviour, ISFXResetable, IKnockbackable
     public void SetStateDead()
     {
         state = State.Dead;
+        animator.Play("SwordDrake_Dead");
         StopCoroutine(attackCorou);
-        if (animator.speed != 1) animator.speed = 1;
+        if (animator.speed != 1)
+            animator.speed = 1;
     }
 
     public void DisableOtherMovement()

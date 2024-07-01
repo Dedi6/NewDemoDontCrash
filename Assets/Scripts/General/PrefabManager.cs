@@ -53,6 +53,7 @@ public class PrefabManager : MonoBehaviour
         Tp_Switch_close,
         PlayerSkill_CannonBall,
         PlayerSkill_CannonBall_Shoot,
+        VFX_Jumpstone,
     }
 
     public enum ListOfSprites

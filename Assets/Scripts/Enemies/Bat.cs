@@ -184,6 +184,7 @@ public class Bat : MonoBehaviour, ISFXResetable, IKnockbackable
 
     public void ResetSFXCues()
     {
+        transform.position = originalPos;
         enemy.gravityScale = 0f;
         InvokeRepeating("StateHandler", 0, 0.2f);
         state = State.Normal;

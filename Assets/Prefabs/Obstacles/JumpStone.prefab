@@ -55,7 +55,7 @@ MonoBehaviour:
   radiusClose: 3
   speedOffset: 0.5
   tilemap: {fileID: 0}
-  deactivatedColor: {r: 0.6784314, g: 0.6784314, b: 0.6784314, a: 1}
+  deactivatedColor: {r: 0.3584906, g: 0.3584906, b: 0.3584906, a: 1}
   isOnFearOfHeights: 0
   isOnFar: 0
   layerSwitcher: {fileID: 0}
@@ -126,7 +126,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0.061222076, y: -0.060000002}
   serializedVersion: 2
-  m_Radius: 0.40871048
+  m_Radius: 0.9
 --- !u!114 &3213762324096024077
 MonoBehaviour:
   m_ObjectHideFlags: 0

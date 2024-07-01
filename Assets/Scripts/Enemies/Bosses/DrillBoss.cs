@@ -107,13 +107,6 @@ public class DrillBoss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRespa
             HandleCooldown();
         }
 
-        if(Input.GetKeyDown(KeyCode.U))
-            audio_M.StartTransitionCoroutine(AudioManager.SoundList.DrillBoss_bg_Start, AudioManager.SoundList.DrillBoss_bg_loop, 10f);
-        if (Input.GetKeyDown(KeyCode.J))
-            audio_M.FadeOutCurrent(3f);
-        if (Input.GetKeyDown(KeyCode.M))
-            audio_M.PlayTheme(AudioManager.SoundList.DrillBoss_bg_Start, 3f);
-
         HandleEnemyClassObjects();
     }
 
@@ -418,12 +411,16 @@ public class DrillBoss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRespa
 
         yield return new WaitForSeconds(1.5f);
 
+        ResetAfterDrill();
+    }
+
+    void ResetAfterDrill()
+    {
         state = State.Normal;
         cooldownTimer = 2f; // drillDownTimer
         HandleDrillStopValues();
 
-       // if (currentPhase == 2)
-            ReturnToHighpoint();
+        ReturnToHighpoint();
     }
 
     void ReturnToHighpoint()
@@ -505,14 +502,14 @@ public class DrillBoss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRespa
         enemy.transform.position = new Vector2(specialMovePos.position.x, specialMovePos.position.y + 10f);
         MoveSetUp(specialMovePos.localPosition, true);
 
-
+        
         yield return new WaitForSeconds(10f);
 
         GetComponent<Enemy>().enemyDead();
         animator.SetBool("IsDead", true);
         drillParticles.SetActive(false);
         GameMaster.instance.StopCameraShake();
-        AudioManager.instance.PlayTheme(AudioManager.SoundList.DrillBoss_bg_ending, 1f);
+        audio_M.PlayTheme(AudioManager.SoundList.DrillBoss_bg_ending, 1f);
 
         yield return new WaitForSeconds(1f);
 
@@ -623,7 +620,7 @@ public class DrillBoss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRespa
         animator.speed = 1;
     }
 
-    public void HandlePhases(float hp)
+    public void HandlePhases(float hp) // boss hit 
     {
         //DodgeStart();
         if (state == State.Waiting)
@@ -640,6 +637,20 @@ public class DrillBoss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRespa
             isChangingPhase = true;
             cooldownTimer = 2f;
             GetComponent<Enemy>().currentHealth = 1000;
+        }
+
+        if (state == State.Stunned)
+            DodgeStart();
+    }
+
+    void DodgeStart()
+    {
+        GetComponent<Enemy>().currentHealth += 15;
+        int i = Random.Range(1, 11); // 1 - 10.
+        if (i < 5)
+        {
+            StopCoroutine(stopDrillCoroutine);
+            ResetAfterDrill();
         }
     }
 

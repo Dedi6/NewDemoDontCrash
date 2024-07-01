@@ -104,7 +104,6 @@ public class Keybindings : ScriptableObject
 
     public void Load_DictToBinds(Dictionary<string, string> _dict)
     {
-        Debug.Log(_dict.Count);
       //  arrayOfKeys = new KeysArray[_dict.Count];
 
         for (int i = 0; i < arrayOfKeys.Length; i++)

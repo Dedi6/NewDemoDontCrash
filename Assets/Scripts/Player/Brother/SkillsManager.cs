@@ -13,13 +13,13 @@ public class SkillsManager : MonoBehaviour
     private int manaASkill, manaBSkill;
     public SkillsUI skillsUI;
     public GameObject player, brother;
-    private Follow brotherScript;
+    private Theo_Follow brotherScript;
     private MovementPlatformer playerScript;
     [HideInInspector]
     public bool isUsingSkill = false;
     void Start()
     {
-        brotherScript = GameMaster.instance.brotherInstance.GetComponent<Follow>();
+        brotherScript = GameMaster.instance.brotherInstance.GetComponent<Theo_Follow>();
         playerScript = GameMaster.instance.playerInstance.GetComponent<MovementPlatformer>();
         playerSkills = new PlayerSkills();
         playerSkills.brotherSkills = brotherScript;

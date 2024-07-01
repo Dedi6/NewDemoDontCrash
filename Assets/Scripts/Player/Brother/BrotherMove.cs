@@ -5,7 +5,7 @@ using UnityEngine;
 public class BrotherMove : MonoBehaviour
 {
     private bool isActive, usingKeyboard;
-    private Follow mainScript;
+    private Theo_Follow mainScript;
     private Cinemachine.CinemachineVirtualCamera currentCam;
     private MovementPlatformer player;
     [SerializeField]
@@ -17,7 +17,7 @@ public class BrotherMove : MonoBehaviour
 
     void Start()
     {
-        mainScript = GetComponent<Follow>();
+        mainScript = GetComponent<Theo_Follow>();
         GameMaster gm = GameMaster.instance;
         player = gm.playerInstance.GetComponent<MovementPlatformer>();
         moveSpeed = mainScript.GetCurrentSpeed();

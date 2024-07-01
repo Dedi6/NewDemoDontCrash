@@ -7,7 +7,7 @@ public class PlayerSkills
 {
     public Dictionary<string, HotKeyAbility> skills;
     public List<HotKeyAbility> abilityList;
-    public Follow brotherSkills;
+    public Theo_Follow brotherSkills;
     public SkillsManager skillsManager;
     public MovementPlatformer playerScript;
    

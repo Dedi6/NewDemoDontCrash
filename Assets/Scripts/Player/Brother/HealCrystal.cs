@@ -23,7 +23,8 @@ public class HealCrystal : MonoBehaviour
     public void DestroyCrystal()
     {
         animator.SetTrigger("Destroy");
-        GameMaster.instance.playerInstance.GetComponent<Health>().health += 4;
+        GameMaster _gm = GameMaster.instance;
+        _gm.playerInstance.GetComponent<Health>().health += 4;
         AudioManager.instance.PlaySound(AudioManager.SoundList.HealCrystal_Hit);
     }
 

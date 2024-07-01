@@ -166,13 +166,20 @@ public class GameSaveManager : MonoBehaviour
 
     public void LoadGame()
     {
+        Load_Keybinds();
+       
+        LoadPlayer();
+    }
+
+    public void Load_Keybinds()
+    {
         if (!Directory.Exists(Application.persistentDataPath + "/game_save/keybindings"))
         {
             Directory.CreateDirectory(Application.persistentDataPath + "/game_save/keybindings");
         }
         foreach (KeybindForPlatforms binding in arrayOfBindings)
         {
-            if(File.Exists(Application.persistentDataPath + binding.path))
+            if (File.Exists(Application.persistentDataPath + binding.path))
             {
                 string savePath = Application.persistentDataPath + binding.path;
 
@@ -181,12 +188,10 @@ public class GameSaveManager : MonoBehaviour
                 string json = EncryptDecrypt(File.ReadAllText(savePath));
                 Dictionary<string, string> loaded_Data = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
                 stream.Close();
-             
+
                 binding.keybindings.Load_DictToBinds(loaded_Data);
             }
         }
-       
-        LoadPlayer();
     }
 
    /* public void LoadSkills()
@@ -205,6 +210,7 @@ public class GameSaveManager : MonoBehaviour
     public void LoadPlayer()
     {
         PlayerData data = LoadPlayerData();
+
         skillsLoader.LoadSkills(data.aSkillName, data.bSkillName, data.arrayOfSkills);
 
         Vector2 point = new Vector2(data.savePointX, data.savePointY);
@@ -212,11 +218,11 @@ public class GameSaveManager : MonoBehaviour
         gm.savePointPosition = point;
         gm.TeleportPlayerToSave(point);
 
-
         /*string[] d = new string[2];  //fix 1
         d[0] = "ThunderBolt";
         d[1] = "ThunderWave";
         skillsLoader.LoadSkills("ThunderBolt", "ThunderBolt", d);*/
+
     }
 
     public int GetLastScene()
