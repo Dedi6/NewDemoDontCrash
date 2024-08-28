@@ -10,7 +10,7 @@ public class DialogueManager : MonoBehaviour
 {
 
     public Text nameText;
-    public TextAnimatorPlayer textAnimatorP;
+    public TypewriterByCharacter textAnimatorP;
 
     public Animator animator;
     public Animator dialogueAnimator;
@@ -36,7 +36,8 @@ public class DialogueManager : MonoBehaviour
     {
         sentences = new Queue<string>();    // the Queue of the dialogue
         audioM = AudioManager.instance;
-        textAnimatorP.textAnimator.onEvent += OnEvent;
+       // textAnimatorP.textAnimator.onEvent += OnEvent;
+        textAnimatorP.onMessage.AddListener(OnTypewriterMessage);
     }
 
 
@@ -210,9 +211,9 @@ public class DialogueManager : MonoBehaviour
     }
 
 
-    void OnEvent(string message)
+    void OnTypewriterMessage(Febucci.UI.Core.Parsing.EventMarker eventMarker)
     {
-        switch (message)
+        switch (eventMarker.name)
         {
             case "test":
                 //do something

@@ -82,10 +82,15 @@ public class InputManager : MonoBehaviour
         }
         else
         {
+
             keybindings = keyboardKeybinds;
         }
-
-        GameSaveManager.instance.Load_Keybinds();
+        if(GameSaveManager.instance.DoesPlayerDataExist())
+        {
+            keybindings = defaultKeyboard;
+        }
+        else
+            GameSaveManager.instance.Load_Keybinds();
         HandleKeyWords();
     }
 

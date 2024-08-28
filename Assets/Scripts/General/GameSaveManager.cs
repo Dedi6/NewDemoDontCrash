@@ -63,6 +63,11 @@ public class GameSaveManager : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
+  /*  private void Start()
+    {
+        LoadGame();
+    }*/
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha6))
@@ -211,6 +216,12 @@ public class GameSaveManager : MonoBehaviour
     {
         PlayerData data = LoadPlayerData();
 
+
+    /*    string[] d = new string[2];  //fix 1
+        d[0] = "ThunderBolt";
+        d[1] = "ThunderWave";
+        skillsLoader.LoadSkills("ThunderBolt", "ThunderBolt", d);*/
+
         skillsLoader.LoadSkills(data.aSkillName, data.bSkillName, data.arrayOfSkills);
 
         Vector2 point = new Vector2(data.savePointX, data.savePointY);
@@ -218,11 +229,15 @@ public class GameSaveManager : MonoBehaviour
         gm.savePointPosition = point;
         gm.TeleportPlayerToSave(point);
 
-        /*string[] d = new string[2];  //fix 1
-        d[0] = "ThunderBolt";
-        d[1] = "ThunderWave";
-        skillsLoader.LoadSkills("ThunderBolt", "ThunderBolt", d);*/
 
+    }
+
+
+    public bool DoesPlayerDataExist()
+    {
+
+        PlayerData data = LoadPlayerData();
+        return data == null;
     }
 
     public int GetLastScene()

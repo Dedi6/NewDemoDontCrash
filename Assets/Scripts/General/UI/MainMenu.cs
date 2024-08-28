@@ -31,6 +31,8 @@ public class MainMenu : MonoBehaviour
 
     public void PlayGame()
     {
+        // First PlayAnimation
+
         Destroy(menuMaster);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
@@ -51,6 +53,9 @@ public class MainMenu : MonoBehaviour
         
     public void StartAndLoad()
     {
+        // play animation
+
+
         PlayerPrefs.SetInt("LoadPlayer", 1);
         GameSaveManager saveM = GameSaveManager.instance;
         Destroy(menuMaster);
