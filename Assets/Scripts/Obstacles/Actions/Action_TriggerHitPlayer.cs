@@ -8,8 +8,9 @@ public class Action_TriggerHitPlayer : MonoBehaviour
     private int damage = 4;
     
     public bool useHitEffect, destroyWhenHit;
-    [SerializeField] private bool useHitSFX;
+    [SerializeField] private bool useHitSFX, useUniqueGroundHitEffect, useScreenShake;
     [ConditionalField("useHitSFX", false)] [SearchableEnum] public AudioManager.SoundList hitSound;
+    [ConditionalField("useScreenShake")] public float shakeTime, shakeForce;
 
     private void OnTriggerEnter2D(Collider2D col)
     {
@@ -20,10 +21,10 @@ public class Action_TriggerHitPlayer : MonoBehaviour
             else
                 col.GetComponent<MovementPlatformer>().KnockBackPlayer(25f, 1f, 0.5f, false);
             col.GetComponent<MovementPlatformer>().GotHitByAnEnemy(damage);
-            HandleHitChecks();
+            HandleHitChecks(false);
         }
         else if (col.gameObject.layer == 8) // 8 is ground
-            HandleHitChecks();
+            HandleHitChecks(true);
     }
 
     private void OnTriggerStay2D(Collider2D col)
@@ -71,11 +72,18 @@ public class Action_TriggerHitPlayer : MonoBehaviour
         GetComponent<BoxCollider2D>().enabled = false;
     }
 
-    void HandleHitChecks()
+    void HandleHitChecks(bool hitGround)
     {
         if (useHitEffect)
         {
-            animator.SetTrigger("HitPlayer");
+            if (useUniqueGroundHitEffect && hitGround)
+                animator.SetTrigger("HitGround");
+            else
+            {
+                if (useScreenShake)
+                    GameMaster.instance.ShakeCamera(shakeTime, shakeForce);
+                animator.SetTrigger("HitPlayer");
+            }
             StopMotion();
         }
         else if (destroyWhenHit)
@@ -84,5 +92,13 @@ public class Action_TriggerHitPlayer : MonoBehaviour
         }
         if (useHitSFX)
             AudioManager.instance.PlaySound(hitSound);
+    }
+
+    public void TriggerNow()
+    {
+        if (useScreenShake)
+            GameMaster.instance.ShakeCamera(shakeTime, shakeForce);
+        animator.SetTrigger("HitPlayer");
+        StopMotion();
     }
 }

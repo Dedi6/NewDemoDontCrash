@@ -10,6 +10,7 @@ public class SavePoint : MonoBehaviour
     public Animator animator;
     private GameMaster gm;
     private MovementPlatformer playerScript;
+    public bool isOnHeights;
 
     private bool isSaving = false, canSave, finishedAnimation;
   
@@ -92,9 +93,11 @@ public class SavePoint : MonoBehaviour
 
     private void GetUp()
     {
+        GetComponentInChildren<UnityEngine.Rendering.Universal.Light2D>().enabled = false;
         isSaving = false;
-        animator.SetTrigger("GetUp");
-        playerScript.transform.position = viniEndPos.position;
+       animator.SetTrigger("GetUp");
+        if(!isOnHeights)
+            playerScript.transform.position = viniEndPos.position;
     }
 
     public void Exit_SavePoint()

@@ -16,12 +16,12 @@ public class TutorialChatBubbles : MonoBehaviour
             InputManager im = InputManager.instance;
             if(im.IsUsingKeyboard())
             {
-                string t = "Press '" + im.keybindings.CheckKey(key).ToString() + "' " + text;
+                string t = "Press '" + im.currentKeybindings.CheckKey(key).ToString() + "' " + text;
                 TextBubble.Create(parent, new Vector3(-1, 2), t, appearTime);
             }
             else
             {
-                string name = im.keybindings.CheckKey(key).ToString();
+                string name = im.currentKeybindings.CheckKey(key).ToString();
                 string t = "Press '" + im.GetControllerKeyWord(name) + "' " + text;
                 TextBubble.Create(parent, new Vector3(-1, 2), t, appearTime);
             }

@@ -37,7 +37,7 @@ public class BrotherMove : MonoBehaviour
                 currentCam.m_Follow = player.transform;
                 pointToFollow.localPosition = originalPos;
                 player.SetStateNormal();
-                GetComponent<CircleCollider2D>().enabled = true;
+              //  GetComponent<CircleCollider2D>().enabled = true;
                 GetComponent<SkillsManager>().isUsingSkill = false;
             }
             else
@@ -63,7 +63,7 @@ public class BrotherMove : MonoBehaviour
         isActive = true;
         currentCam = GameMaster.instance.currentRoom.GetComponent<RoomManagerOne>().virtualCam.GetComponent<Cinemachine.CinemachineVirtualCamera>();
         currentCam.m_Follow = transform;
-        GetComponent<CircleCollider2D>().enabled = false;
+       // GetComponent<CircleCollider2D>().enabled = false;
         player.StartIgnoreInput();
         GetComponent<SkillsManager>().isUsingSkill = true;
     }

@@ -7,18 +7,29 @@ public class ConfineCamera : MonoBehaviour
     public GameObject newCam; 
     public float dampTime;
     public GameObject currentRoom;
+    private CinemachineVirtualCamera originalCam; 
 
     public void HandleConfiners()
     {
+        RoomManagerOne _roomManager = currentRoom.GetComponent<RoomManagerOne>();
+        originalCam  = _roomManager.virtualCam.GetComponent<CinemachineVirtualCamera>();
         StartCoroutine(DampConfiners(dampTime));
+
         newCam.SetActive(true);
-        currentRoom.GetComponent<RoomManagerOne>().virtualCam.SetActive(false);
+        _roomManager.virtualCam = newCam;
+        originalCam.gameObject.SetActive(false);
+
+        /*newCam.SetActive(true);
+        currentRoom.GetComponent<RoomManagerOne>().virtualCam.SetActive(false);*/
     }
 
     public void RevertConfiners()
     {
         StartCoroutine(DampConfiners(dampTime));
-        currentRoom.GetComponent<RoomManagerOne>().virtualCam.SetActive(true);
+        RoomManagerOne _roomManager = currentRoom.GetComponent<RoomManagerOne>();
+
+        originalCam.gameObject.SetActive(true);
+        _roomManager.virtualCam = originalCam.gameObject;
         newCam.SetActive(false);
     }
 

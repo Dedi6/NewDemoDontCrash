@@ -169,16 +169,18 @@ public class Floater : MonoBehaviour, ISFXResetable, IKnockbackable
             moveSFXflag = true;
             AudioManager.instance.PlaySound(AudioManager.SoundList.Floater_Move);
         }
+        animator.SetTrigger("Attack");
 
-        if(Vector2.Distance(transform.position, attackPos.transform.position) > 1f)
+        if (Vector2.Distance(transform.position, attackPos.transform.position) > 1f)
             transform.position = Vector2.MoveTowards(transform.position, attackPos.transform.position, speedMulitiplier * Time.deltaTime);
         else
         {
-            state = State.Firing;
-            animator.SetTrigger("Attack");
+          /*  state = State.Firing;
+            animator.SetTrigger("Attack");*/
             attackTimer = cooldown;
             AudioManager.instance.PlaySound(AudioManager.SoundList.Floater_Attack);
             moveSFXflag = false;
+            SetStateNormal();
         }
 
     }
@@ -205,11 +207,12 @@ public class Floater : MonoBehaviour, ISFXResetable, IKnockbackable
     }
 
     public void Shoot()
-    {
-        var pos = shootPos.position;
+    {   //also deleted set state normal from animation
+
+        /*var pos = shootPos.position;
         var dir = player.transform.position - pos;
         GameObject projectile = Instantiate(projectilePrefab, pos, Quaternion.identity);
-        projectile.GetComponent<Action_TriggerHitPlayer>().SetMovement(dir.normalized, projectileSpeed);
+        projectile.GetComponent<Action_TriggerHitPlayer>().SetMovement(dir.normalized, projectileSpeed);*/
     }
 
     void AttackPosSet()

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: SizeBehavior
   m_EditorClassIdentifier: 
   tagID: incr
-  baseAmplitude: 1.5
-  baseFrequency: 4
-  baseWaveSize: 0.2
+  baseAmplitude: 2.11
+  baseFrequency: 4.51
+  baseWaveSize: 2.35

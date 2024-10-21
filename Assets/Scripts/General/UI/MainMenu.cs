@@ -27,6 +27,7 @@ public class MainMenu : MonoBehaviour
     {
         firstStartButton.SetActive(firstTime);
         newAndLoadButtons.SetActive(!firstTime);
+        GetComponent<UI_FirstButton_Holder>().firstButton = firstTime ? firstStartButton : newAndLoadButtons.transform.GetChild(0).gameObject;
     }
 
     public void PlayGame()

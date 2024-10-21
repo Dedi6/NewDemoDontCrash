@@ -54,6 +54,7 @@ public class Keybindings : ScriptableObject
                 return currentKey;
             }
         }
+
         return null;
     }
 

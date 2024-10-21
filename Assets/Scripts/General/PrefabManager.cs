@@ -93,6 +93,19 @@ public class PrefabManager : MonoBehaviour
         GameObject vfx = Instantiate(FindVFX(name), position, Quaternion.Euler(0, 0, angle));
     }
 
+    public void Play_VFX_Angle_AndSortingLayer(ListOfVFX name, Vector2 position, float angle, string layerName)
+    {
+        GameObject vfx = Instantiate(FindVFX(name), position, Quaternion.Euler(0, 0, angle));
+        vfx.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID(layerName);
+    }
+
+    public void Play_VFX_Complex(ListOfVFX name, Vector2 position, float angle, string layerName, float _scale)
+    {
+        GameObject vfx = Instantiate(FindVFX(name), position, Quaternion.Euler(0, 0, angle));
+        vfx.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID(layerName);
+        vfx.transform.localScale = new Vector3(_scale, _scale, 1f);
+    }
+
     public GameObject CreatePrefabAndReturnObject(ListOfVFX name, Vector2 position, float angle)
     {
         GameObject vfx = Instantiate(FindVFX(name), position, Quaternion.Euler(0, 0, angle));

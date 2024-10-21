@@ -5,6 +5,7 @@ using Cinemachine;
 
 public class EditorRoomSpawner : EditorWindow
 {
+    GameObject playerInstance;
     GameObject previousRoom;
     BuildPath buildTo;
     GameObject roomToMove;
@@ -32,6 +33,7 @@ public class EditorRoomSpawner : EditorWindow
         GUILayout.Label("Spawn New Room", EditorStyles.boldLabel);
 
         //roomNumber = EditorGUILayout.IntField("Room Number", roomNumber);
+        playerInstance = EditorGUILayout.ObjectField("Player Instance", playerInstance, typeof(GameObject), true) as GameObject;
         previousRoom = EditorGUILayout.ObjectField("Previous room", previousRoom, typeof(GameObject), true) as GameObject;
 
         buildTo = (BuildPath)EditorGUILayout.EnumPopup("Build To", buildTo);
@@ -48,14 +50,16 @@ public class EditorRoomSpawner : EditorWindow
 
     private void SpawnRoom()
     {
-        GameObject newRoom = PrefabUtility.InstantiatePrefab(Resources.Load("Room")) as GameObject;
+        GameObject newRoom = PrefabUtility.InstantiatePrefab(Resources.Load("Room"), previousRoom.transform.parent) as GameObject;
         GameObject vCam = PrefabUtility.InstantiatePrefab(Resources.Load("vCamRoom")) as GameObject;
 
 
         vCam.transform.parent = newRoom.transform;
         newRoom.GetComponent<RoomManagerOne>().virtualCam = vCam;
         vCam.GetComponent<CinemachineConfiner>().m_BoundingShape2D = newRoom.GetComponent<PolygonCollider2D>();
-        if(previousRoom != null)
+        vCam.GetComponent<Cinemachine.CinemachineVirtualCamera>().Follow = playerInstance.transform;
+
+        if (previousRoom != null)
             SetRoomPosition(newRoom);
 
         //newRoom.name = "Room" + " " + roomNumber.ToString();

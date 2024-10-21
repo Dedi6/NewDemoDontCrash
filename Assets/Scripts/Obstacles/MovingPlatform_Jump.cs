@@ -83,6 +83,7 @@ public class MovingPlatform_Jump : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawLine(transform.position, endPos.position);
+        if(endPos != null)
+          Gizmos.DrawLine(transform.position, endPos.position);
     }
 }

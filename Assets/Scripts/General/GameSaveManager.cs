@@ -233,7 +233,7 @@ public class GameSaveManager : MonoBehaviour
     }
 
 
-    public bool DoesPlayerDataExist()
+    public bool IsPlayerDataNull()
     {
 
         PlayerData data = LoadPlayerData();

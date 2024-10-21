@@ -6,25 +6,34 @@ EditorUserSettings:
   serializedVersion: 4
   m_ConfigSettings:
     RecentlyUsedSceneGuid-0:
-      value: 560506055503585f5d5e5876467208444216417c757172637b79446bb2e5603e
-      flags: 0
-    RecentlyUsedSceneGuid-1:
-      value: 55020c0007565c585a595d2313725e44424f4f2f7e7d72682c2f196bb5b4636c
-      flags: 0
-    RecentlyUsedSceneGuid-2:
       value: 5706515501075059580a5e73487b06441515192c2e7d7561292f4c66b1b33160
       flags: 0
-    RecentlyUsedSceneGuid-3:
+    RecentlyUsedSceneGuid-1:
       value: 56095507500d58585b5c587340710944401641782d7a7f362f784b61b4b8303c
       flags: 0
-    RecentlyUsedSceneGuid-4:
+    RecentlyUsedSceneGuid-2:
       value: 06540d525c515f5e59585f7513210d44144f4f79787022667c2a4860b3e36d39
       flags: 0
-    RecentlyUsedSceneGuid-5:
+    RecentlyUsedSceneGuid-3:
+      value: 0102505350075f0d5b595f75137a0e4443164b292d7972342f2b4a67e3b8666d
+      flags: 0
+    RecentlyUsedSceneGuid-4:
       value: 00550352570151030f5a5e73437a5a4443164f7e7f7c276729281935b5b9373b
       flags: 0
+    RecentlyUsedSceneGuid-5:
+      value: 5a080d54500c595a5e0c0a7145250844444e1c7e2e7975652c791b63e6b3653d
+      flags: 0
     RecentlyUsedSceneGuid-6:
-      value: 0102505350075f0d5b595f75137a0e4443164b292d7972342f2b4a67e3b8666d
+      value: 55020c0007565c585a595d2313725e44424f4f2f7e7d72682c2f196bb5b4636c
+      flags: 0
+    RecentlyUsedSceneGuid-7:
+      value: 5b5405025c060b09590d547545200f44154f1a737e297163792b1b60b6e6663e
+      flags: 0
+    RecentlyUsedSceneGuid-8:
+      value: 5200550756500d0a0e0d5a7615710c4442154f78757b22647b781b6bbbb76c6b
+      flags: 0
+    RecentlyUsedSceneGuid-9:
+      value: 5102525755005b030e0d0821417b5c4447154d797e2920617d2a1f30b2e26461
       flags: 0
     UnityEditor.ShaderGraph.Blackboard:
       value: 18135939215a0a5004000b0e15254b524c030a3f2964643d120d1230e9e93a3fd6e826abbd2e2d293c4ead313b08042de6030a0afa240c0d020be94c4ba75e435d8715fa32c70d15d11612dacc11fee5d3c5d1fe9ab1bf968e93e2ffcbc3e7e2f0b3ffe0e8b0be9af8ffaeffff8e85dd8390e3949c8899daa7

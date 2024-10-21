@@ -10,7 +10,7 @@ public class PreventDeselectionGroup : MonoBehaviour
     public GameObject firstButton;
     GameObject sel;
     [SerializeField]
-    private bool isUsingPointer;
+    private bool isUsingPointer, isMainMenu;
     [ConditionalField("isUsingPointer")] public RectTransform pointer;
 
     private void Start()
@@ -21,10 +21,23 @@ public class PreventDeselectionGroup : MonoBehaviour
 
     private void Update()
     {
+        if(sel == null) sel = firstButton;
+
         if (evt.currentSelectedGameObject != null && evt.currentSelectedGameObject != sel)
-            sel = evt.currentSelectedGameObject;
+        {
+            if (isMainMenu)
+            {
+                sel.GetComponentInChildren<Add_TextEffectWhen>().ChangeAnimator(false);
+                sel = evt.currentSelectedGameObject;
+                sel.GetComponentInChildren<Add_TextEffectWhen>().ChangeAnimator(true);
+            }
+            else
+                sel = evt.currentSelectedGameObject;
+
+        }
         else if (sel != null && evt.currentSelectedGameObject == null)
             evt.SetSelectedGameObject(sel);
+       
 
         if(isUsingPointer && Input.anyKeyDown)
         {
@@ -47,11 +60,25 @@ public class PreventDeselectionGroup : MonoBehaviour
     private void OnEnable()
     {
         sel = firstButton;
+        if (isMainMenu) StartCoroutine(Test());
+    }
+
+    private IEnumerator Test()
+    {
+        yield return new WaitForSeconds(0.5f);
+        sel.GetComponentInChildren<Add_TextEffectWhen>().ChangeAnimator(true);
+        Debug.Log(sel);
+    }
+
+    public void SelectPreviousButton()
+    {
+        sel = firstButton;
     }
 
     private void OnDisable()
     {
-        evt.SetSelectedGameObject(null);
+        if(!isMainMenu)
+            evt.SetSelectedGameObject(null);
     }
 
     public void SelectFirstButton()

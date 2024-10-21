@@ -29,6 +29,7 @@ public class HiddenDoorManager : MonoBehaviour
 
             if (resetDoors)
             {
+            Debug.Log("Why");
                 PlayerPrefs.DeleteKey(crank.GetComponent<DoorCrank>().nameForSave);
             }
         }

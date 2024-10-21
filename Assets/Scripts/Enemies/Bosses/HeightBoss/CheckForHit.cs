@@ -23,8 +23,9 @@ public class CheckForHit : MonoBehaviour
     private float knockBackForce;
     private bool shouldIgnoreCheck;
     [SerializeField]
-    private bool playSoundWhenTriggered;
+    private bool playSoundWhenTriggered, useScreenShake;
     [ConditionalField("playSoundWhenTriggered")] [SearchableEnum] public AudioManager.SoundList soundToPlay;
+    [ConditionalField("useScreenShake")] public float shakeTime, shakeForce;
 
     private enum ColliderType
     {
@@ -58,11 +59,21 @@ public class CheckForHit : MonoBehaviour
             case ColliderType.Capsule:
                 break;
             case ColliderType.CircleCollider:
+                Collider2D[] hitCheck_circle = Physics2D.OverlapCircleAll(point.transform.position, radius, 1 << 11);
+                foreach (Collider2D col in hitCheck_circle)
+                {
+                    if (col.gameObject.layer == 11) // player
+                        PlayerKnockBackAndDamage(col.gameObject);
+                    if (col.gameObject.layer == 23) // hittable object
+                        col.GetComponent<HittableObject>().HitObject();
+                }
                 break;
         }
 
         if(playSoundWhenTriggered)
             AudioManager.instance.ThreeDSound(soundToPlay, transform.position);
+        if (useScreenShake)
+            GameMaster.instance.ShakeCamera(shakeTime, shakeForce);
     }
 
     public void PlayerKnockBackAndDamage(GameObject player)

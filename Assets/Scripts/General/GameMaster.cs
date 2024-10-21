@@ -14,7 +14,7 @@ public class GameMaster : MonoBehaviour
     public GameObject firstRoom;
     public Transform spawnPoint;
     [HideInInspector]
-    public GameObject brotherInstance;
+    public GameObject brotherInstance, confinedCamera;
 
 
     void Awake()
@@ -48,6 +48,16 @@ public class GameMaster : MonoBehaviour
     public void ShakeCamera(float time, float force)
     {
         StartCoroutine(currentRoom.GetComponent<RoomManagerOne>().virtualCam.GetComponent<ScreenShake>().ShakeyShakey(time, force));
+    }
+
+    public void Shake_SpecificCamera(float time, float force, GameObject cameraObject)
+    {
+        cameraObject.GetComponent<ScreenShake>().ShakeyShakey(time, force);
+    }
+
+    public void Shake_ConfinedCamera(float time, float force, GameObject cameraObject)
+    {
+        cameraObject.GetComponent<ScreenShake>().ShakeyShakey(time, force);
     }
 
     public void ShakeCameraTopDown(float time, float force)

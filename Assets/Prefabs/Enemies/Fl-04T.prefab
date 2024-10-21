@@ -365,7 +365,7 @@ MonoBehaviour:
   speedMulitiplier: 10
   playerCheckDistance: 15
   projectileSpeed: 15
-  cooldown: 2
+  cooldown: 1
   attackPos: {fileID: 6023944977575306539}
   shootPos: {fileID: 6023944975700167795}
   projectilePrefab: {fileID: 2543233603466647640, guid: 25b76b54c1659fb49a5d274f5f9853f2,

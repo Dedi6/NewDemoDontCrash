@@ -43,9 +43,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _ShockWaveStrength: 0.04
-    - _Size: 0.02
-    - _Test: 0.948
+    - _ShockWaveStrength: -0.24
+    - _Size: 0
+    - _Test: 0.249
     - _WaveDistanceFromCenter: -0.1
     - _XSizeRatio: 9.51
     m_Colors:

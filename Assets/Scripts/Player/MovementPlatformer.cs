@@ -263,10 +263,14 @@ public class MovementPlatformer : MonoBehaviour
             case State.IgnorePlayerInput:
                 break;
         }
-        if(isAirborn && (rb.velocity.y < -fallSpeed))
-        {
-            rb.velocity = new Vector2(rb.velocity.x, -fallSpeed);
-        }
+
+        ClampFallSpeed();
+    }
+
+    private void ClampFallSpeed()
+    {
+         if (isAirborn && (rb.velocity.y < -fallSpeed))
+             rb.velocity = new Vector2(rb.velocity.x, -fallSpeed);
     }
 
     public void SetStateNormal()
@@ -1371,7 +1375,7 @@ public class MovementPlatformer : MonoBehaviour
         GetComponent<ManaBar>().SetManaFull();
         GetComponent<Health>().FullHeal();
         BulletReset();
-        savedNow.Invoke();
+        //savedNow.Invoke();
         if(currentRoom != null)
             currentRoom.GetComponent<RoomManagerOne>().PlayerRespawnReset2();
         

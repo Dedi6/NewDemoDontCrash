@@ -12,7 +12,7 @@ public class DoorCrank : MonoBehaviour, IRespawnResetable
 
     private void Start()
     {
-        CheckIfActive(false);
+       // CheckIfActive(false); for demo
     }
 
     public void CheckIfActive(bool shouldPlayAudio)
@@ -36,7 +36,7 @@ public class DoorCrank : MonoBehaviour, IRespawnResetable
             gm.GetComponent<AudioManager>().PlaySound(AudioManager.SoundList.ClankTriggered);
         }
 
-        PlayerPrefs.SetInt(nameForSave, 1);
+       // PlayerPrefs.SetInt(nameForSave, 1); For saving shit i disabled for demo
     }
 
     public void PlayerDiedAfterClank()

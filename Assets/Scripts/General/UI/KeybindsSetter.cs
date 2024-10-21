@@ -3,23 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
+using MyBox;
 
 public class KeybindsSetter : MonoBehaviour
 {
     public Transform menuPanel;
+    [SerializeField] private Transform menuPanel2;
     Event keyEvent;
-    Text buttonText;
+    TextMeshProUGUI buttonText;
     KeyCode newKey;
+    [SerializeField]
     private Keybindings keys;
     private EventSystem evt;
     Coroutine lastCoroutine;
+
+
+    [Separator("AddTextEffect")]
+    [SerializeField]
+    private bool addTextEffects;
+    [SerializeField]
+    [ConditionalField(nameof(addTextEffects))] private string effectText;
 
     bool waitingForKey;
 
     void Start()
     {
         waitingForKey = false;
-        keys = InputManager.instance.keybindings;
+        keys = InputManager.instance.currentKeybindings;
         evt = EventSystem.current;
         SetStartKeys();
     }
@@ -39,7 +50,7 @@ public class KeybindsSetter : MonoBehaviour
     {
         GameObject button = evt.currentSelectedGameObject;
         string name = button.transform.parent.name;
-        buttonText = button.GetComponentInChildren<Text>();
+        buttonText = button.GetComponentInChildren<TextMeshProUGUI>();
         if (!waitingForKey)
             lastCoroutine = StartCoroutine(AssignKey(name));
         else
@@ -64,59 +75,65 @@ public class KeybindsSetter : MonoBehaviour
         
         yield return WaitForKey();
 
-        switch(keyName)
+
+        string newKeyText = addTextEffects ? new string(effectText + newKey.ToString()) : newKey.ToString();
+
+
+        switch(keyName) // the string needs to fit the button name in the editor you sweet fool
         {
             case "JumpKey":
                 keys.ChangeKey(Keybindings.KeyList.Jump, newKey);
-                buttonText.text = newKey.ToString(); 
+                buttonText.text = newKeyText;
                 break;
             case "AttackKey":
                 keys.ChangeKey(Keybindings.KeyList.Attack, newKey);
-                buttonText.text = newKey.ToString();
+                buttonText.text = newKeyText;
                 break;
             case "Shoot":
                 keys.ChangeKey(Keybindings.KeyList.Shoot, newKey);
-                buttonText.text = newKey.ToString();
+                Debug.Log(keyName + "  " + newKeyText + "  " + buttonText.text);
+                buttonText.text = newKeyText;
+                Debug.Log(keyName + "  " + newKeyText + "  " + buttonText.text);
                 break;
             case "Skill1":
                 keys.ChangeKey(Keybindings.KeyList.Skill1, newKey);
-                buttonText.text = newKey.ToString();
+                buttonText.text = newKeyText;
                 break;
             case "Skill2":
                 keys.ChangeKey(Keybindings.KeyList.Skill2, newKey);
-                buttonText.text = newKey.ToString();
+                buttonText.text = newKeyText;
                 break;
             case "SkillsMenu":
                 keys.ChangeKey(Keybindings.KeyList.SkillsMenuHotKey, newKey);
-                buttonText.text = newKey.ToString();
+                buttonText.text = newKeyText;
                 break;
             case "PauseMenu":
                 keys.ChangeKey(Keybindings.KeyList.PauseMenu, newKey);
-                buttonText.text = newKey.ToString();
+                buttonText.text = newKeyText;
                 break;
             case "DestroyProjectile":
                 keys.ChangeKey(Keybindings.KeyList.ResetBullet, newKey);
-                buttonText.text = newKey.ToString();
+                buttonText.text = newKeyText;
                 break;
             case "HealKey":
                 keys.ChangeKey(Keybindings.KeyList.Heal, newKey);
-                buttonText.text = newKey.ToString();
+                buttonText.text = newKeyText;
                 break;
             case "UpKey":
                 keys.ChangeKey(Keybindings.KeyList.Up, newKey);
-                buttonText.text = newKey.ToString();
+                buttonText.text = newKeyText;
                 break;
             case "DownKey":
                 keys.ChangeKey(Keybindings.KeyList.Down, newKey);
-                buttonText.text = newKey.ToString();
+                buttonText.text = newKeyText;
                 break;
             case "RightKey":
                 keys.ChangeKey(Keybindings.KeyList.Right, newKey);
-                buttonText.text = newKey.ToString();
+                buttonText.text = newKeyText;
                 break;
             case "LeftKey":
                 keys.ChangeKey(Keybindings.KeyList.Left, newKey);
-                buttonText.text = newKey.ToString();
+                buttonText.text = newKeyText;
                 break;
         }  //assignKey
 
@@ -125,48 +142,56 @@ public class KeybindsSetter : MonoBehaviour
                                    //  Also, for the script to work, the button's parent need to be the same name as the string.
     public void SetStartKeys()
     {
-        for (int i = 0; i < menuPanel.childCount; i++)
+        SetStartingButtons_Helper(menuPanel);
+        SetStartingButtons_Helper(menuPanel2);
+    }
+
+    private void SetStartingButtons_Helper(Transform _menuPanel)
+    {
+        string _textEffect = addTextEffects ? effectText : "";
+
+        for (int i = 0; i < _menuPanel.childCount; i++)
         {
-            switch(menuPanel.GetChild(i).name)
+            switch (_menuPanel.GetChild(i).name)
             {
                 case "JumpKey":
-                    menuPanel.GetChild(i).GetComponentInChildren<Text>().text = keys.CheckKey(Keybindings.KeyList.Jump).ToString();
+                    _menuPanel.GetChild(i).GetComponentInChildren<TextMeshProUGUI>().text = _textEffect + keys.CheckKey(Keybindings.KeyList.Jump).ToString();
                     break;
                 case "AttackKey":
-                    menuPanel.GetChild(i).GetComponentInChildren<Text>().text = keys.CheckKey(Keybindings.KeyList.Attack).ToString();
+                    _menuPanel.GetChild(i).GetComponentInChildren<TextMeshProUGUI>().text = _textEffect + keys.CheckKey(Keybindings.KeyList.Attack).ToString();
                     break;
                 case "Shoot":
-                    menuPanel.GetChild(i).GetComponentInChildren<Text>().text = keys.CheckKey(Keybindings.KeyList.Shoot).ToString();
+                    _menuPanel.GetChild(i).GetComponentInChildren<TextMeshProUGUI>().text = _textEffect + keys.CheckKey(Keybindings.KeyList.Shoot).ToString();
                     break;
                 case "Skill1":
-                    menuPanel.GetChild(i).GetComponentInChildren<Text>().text = keys.CheckKey(Keybindings.KeyList.Skill1).ToString();
+                    _menuPanel.GetChild(i).GetComponentInChildren<TextMeshProUGUI>().text = _textEffect + keys.CheckKey(Keybindings.KeyList.Skill1).ToString();
                     break;
                 case "Skill2":
-                    menuPanel.GetChild(i).GetComponentInChildren<Text>().text = keys.CheckKey(Keybindings.KeyList.Skill2).ToString();
+                    _menuPanel.GetChild(i).GetComponentInChildren<TextMeshProUGUI>().text = _textEffect + keys.CheckKey(Keybindings.KeyList.Skill2).ToString();
                     break;
                 case "SkillsMenu":
-                    menuPanel.GetChild(i).GetComponentInChildren<Text>().text = keys.CheckKey(Keybindings.KeyList.SkillsMenuHotKey).ToString();
+                    _menuPanel.GetChild(i).GetComponentInChildren<TextMeshProUGUI>().text = _textEffect + keys.CheckKey(Keybindings.KeyList.SkillsMenuHotKey).ToString();
                     break;
                 case "PauseMenu":
-                    menuPanel.GetChild(i).GetComponentInChildren<Text>().text = keys.CheckKey(Keybindings.KeyList.PauseMenu).ToString();
+                    _menuPanel.GetChild(i).GetComponentInChildren<TextMeshProUGUI>().text = _textEffect + keys.CheckKey(Keybindings.KeyList.PauseMenu).ToString();
                     break;
                 case "DestroyProjectile":
-                    menuPanel.GetChild(i).GetComponentInChildren<Text>().text = keys.CheckKey(Keybindings.KeyList.ResetBullet).ToString();
+                    _menuPanel.GetChild(i).GetComponentInChildren<TextMeshProUGUI>().text = _textEffect + keys.CheckKey(Keybindings.KeyList.ResetBullet).ToString();
                     break;
                 case "HealKey":
-                    menuPanel.GetChild(i).GetComponentInChildren<Text>().text = keys.CheckKey(Keybindings.KeyList.Heal).ToString();
+                    _menuPanel.GetChild(i).GetComponentInChildren<TextMeshProUGUI>().text = _textEffect + keys.CheckKey(Keybindings.KeyList.Heal).ToString();
                     break;
                 case "UpKey":
-                    menuPanel.GetChild(i).GetComponentInChildren<Text>().text = keys.CheckKey(Keybindings.KeyList.Up).ToString();
+                    _menuPanel.GetChild(i).GetComponentInChildren<TextMeshProUGUI>().text = _textEffect + keys.CheckKey(Keybindings.KeyList.Up).ToString();
                     break;
                 case "DownKey":
-                    menuPanel.GetChild(i).GetComponentInChildren<Text>().text = keys.CheckKey(Keybindings.KeyList.Down).ToString();
+                    _menuPanel.GetChild(i).GetComponentInChildren<TextMeshProUGUI>().text = _textEffect + keys.CheckKey(Keybindings.KeyList.Down).ToString();
                     break;
                 case "RightKey":
-                    menuPanel.GetChild(i).GetComponentInChildren<Text>().text = keys.CheckKey(Keybindings.KeyList.Right).ToString();
+                    _menuPanel.GetChild(i).GetComponentInChildren<TextMeshProUGUI>().text = _textEffect + keys.CheckKey(Keybindings.KeyList.Right).ToString();
                     break;
                 case "LeftKey":
-                    menuPanel.GetChild(i).GetComponentInChildren<Text>().text = keys.CheckKey(Keybindings.KeyList.Left).ToString();
+                    _menuPanel.GetChild(i).GetComponentInChildren<TextMeshProUGUI>().text = _textEffect + keys.CheckKey(Keybindings.KeyList.Left).ToString();
                     break;
             }
         }

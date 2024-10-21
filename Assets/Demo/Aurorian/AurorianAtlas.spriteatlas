@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AurorianAtlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 0
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 0
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: 0d0af63289f5742488321f82950f9092, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: -1700149642, guid: 0d0af63289f5742488321f82950f9092, type: 3}
+  - {fileID: 1591768584, guid: 0d0af63289f5742488321f82950f9092, type: 3}
+  - {fileID: -242841746, guid: 0d0af63289f5742488321f82950f9092, type: 3}
+  - {fileID: -1488438760, guid: 0d0af63289f5742488321f82950f9092, type: 3}
+  - {fileID: 1846761805, guid: 0d0af63289f5742488321f82950f9092, type: 3}
+  - {fileID: 613422520, guid: 0d0af63289f5742488321f82950f9092, type: 3}
+  - {fileID: 988415909, guid: 0d0af63289f5742488321f82950f9092, type: 3}
+  - {fileID: 233721135, guid: 0d0af63289f5742488321f82950f9092, type: 3}
+  - {fileID: 691411180, guid: 0d0af63289f5742488321f82950f9092, type: 3}
+  - {fileID: -705702956, guid: 0d0af63289f5742488321f82950f9092, type: 3}
+  - {fileID: 302419966, guid: 0d0af63289f5742488321f82950f9092, type: 3}
+  - {fileID: 1922570663, guid: 0d0af63289f5742488321f82950f9092, type: 3}
+  - {fileID: -1014263888, guid: 0d0af63289f5742488321f82950f9092, type: 3}
+  - {fileID: 1921671378, guid: 0d0af63289f5742488321f82950f9092, type: 3}
+  - {fileID: 2085245899, guid: 0d0af63289f5742488321f82950f9092, type: 3}
+  - {fileID: 1996620868, guid: 0d0af63289f5742488321f82950f9092, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Tiles_Aurorian_5
+  - Tiles_Aurorian_4
+  - Tiles_Aurorian_14
+  - Tiles_Aurorian_7
+  - Tiles_Aurorian_15
+  - Tiles_Aurorian_6
+  - Tiles_Aurorian_1
+  - Tiles_Aurorian_0
+  - Tiles_Aurorian_10
+  - Tiles_Aurorian_3
+  - Tiles_Aurorian_11
+  - Tiles_Aurorian_2
+  - Tiles_Aurorian_12
+  - Tiles_Aurorian_13
+  - Tiles_Aurorian_9
+  - Tiles_Aurorian_8
+  m_RenderDataMap: {}
+  m_Tag: AurorianAtlas
+  m_IsVariant: 0

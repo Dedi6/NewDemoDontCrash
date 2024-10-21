@@ -8,7 +8,7 @@ public class InputManager : MonoBehaviour
     public bool isTopDown;
 
     [HideInInspector]
-    public Keybindings keybindings;
+    public Keybindings currentKeybindings;
     public Keybindings keyboardKeybinds, joyStickKeybind, defaultKeyboard;
 
     public Dictionary<string, string> joyStickNames;
@@ -25,13 +25,14 @@ public class InputManager : MonoBehaviour
 
     private void Start()
     {
+       // SetKeyBindingsDefault();
         HandleStartingKeybinds();
     }
 
 
     public bool KeyDown(Keybindings.KeyList key)
     {
-        if (Input.GetKeyDown(keybindings.CheckKey(key)))
+        if (Input.GetKeyDown(currentKeybindings.CheckKey(key)))
             return true;
         else
             return false;
@@ -39,7 +40,7 @@ public class InputManager : MonoBehaviour
 
     public bool GetKey(Keybindings.KeyList key)
     {
-        if (Input.GetKey(keybindings.CheckKey(key)))
+        if (Input.GetKey(currentKeybindings.CheckKey(key)))
             return true;
         else
             return false;
@@ -47,7 +48,7 @@ public class InputManager : MonoBehaviour
 
     public bool KeyUp(Keybindings.KeyList key)
     {
-        if (Input.GetKeyUp(keybindings.CheckKey(key)))
+        if (Input.GetKeyUp(currentKeybindings.CheckKey(key)))
             return true;
         else
             return false;
@@ -55,10 +56,10 @@ public class InputManager : MonoBehaviour
 
     public void ChangeKeybindings()
     {
-        keybindings = keybindings == keyboardKeybinds ? joyStickKeybind : keyboardKeybinds;
-        if (!PlayerPrefs.HasKey("UsingJoystick") && keybindings == joyStickKeybind)
+        currentKeybindings = currentKeybindings == keyboardKeybinds ? joyStickKeybind : keyboardKeybinds;
+        if (!PlayerPrefs.HasKey("UsingJoystick") && currentKeybindings == joyStickKeybind)
             PlayerPrefs.SetInt("UsingJoystick", 1);
-        else if(PlayerPrefs.HasKey("UsingJoystick") && keybindings == keyboardKeybinds)
+        else if(PlayerPrefs.HasKey("UsingJoystick") && currentKeybindings == keyboardKeybinds)
             PlayerPrefs.DeleteKey("UsingJoystick");
         PlayerPrefs.Save();
 
@@ -67,8 +68,10 @@ public class InputManager : MonoBehaviour
 
     void ChangeMovementInScript()
     {
+        if (GameMaster.instance.playerInstance == null) return;
+
         if (!isTopDown)
-            GameMaster.instance.playerInstance.GetComponent<MovementPlatformer>().SwitchToOrFromJoystick();
+            GameMaster.instance.playerInstance.GetComponent<MovementPlatformer>().SwitchToOrFromJoystick(); // change so it will have a playerprefs and movementplaftormer will determine what to use
         else
             GameMaster.instance.playerInstance.GetComponent<TopDownMovement>().SwitchToOrFromJoystick();
     }
@@ -77,17 +80,16 @@ public class InputManager : MonoBehaviour
     {
         if (PlayerPrefs.HasKey("UsingJoystick"))
         {
-            keybindings = joyStickKeybind;
+            currentKeybindings = joyStickKeybind;
             ChangeMovementInScript();
         }
         else
         {
-
-            keybindings = keyboardKeybinds;
+            currentKeybindings = keyboardKeybinds;
         }
-        if(GameSaveManager.instance.DoesPlayerDataExist())
+        if(GameSaveManager.instance.IsPlayerDataNull())
         {
-            keybindings = defaultKeyboard;
+            SetKeyBindingsDefault();
         }
         else
             GameSaveManager.instance.Load_Keybinds();
@@ -98,10 +100,10 @@ public class InputManager : MonoBehaviour
     {
         joyStickNames = new Dictionary<string, string>    //○ ↑ ↓ → ← ■ ▲ ◯ ⚪ ⚫
         {
-            { "JoystickButton0", "▲" },
-            { "JoystickButton1", "○" },
-            { "JoystickButton2", "X" },
-            { "JoystickButton3", "■" },
+            { "JoystickButton0", "■" }, // triangle
+            { "JoystickButton1", "X" }, //O
+            { "JoystickButton2", "X" }, // X
+            { "JoystickButton3", "■" }, // square
             { "JoystickButton4", "L1" },
             { "JoystickButton5", "R1" },
             { "JoystickButton6", "L2" },
@@ -122,7 +124,7 @@ public class InputManager : MonoBehaviour
 
     public bool IsUsingKeyboard()
     {
-        if (keybindings == keyboardKeybinds)
+        if (currentKeybindings == keyboardKeybinds)
             return true;
         else
             return false;
@@ -130,9 +132,15 @@ public class InputManager : MonoBehaviour
 
     public void SetKeyBindingsDefault()
     {
-        foreach (Keybindings.KeysArray key in keyboardKeybinds.arrayOfKeys)
+        /*foreach (Keybindings.KeysArray key in keyboardKeybinds.arrayOfKeys)
         {
             key.keyBinding = defaultKeyboard.CheckKey(key.KeyFor);
+            Debug.Log(key.keyBinding);
+        }*/
+        for (int i = 0; i < defaultKeyboard.arrayOfKeys.Length ; i++)
+        {
+            keyboardKeybinds.arrayOfKeys[i].KeyFor = defaultKeyboard.arrayOfKeys[i].KeyFor;
+            keyboardKeybinds.arrayOfKeys[i].keyBinding = defaultKeyboard.arrayOfKeys[i].keyBinding;
         }
     }
 }

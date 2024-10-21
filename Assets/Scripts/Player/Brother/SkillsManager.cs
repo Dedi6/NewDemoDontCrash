@@ -25,12 +25,13 @@ public class SkillsManager : MonoBehaviour
         playerSkills.brotherSkills = brotherScript;
         playerSkills.skillsManager = this;
         playerSkills.playerScript = playerScript;
+        skillsUI.SetStartingSkillsButton();
         HandleLoad();
     }
 
     void Update()
     {
-        if (!isUsingSkill && InputManager.instance.KeyDown(Keybindings.KeyList.Skill2) && manaBar.HaveEnoughMana(manaASkill))
+       /* if (!isUsingSkill && InputManager.instance.KeyDown(Keybindings.KeyList.Skill2) && manaBar.HaveEnoughMana(manaASkill))
         {
             isUsingSkill = true;
             aSkill();
@@ -41,7 +42,7 @@ public class SkillsManager : MonoBehaviour
             isUsingSkill = true;
             bSkill();
             manaBar.UseMana(manaBSkill);
-        }
+        }*/
     }
 
     public void SetSkill(string actionName, bool settingFirstSkill)
