@@ -127,6 +127,7 @@ MonoBehaviour:
   bulletObject: {fileID: 8461732601435610748}
   didHitAnEnemy: 0
   animator: {fileID: 4672039470557450516}
+  maxDistance: 22
 --- !u!58 &4001767246337153059
 CircleCollider2D:
   m_ObjectHideFlags: 0

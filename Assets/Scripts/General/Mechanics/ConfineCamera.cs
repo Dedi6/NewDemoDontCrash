@@ -41,4 +41,27 @@ public class ConfineCamera : MonoBehaviour
 
         Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 0.3f;
     }
+
+    public void SwitchCameras_NoEase()
+    {
+        RoomManagerOne _roomManager = currentRoom.GetComponent<RoomManagerOne>();
+        originalCam = _roomManager.virtualCam.GetComponent<CinemachineVirtualCamera>();
+        Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 0f;
+
+        newCam.SetActive(true);
+        //_roomManager.virtualCam = newCam;
+        originalCam.gameObject.SetActive(false);
+    }
+
+    public void RevertEase()
+    {
+        Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 0.3f;
+    }
+
+    public void Set_NoEase()
+    {
+
+    }
+
+    
 }

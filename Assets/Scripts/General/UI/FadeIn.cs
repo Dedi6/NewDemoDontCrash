@@ -40,4 +40,18 @@ public class FadeIn : MonoBehaviour
         SetFull();
         StartCoroutine(FadeTo(0f, 0.75f));
     }
+
+    public void Fade_SlowMo()
+    {
+        Time.timeScale = 0.3f;
+        StartCoroutine(Test());
+    }
+
+    private IEnumerator Test()
+    {
+        yield return null;
+
+        Time.timeScale = 0.3f;
+        StartCoroutine(FadeTo(1f, 0.6f));
+    }
 }

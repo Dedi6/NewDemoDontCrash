@@ -1838,6 +1838,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Mooman_Sheet_82
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 0
+        width: 96
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59f2e9efc3643be41a8fbf79e85c3478
+      internalID: 1391469510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1884,6 +1905,7 @@ TextureImporter:
       Mooman_Sheet_74: -1606959243
       Mooman_Sheet_5: -323409796
       Mooman_Sheet_54: 36816219
+      Mooman_Sheet_82: 1529019064
       Mooman_Sheet_81: -262605659
       Mooman_Sheet_79: -390113442
       Mooman_Sheet_0: -1812321634

@@ -13,6 +13,8 @@ public class bullet : MonoBehaviour
     private Vector2 direction, originalSpeed;
     public bool didHitAnEnemy = false;
     public Animator animator;
+  //
+    [SerializeField] float maxDistance;
 
    
     private int finalMask = (1 << 15) | (1 << 8); 
@@ -38,6 +40,16 @@ public class bullet : MonoBehaviour
         player.GetComponent<MovementPlatformer>().canShoot = false;
     }
 
+
+ /*   private void Update()
+    {
+        if(Vector2.Distance(transform.position, player.transform.position) > maxDistance)
+        {
+            DestroyBulletAndReset();
+        }
+    }*/
+
+
     /* insta teleport commented out
     void Update()
     {
@@ -49,7 +61,7 @@ public class bullet : MonoBehaviour
 
 
     }*/
-   
+
     private void OnCollisionEnter2D(Collision2D col)
     {
         AudioManager audioManager = AudioManager.instance;

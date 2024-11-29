@@ -40,6 +40,11 @@ public class GatePortal : MonoBehaviour
         }
     }
 
+    public void SwitchFromAFar()
+    {
+        StartCoroutine(SwitchScenes());
+    }
+
     private IEnumerator SwitchScenes()
     {
         StartCoroutine(overlay.FadeTo(1f, 0.25f));

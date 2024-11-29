@@ -40,5 +40,21 @@ public class TextBubble : MonoBehaviour
         TextWriter.AddWriter_Static(textMeshPro, text, .05f, true, true);
     }
 
+    public static void Create_Scaled(Transform parent, Vector3 localPosition, string text, float bubbleTime)
+    {
+        Transform textBubble = PrefabManager.instance.FindVFX(PrefabManager.ListOfVFX.ChatBubblePrefab).transform;
+        textBubble.Rotate(0.0f, 180.0f, 0.0f);
+        Transform chatBubbleTransform = Instantiate(textBubble, parent);
+        chatBubbleTransform.eulerAngles = new Vector3(0f, 0f, 0f);
+        chatBubbleTransform.localPosition = localPosition;
+        float scale = 1 / parent.transform.localScale.x;
+        chatBubbleTransform.localScale = new Vector3(scale, scale, 1f);
+
+        chatBubbleTransform.GetComponent<TextBubble>().Setup(text);
+        chatBubbleTransform.localPosition = new Vector3(-1, 2); // hardcoding 
+
+        Destroy(chatBubbleTransform.gameObject, bubbleTime);
+    }
+
 
 }

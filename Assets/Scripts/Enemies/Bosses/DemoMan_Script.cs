@@ -231,6 +231,7 @@ public class DemoMan_Script : MonoBehaviour, ISFXResetable, IPhaseable<float>, I
     {
         if (!fightHasStarted)
         {
+            audio_M.PlayTheme(AudioManager.SoundList.Demoman_BG, 0.3f);
             player.GetComponent<MovementPlatformer>().StartIgnoreInput();
             StartCoroutine(PlayVideo_Delay());
             fightHasStarted = true;
@@ -240,8 +241,10 @@ public class DemoMan_Script : MonoBehaviour, ISFXResetable, IPhaseable<float>, I
 
     private void Repeat_StartFight()
     {
+
         if (!fightHasStarted)
         {
+            audio_M.PlayTheme(AudioManager.SoundList.Demoman_BG, 0.3f);
             fightHasStarted = true;
             SetStateNormal();
         }
@@ -622,6 +625,8 @@ public class DemoMan_Script : MonoBehaviour, ISFXResetable, IPhaseable<float>, I
         animator.Play("Demoman_Idle");
         playerRespawned = false;
         transform.position = respawnPosition.position;
+        audio_M.FadeOutCurrent(0.3f);
+        GetComponent<Enemy>().SetHpMax();
     }
 
     private bool Is_PlayerToTheRight()

@@ -12,7 +12,7 @@ public class SavePoint : MonoBehaviour
     private MovementPlatformer playerScript;
     public bool isOnHeights;
 
-    private bool isSaving = false, canSave, finishedAnimation;
+    private bool isSaving = false, canSave, finishedAnimation, finishedExitAnimation = true;
   
     void Start()
     {
@@ -23,10 +23,12 @@ public class SavePoint : MonoBehaviour
 
     private void Update()
     {
-        if (canSave && !isSaving && playerScript.isGrounded && IsPressingDown()) // player collided from above
+        
+        if (canSave  && finishedExitAnimation && !isSaving && playerScript.isGrounded && IsPressingDown()) // player collided from above
         {
             isSaving = true;
             StartCoroutine(Save());
+            finishedExitAnimation = false;
         }
 
         if(isSaving && finishedAnimation && IsPressingUp())
@@ -51,7 +53,7 @@ public class SavePoint : MonoBehaviour
             canSave = true;
     }
 
-    private void OnTriggerExit2D(Collider2D col)
+   private void OnTriggerExit2D(Collider2D col)
     {
         if (col.gameObject.layer == 11)
             canSave = false;
@@ -95,9 +97,17 @@ public class SavePoint : MonoBehaviour
     {
         GetComponentInChildren<UnityEngine.Rendering.Universal.Light2D>().enabled = false;
         isSaving = false;
-       animator.SetTrigger("GetUp");
+        animator.SetTrigger("GetUp");
+    //    StartCoroutine(Delay_CanSaveBool());
         if(!isOnHeights)
             playerScript.transform.position = viniEndPos.position;
+    }
+
+    private IEnumerator Delay_CanSaveBool()
+    {
+        yield return new WaitForSeconds(1.5f);
+
+        canSave = true;
     }
 
     public void Exit_SavePoint()
@@ -106,7 +116,9 @@ public class SavePoint : MonoBehaviour
         playerScript.GetComponent<SpriteRenderer>().enabled = true;
         if (!playerScript.IsFacingRight()) playerScript.Flip();
 
+        canSave = true;
         finishedAnimation = false;
+        finishedExitAnimation = true;
         gm.brotherInstance.GetComponent<Theo_Follow>().Reset_Save();
         animator.ResetTrigger("GetUp");
         StopAllCoroutines();

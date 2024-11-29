@@ -26,6 +26,7 @@ public class MovementPlatformer : MonoBehaviour
     private bool pressedJump;
     [SerializeField]
     private float groundStuckCheckHeight;
+ //   [SerializeField] SpriteRenderer rangeIndicator;
 
     private Footsteps footsteps_Script;
     private FixedJump fixJump_Script;
@@ -200,6 +201,7 @@ public class MovementPlatformer : MonoBehaviour
         //HandleAnimations();     // General functions
         Timers();
         JumpMemory();
+       // HandleTP_Range_Indicator();
 
         switch (state)
         {
@@ -294,6 +296,15 @@ public class MovementPlatformer : MonoBehaviour
         }
     }
 
+  /*  private void HandleTP_Range_Indicator()
+    {
+        if (CurrentBulletGameObject == null)
+            return;
+
+        float alpha = Mathf.InverseLerp(0f, 21f, Vector3.Distance(CurrentBulletGameObject.transform.position, transform.position));
+        rangeIndicator.color = new Color(1, 1, 1, alpha);
+    }
+    */
 
     /*private void FixBumps()    // this is garbage code for a garbage bug
     {
@@ -971,7 +982,7 @@ public class MovementPlatformer : MonoBehaviour
             if (isGrounded == false)
                 canShoot = false;
 
-
+         //   rangeIndicator.color = new Color(1, 1, 1, 0);
             ResetOrb();
         }
     }

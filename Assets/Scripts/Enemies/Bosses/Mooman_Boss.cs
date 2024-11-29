@@ -14,7 +14,7 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
     private RaycastHit2D groundCheckRaycast;
     private Vector2 originalPos;
     public float wallCheckDistance = 1, attackCheckDistance, knockBackTime, turnAroundTimer;
-    public float groundCheckDistance = 1, stallAnimation, phaseTwoHp, phaseThreeHp;
+    public float groundCheckDistance = 1, stallAnimation, phaseTwoHp, phaseThreeHp, moveUpSpeed;
     private int layerMaskGround = 1 << 8, currentPhase = 1;
     private Collider2D waitingCast;
     private bool fightHasStarted, shouldMovePhase, isSpawning_SlipBomb;
@@ -25,7 +25,7 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
     [SerializeField] private float screenShake_Time, pauseBeforeAttack, pauseBefore_Flying, runningSpeed, smokeBombOffset;
     [SerializeField] private float melee_Collider_Radius, flySpeed, flyBombs_Interval, flyBomb_VerticalForce;
     [SerializeField] private float melee_CD, throw_CD, launch_CD, cowWalk_CD, playerCloseDistance;
-    private float skillCoolDownTimer, slipBombTimer;
+    private float skillCoolDownTimer, slipBombTimer, vanish_Ypos;
 
 
     private int currentSkillsInt;
@@ -40,14 +40,15 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
     [Header("Caching")]
     [Space]
     [SerializeField]
-    private Transform getUp_Position;
+    private Transform holy_AppearPos, getUp_Position;
     [SerializeField]
-    private Transform melee_HitPos, cowSpawnPos, bomb_Throw_Position, bombInHand_HitPos, respawnPosition, startFightTrigger, flyBombPos;
+    private Transform secondPhasePos, melee_HitPos, cowSpawnPos, bomb_Throw_Position, bombInHand_HitPos, respawnPosition, startFightTrigger, flyBombPos;
     [SerializeField]
-    private GameObject flying_Collider, bomb_Prefab, smokeBomb_Prefab, cowToy_prefab, meleeVFX_Prefab;
+    private GameObject flying_Collider, bomb_Prefab, smokeBomb_Prefab, cowToy_prefab, meleeVFX_Prefab, yingYang_Object;
     [SerializeField]
     private UnityEngine.Video.VideoPlayer videoPlayer;
     [SerializeField] private RawImage screen;
+    [SerializeField] private GameObject warpObject, player_TP_Pos, triggerCollider, fadeToBlack;
 
 
 
@@ -69,6 +70,8 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
         Stunned,
         Flying,
         Running,
+        MoveUp,
+        Floating,
         Dead,
     }
     void Start()
@@ -117,15 +120,18 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
 
         // inputs for testing
         if (Input.GetKeyDown(KeyCode.Y))
-            animator.Play("Cow_Appear");
+        {
+            fadeToBlack.SetActive(true);
+            fadeToBlack.GetComponent<FadeIn>().Fade_SlowMo();
+        }
         if (Input.GetKeyDown(KeyCode.L))
-             Start_Melee();
-         if (Input.GetKeyDown(KeyCode.O))
+            Time.timeScale = 1f;
+        if (Input.GetKeyDown(KeyCode.O))
              Start_Launch();
          if (Input.GetKeyDown(KeyCode.P))
              Start_Throw();
          if (Input.GetKeyDown(KeyCode.I))
-             Start_CowWalk();
+            animator.Play("Mooman_Falling"); 
          if (Input.GetKeyDown(KeyCode.U))
          {
              state = State.Normal;
@@ -154,6 +160,9 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
             case State.Running:
                 Sprint();
                 break;
+            case State.MoveUp:
+                MoveUp();
+                break;
         }
 
         HandleRaycasts();
@@ -161,6 +170,21 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
         //    Debug.DrawRay(boxCollider.bounds.center + new Vector3(boxCollider.bounds.extents.x - 0.1f, 0), Vector2.down * (boxCollider.bounds.extents.y + groundCheckDistance));
         //     Debug.DrawRay(boxCollider.bounds.center - new Vector3(boxCollider.bounds.extents.x - 0.1f, 0), Vector2.down * (boxCollider.bounds.extents.y + groundCheckDistance));
         //    Debug.DrawRay(boxCollider.bounds.center - new Vector3(boxCollider.bounds.extents.x - 0.1f, boxCollider.bounds.extents.y + groundCheckDistance, 0), Vector2.right * (boxCollider.bounds.extents.x + groundCheckDistance));
+    }
+
+    private void MoveUp()
+    {
+        if (transform.position.y < vanish_Ypos)
+        {
+            transform.position = new Vector2(transform.position.x, transform.position.y + moveUpSpeed * Time.deltaTime);
+        }
+        else
+        {
+            state = State.Stunned;
+            transform.position = secondPhasePos.position;
+            GetComponent<Enemy>().currentHealth = 350;
+            triggerCollider.layer = 14;
+        }
     }
 
     private void HandleRaycasts()
@@ -172,6 +196,9 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
 
     private void StartAttacking()
     {
+        if (state == State.Waiting) return;
+
+
         state = State.Attack;
 
         if (shouldMovePhase)
@@ -224,10 +251,7 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
         return distance < playerCloseDistance;
     }
 
-    private void HandleFirstTime()
-    {
 
-    }
 
     private bool IsFirstTime()
     {
@@ -253,19 +277,20 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
       //  Animator bushAnimator = bushObject.GetComponent<Animator>();
 
       //  bushObject.layer = 13;
+        audio_M.PlayTheme(AudioManager.SoundList.Demoman_BG, 0.3f);
 
-        /*if (!PlayerPrefs.HasKey("Mooman_FirstTime"))
+        if (!PlayerPrefs.HasKey("Mooman_FirstTime"))
         {
             PlayerPrefs.SetInt("Mooman_FirstTime", 1);
-            animator.Play("Cow_Appear");*/
+            animator.Play("Cow_Appear");
 
             StartFight();
         //screen.color = new Color(1, 1, 1, 1);
-       /* }
+        }
         else
         {
             Repeat_StartFight();
-        }*/
+        }
     }
 
 
@@ -544,18 +569,6 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
 
 
 
-    private void DodgeStart()
-    {
-        if (Vector2.Distance(transform.position, player.transform.position) > 10)
-            return;
-        int i = Random.Range(1, 11); // 1 - 10.
-        if (i < 5)
-        {
-            //Dodge()
-            //  animator.SetTrigger("Dodge");
-
-        }
-    }
 
 
     private void ForceFlip()
@@ -608,23 +621,104 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
 
     public void HandlePhases(float hp)
     {
-        DodgeStart();
+       // DodgeStart();
         if (hp < phaseTwoHp && currentPhase == 1)
         {
+            state = State.Stunned;
             currentPhase++;
-            shouldMovePhase = true;
+            animator.Play("Mooman_Falling");
+            gameObject.layer = 13;
+            triggerCollider.layer = 13;
+            MovementPlatformer player_Script = player.GetComponent<MovementPlatformer>();
+            player_Script.BulletReset(); 
+            // stop music
 
         }
         if (hp < phaseThreeHp && currentPhase == 2)
         {
-            currentPhase++;
+            fadeToBlack.SetActive(true);
+            fadeToBlack.GetComponent<FadeIn>().Fade_SlowMo();
+
         }
     }
 
+
+    public void Delay_Vanish()
+    {
+        StartCoroutine(Delay_SecondPhase());
+    }
+
+
+    private IEnumerator Delay_SecondPhase()
+    {
+        yield return new WaitForSeconds(5f);
+
+        animator.Play("Mooman_Holy_Vanish");
+
+        yield return new WaitForSeconds(2f);
+
+        player.GetComponent<MovementPlatformer>().StartIgnoreInput();
+        enemy.bodyType = RigidbodyType2D.Kinematic;
+        transform.position = holy_AppearPos.position;
+        GameMaster.instance.ShakeCamera(4f, 1f);
+        animator.Play("Mooman_Holy_Appear");
+        yingYang_Object.SetActive(true);
+
+        yield return new WaitForSeconds(1f);
+
+        GetComponent<AfterImage>().enabled = true;
+
+        //TextBubble.Create_Scaled(player.transform, Vector2.zero, "HOLY COW!!!", 5f);
+        TextBubble.Create_Scaled(GameMaster.instance.brotherInstance.transform, Vector2.zero, "HOLY COW!!!", 5f);
+
+        yield return new WaitForSeconds(4f);
+
+        warpObject.SetActive(true);
+        warpObject.GetComponent<Warp_Distortion_Shader>().CallShockWave(0f, 5f, 0.8f);
+        //triggerHolder.GetComponent<ConfineCamera>().RevertConfiners();
+
+        yield return new WaitForSeconds(2f);
+
+
+        HandleCameraSwitch();
+        warpObject.GetComponent<Warp_Distortion_Shader>().CallShockWave(5f, 0f, 0.2f);
+
+        yield return new WaitForSeconds(1f);
+
+        vanish_Ypos = transform.position.y + 30f;
+        state = State.MoveUp;
+        player.GetComponent<MovementPlatformer>().EndIgnoreInput();
+    }
+
+    private void HandleCameraSwitch()
+    {
+        
+
+        ConfineCamera _confiner = GetComponent<ConfineCamera>();
+        _confiner.Set_NoEase();
+
+        Vector2 tpPos = player_TP_Pos.transform.position;
+        player.transform.position = tpPos;
+        GameMaster.instance.brotherInstance.transform.position = tpPos;
+        transform.position = new Vector2(tpPos.x, tpPos.y + 10f);
+    }
+    
+   /* private IEnumerator WarpSpace()
+    {
+        float warpStrength = warpMaterial.GetFloat("ShockWaveStrength");
+        while(warpMaterial.GetFloat("ShockWaveStrength") < 5)
+        {   
+            warpStrength
+            warpMaterial.SetFloat("ShockWaveStrength", )
+            yield return null;
+        }
+    }*/
+
+
     private void OnEnable()
     {
-     /*   if (PlayerPrefs.HasKey("Mooman_FirstTime"))
-            transform.position = respawnPosition.position;*/
+        if (PlayerPrefs.HasKey("Mooman_FirstTime"))
+            transform.position = respawnPosition.position;
 
     }
 
@@ -666,6 +760,9 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
         animator.Play("Mooman_Idle");
         playerRespawned = false;
         transform.position = respawnPosition.position;
+        audio_M.FadeOutCurrent(0.3f);
+        GetComponent<Enemy>().SetHpMax();
+        startFightTrigger.GetComponent<BoxCollider2D>().enabled = true;
     }
 
     private bool Is_PlayerToTheRight()

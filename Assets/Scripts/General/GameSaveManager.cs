@@ -295,6 +295,8 @@ public class GameSaveManager : MonoBehaviour
     {
         Directory.Delete(Application.persistentDataPath + "/game_save", true);
         PlayerPrefs.DeleteKey("FirstTimePlaying");
+        PlayerPrefs.DeleteKey("Demoman_FirstTime");
+        PlayerPrefs.DeleteKey("Mooman_FirstTime");
     }
 
 

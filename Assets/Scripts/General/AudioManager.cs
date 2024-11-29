@@ -143,6 +143,8 @@ public class AudioManager : MonoBehaviour
         DrillBoss_bg_Start,
         DrillBoss_bg_loop,
         DrillBoss_bg_ending,
+        Demoman_BG,
+        Rotem_Song,
     }
 
     public enum AudioManagerList
