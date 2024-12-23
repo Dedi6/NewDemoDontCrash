@@ -29,7 +29,7 @@ TagManager:
   - enemy
   - DeadEnemy
   - EnemyHitCollider
-  - Flower
+  - Hookable
   - DoorTeleport
   - Crank
   - EnemyProjectiles

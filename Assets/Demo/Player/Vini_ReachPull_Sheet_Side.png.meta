@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 8da82147edc82b848a711db8ba30dafd
+guid: 2e03a720161f74c4ebfdd5604a6c50bc
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -117,7 +117,133 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Vini_Pull_Side_Sheet_Test_0
+      name: Vini_ReachPull_Sheet_Side_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 256
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 611a77139ba87624d838e1bb67dca6e5
+      internalID: -1027933304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vini_ReachPull_Sheet_Side_1
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 256
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4e2077981c155c845b7e046590808726
+      internalID: -1607074531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vini_ReachPull_Sheet_Side_2
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 256
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0e0d6f8e0b2b6d4c8c6384c8719b4e5
+      internalID: -1593308839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vini_ReachPull_Sheet_Side_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 128
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15eae262e385e78499a8f624a0252acc
+      internalID: -1586115380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vini_ReachPull_Sheet_Side_4
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 128
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4441d975d023d949829edb0eadad1f7
+      internalID: 1663257199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vini_ReachPull_Sheet_Side_5
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 128
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5783e9608eef7a94ea590de90aac33dd
+      internalID: 214254543
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vini_ReachPull_Sheet_Side_6
       rect:
         serializedVersion: 2
         x: 0
@@ -131,14 +257,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6943349fa793e9846b82edf3ef6f5fb9
-      internalID: -1974611900
+      spriteID: 44b6b09d334d0464882e051fb17ecd11
+      internalID: 1504234732
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Vini_Pull_Side_Sheet_Test_1
+      name: Vini_ReachPull_Sheet_Side_7
       rect:
         serializedVersion: 2
         x: 128
@@ -152,29 +278,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9ebf737f29617c1468fa19836688cc6a
-      internalID: 783619487
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Vini_Pull_Side_Sheet_Test_2
-      rect:
-        serializedVersion: 2
-        x: 256
-        y: 0
-        width: 128
-        height: 128
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 21f43034a69a1af4a86ee1bcb54a4642
-      internalID: -507265319
+      spriteID: 6e29c5d075aac9d42967d71cdc2a5f3f
+      internalID: -771237626
       vertices: []
       indices: 
       edges: []
@@ -190,9 +295,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Vini_Pull_Side_Sheet_Test_2: -507265319
-      Vini_Pull_Side_Sheet_Test_0: -1974611900
-      Vini_Pull_Side_Sheet_Test_1: 783619487
+      Vini_ReachPull_Sheet_Side_6: 1504234732
+      Vini_ReachPull_Sheet_Side_7: -771237626
+      Vini_ReachPull_Sheet_Side_3: -1586115380
+      Vini_ReachPull_Sheet_Side_0: -1027933304
+      Vini_ReachPull_Sheet_Side_2: -1593308839
+      Vini_ReachPull_Sheet_Side_5: 214254543
+      Vini_ReachPull_Sheet_Side_1: -1607074531
+      Vini_ReachPull_Sheet_Side_4: 1663257199
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

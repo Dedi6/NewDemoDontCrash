@@ -29,7 +29,7 @@ public class FixedJump : MonoBehaviour
         }
     }
 
-    public void Set_Multiply_Equal()
+/*    public void Set_Multiply_Equal()
     {
         lowJumpMultiplayer = fallMultiplayer;
     }
@@ -37,5 +37,5 @@ public class FixedJump : MonoBehaviour
     public void ResetMultiplayer()
     {
         lowJumpMultiplayer = lowJumpBase;
-    }
+    }*/
 }

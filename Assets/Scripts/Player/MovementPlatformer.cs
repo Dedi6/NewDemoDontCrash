@@ -16,7 +16,7 @@ public class MovementPlatformer : MonoBehaviour
     [HideInInspector]
     public float jumpMemory = 0.2f, groundedMemory = 0.2f, moveInput, moveInputVertical;
     [SerializeField]
-    private float groundMemoryMax;
+    private float groundMemoryMax, stopping_Drag, maxSpeed;
     public float fHorDmpBasic;
     public float fHorDmpStopping;
     public float fHorDmpTurning;
@@ -26,7 +26,12 @@ public class MovementPlatformer : MonoBehaviour
     private bool pressedJump;
     [SerializeField]
     private float groundStuckCheckHeight;
- //   [SerializeField] SpriteRenderer rangeIndicator;
+    //   [SerializeField] SpriteRenderer rangeIndicator;
+
+    [SerializeField]
+    private float fall_Multipler_Jumping = 5f, lowJump_Multiplyer = 10f;
+    private float lowJumpBase;
+
 
     private Footsteps footsteps_Script;
     private FixedJump fixJump_Script;
@@ -93,10 +98,12 @@ public class MovementPlatformer : MonoBehaviour
     private int canBeAttackedLayerMask = (1 << 12) | (1 << 17) | (1 << 30) | (1 << 19) | (1 << 23);
     public int attackDamage = 40, manaFillPerAttack = 7;
     private float atkAnimationStallTimer;
+    [SerializeField]
+    private float atkAnimationStallTimer_Max;
     public float attackRate = 2f;
     private float nextAttackTime = 0f;
     private float regularAttackTimer, atkAnimationCombo = 0;
-    private bool atkAndFlip, isNearWall;        //!
+    private bool isNearWall;        //!
     private Vector2 atkCapsuleHor;
 
     [Header("General")]
@@ -126,16 +133,20 @@ public class MovementPlatformer : MonoBehaviour
     public UnityEvent OnLandEvent;
     [HideInInspector]
     public delegate void CustomEvent();
-    public CustomEvent teleportedNow, jumpedNow, savedNow;
+    public CustomEvent teleportedNow, jumpedNow, savedNow, landedNow;
 
     [System.Serializable]
     public class BoolEvent : UnityEvent<bool> { }
+
+    private bool testBool;
 
 
     private enum State              // all of the states available for the character
     {
         Normal,
+        Attacking,
         DashingToEnemy,
+        Reaching,
         IgnorePlayerInput,
     }
 
@@ -183,6 +194,7 @@ public class MovementPlatformer : MonoBehaviour
 
         orbType = OrbType.Normal;
         defaultOrb = PrefabManager.instance.defaultBulletPrefab;
+        lowJumpBase = lowJump_Multiplyer;
     }
 
     private void Awake()
@@ -206,21 +218,13 @@ public class MovementPlatformer : MonoBehaviour
         switch (state)
         {
             case State.Normal:              // actions available in normal state
-                FlipStart();
-                HandleAnimations();
-                MoveStart();
-                WallSlideCheck();
-                SwitchStates();
+                NormalState_Functions_Update();
+                Attack_Timer_Checks(); // intiates attack
+                FlipStart(); // checks For flipping
+
                 ShootMemory();
-                CheckDirectionPressed();
-                AttackMemory();
                 if (input.KeyDown(Keybindings.KeyList.ResetBullet))
                     BulletReset();
-                if (regularAttackTimer > 0 && Time.time >= nextAttackTime)
-                {
-                    AttackRegular();
-                    nextAttackTime = Time.time + 1f / attackRate;
-                }
                 if (shootMemoryTimer > 0 && !canTeleport)
                     ShootStart();
                 else if (input.KeyDown(Keybindings.KeyList.Shoot) && canTeleport)
@@ -228,6 +232,14 @@ public class MovementPlatformer : MonoBehaviour
                /* if (canHeal && input.KeyDown(Keybindings.KeyList.Heal) && manaBar.HaveEnoughMana(25) && !GetComponent<Health>().IsFullHealth())
                     StartCoroutine(StartHeal());*/
                 break;
+            case State.Attacking:
+                NormalState_Functions_Update();
+                Attack_Timer_Checks();
+                break;
+            case State.Reaching:
+                NormalState_Functions_Update();
+                break;
+
             case State.DashingToEnemy:
                 HandleAnimations();
                 break;
@@ -247,6 +259,26 @@ public class MovementPlatformer : MonoBehaviour
             RotatePointer();
     }
 
+    private void NormalState_Functions_Update()
+    {
+       // FlipStart();
+        HandleAnimations();
+        MoveStart();
+        WallSlideCheck();
+        //SwitchStates();
+        CheckDirectionPressed();
+        AttackMemory();
+    }
+
+    private void Attack_Timer_Checks()
+    {
+        if (regularAttackTimer > 0 && Time.time >= nextAttackTime)
+        {
+            AttackRegular();
+            nextAttackTime = Time.time + 1f / attackRate;
+        }
+    }
+
     void FixedUpdate()
     {
         HandleWallSlide();
@@ -257,27 +289,54 @@ public class MovementPlatformer : MonoBehaviour
             case State.Normal:
                 Move();
                 JumpNow();
+                ClampFallSpeed();
+                Jump_Fall_Handler();
+                break;
+            case State.Attacking:
+                Move();
+                JumpNow();
+                ClampFallSpeed_Attacking();
+                Jump_Fall_Handler();
+                break;
+            case State.Reaching:
+                Move();
+                Jump_Fall_Handler();
+
+                //JumpNow();
+                //  ClampFallSpeed_Attacking();
                 break;
             case State.DashingToEnemy:
                 DashToEnemy();
                 JumpMemory();
+                ClampFallSpeed();
                 break;
             case State.IgnorePlayerInput:
                 break;
         }
 
-        ClampFallSpeed();
+     //   ClampFallSpeed();
     }
 
     private void ClampFallSpeed()
     {
          if (isAirborn && (rb.velocity.y < -fallSpeed))
              rb.velocity = new Vector2(rb.velocity.x, -fallSpeed);
+
+    }
+
+    private void ClampFallSpeed_Attacking()
+    {
+        rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.2f);
     }
 
     public void SetStateNormal()
     {
         state = State.Normal;
+    }
+
+    public void SetState_Reaching()
+    {
+        state = State.Reaching;
     }
 
     private void RayCastsAndChecks()
@@ -380,10 +439,12 @@ public class MovementPlatformer : MonoBehaviour
             regularAttackTimer -= Time.deltaTime;
 
         if (atkAnimationStallTimer > 0)
-            atkAnimationStallTimer -= 1;
+            atkAnimationStallTimer -= Time.deltaTime;
+          //  atkAnimationStallTimer -= 1;
 
         if (atkAnimationCombo > 0)
             atkAnimationCombo -= Time.deltaTime;
+
     }
 
 
@@ -439,6 +500,12 @@ public class MovementPlatformer : MonoBehaviour
         else if (facingRight == true && moveInput < 0 && atkAnimationStallTimer <= 0)
             Flip();
     }
+
+    public void Set_AtkAnimation_StallTimer(float timerAmount)
+    {
+        atkAnimationStallTimer = timerAmount;
+    }
+
     public void Flip()
     {
         if (!thrustHappening)
@@ -478,13 +545,34 @@ public class MovementPlatformer : MonoBehaviour
         fHorizontalVelocity += moveInput;
 
         if (Mathf.Abs(moveInput) < 0.01f)
-            fHorizontalVelocity *= Mathf.Pow(1f - fHorDmpStopping, Time.deltaTime * speedMulitiplier);
+            fHorizontalVelocity *= Mathf.Pow(1f - fHorDmpStopping, Time.deltaTime * speedMulitiplier * stopping_Drag);
         else if (Mathf.Sign(moveInput) != Mathf.Sign(fHorizontalVelocity))
             fHorizontalVelocity *= Mathf.Pow(1f - fHorDmpTurning, Time.deltaTime * speedMulitiplier);
         else
-            fHorizontalVelocity *= Mathf.Pow(1f - fHorDmpBasic, Time.deltaTime * speedMulitiplier);
+        {
+
+            /*if (fHorizontalVelocity > maxSpeed)
+            {
+                if (isGrounded && bunnyHop_Timer <= 0)
+                    fHorizontalVelocity = maxSpeed;
+                else if (isGrounded && bunnyHop_Timer > 0)
+                    fHorizontalVelocity = rb.velocity.x;
+            }
+
+            if(fHorizontalVelocity < maxSpeed)*/
+                fHorizontalVelocity *= Mathf.Pow(1f - fHorDmpBasic, Time.deltaTime * speedMulitiplier);
+        }
+
+     /*  if (fHorizontalVelocity > maxSpeed)
+        {
+            if (isGrounded && bunnyHop_Timer <= 0)
+                fHorizontalVelocity = maxSpeed;
+            else if (isGrounded && bunnyHop_Timer > 0)
+                fHorizontalVelocity = rb.velocity.x;
+        }*/
 
         rb.velocity = new Vector2(fHorizontalVelocity, rb.velocity.y);
+
 
         /*    this is bad and not good and also bad but maybe ill use that again.
         if (isUsingTopNSideTeleport == true)
@@ -520,7 +608,7 @@ public class MovementPlatformer : MonoBehaviour
                 groundedMemory = groundMemoryMax;
                 Vector2 vfxPos = new Vector2(transform.position.x, transform.position.y - 1f);
                 PrefabManager.instance.PlayVFX(PrefabManager.ListOfVFX.VFX_Jumpstone, vfxPos);
-                fixJump_Script.Set_Multiply_Equal();
+                Set_Jump_Multiply_Equal();
             }
         }
         if (isGrounded)
@@ -560,7 +648,9 @@ public class MovementPlatformer : MonoBehaviour
         footsteps_Script.PlayerLanded();
         CreateDust();
         OnLandEvent.Invoke();
-        fixJump_Script.ResetMultiplayer();
+        Reset_Jump_Multiplyer();
+        landedNow.Invoke();
+        testBool = false;
     }
 
     public void JumpNow()  // the action of jumping
@@ -580,6 +670,52 @@ public class MovementPlatformer : MonoBehaviour
             animator.SetBool("IsFalling", false);
         }
     } 
+
+    public void ChangeTestBool()
+    {
+        testBool = true;
+    }
+
+    private void Jump_Fall_Handler()
+    {
+       /* if(!testBool)
+        {
+            if (rb.velocity.y > 0 && !InputManager.instance.GetKey(Keybindings.KeyList.Jump) || rb.GetComponent<MovementPlatformer>().thrustHappening)
+            {
+                rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJump_Multiplyer - 3) * Time.deltaTime;
+            }
+            else if (rb.velocity.y < 0)
+            {
+                rb.velocity += Vector2.up * Physics2D.gravity.y * (fall_Multipler_Jumping - 3) * Time.deltaTime;
+                //rb.GetComponent<MovementPlatformer>().animator.SetBool("IsJumping", true);
+            }
+        }
+        else
+        {
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJump_Multiplyer - 3) * Time.deltaTime;
+        }*/
+
+        
+        if (rb.velocity.y > 0 && !InputManager.instance.GetKey(Keybindings.KeyList.Jump) || rb.GetComponent<MovementPlatformer>().thrustHappening)
+        {
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJump_Multiplyer - 3) * Time.deltaTime;
+        }
+        else if (rb.velocity.y < 0)
+        {
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (fall_Multipler_Jumping - 3) * Time.deltaTime;
+            //rb.GetComponent<MovementPlatformer>().animator.SetBool("IsJumping", true);
+        }
+    }
+
+    private void Set_Jump_Multiply_Equal()
+    {
+        lowJump_Multiplyer = fall_Multipler_Jumping;
+    }
+
+    private void Reset_Jump_Multiplyer()
+    {
+        lowJump_Multiplyer = lowJumpBase;
+    }
 
     public Vector2 GetPosition()
     {
@@ -620,6 +756,12 @@ public class MovementPlatformer : MonoBehaviour
 
     public void SwitchStates()
     {
+        
+    }
+
+    public void SetState_Attacking()
+    {
+        state = State.Attacking;
     }
     
 
@@ -994,6 +1136,18 @@ public class MovementPlatformer : MonoBehaviour
             regularAttackTimer = 0.1f;
     }       // attacking functions
 
+    public void Start_Pull()
+    {
+
+        // need a timer instead
+        if (!InputManager.instance.GetKey(Keybindings.KeyList.Attack))
+            return;
+
+        animator.Play("Player_Pull_Side");
+
+
+    }
+
     private void CheckIfHitWall()
     {
         RaycastHit2D checkIfHitWall;
@@ -1019,9 +1173,35 @@ public class MovementPlatformer : MonoBehaviour
             isNearWall = false;
         }
     }
+
+    /*private IEnumerator ChangeGravity(float newValue, float timeToChange)
+    {
+        float original_Value = rb.gravityScale;
+        rb.gravityScale = newValue;
+
+        yield return new WaitForSeconds(timeToChange);
+
+        rb.gravityScale = original_Value;
+    }*/
+
+    public IEnumerator SwithState_Attacking(float timeToChange)
+    {
+        state = State.Attacking;
+
+        yield return new WaitForSeconds(timeToChange);
+
+        state = State.Normal;
+    }
+
     public void AttackRegular()
     {
-        atkAnimationStallTimer = 19;
+        // added changes in velocity
+        //rb.velocity = Vector2.zero;
+        //  StartCoroutine(PauseMovement(2f));
+        //StartCoroutine(ChangeGravity(0f, 0.25f));
+        
+
+        atkAnimationStallTimer = atkAnimationStallTimer_Max;
         if (moveInputVertical != 1)
         {
             if (atkAnimationCombo <= 0)
@@ -1040,20 +1220,23 @@ public class MovementPlatformer : MonoBehaviour
             float offsetHit = isNearWall ? -1.1f : 0;
             Vector2 attackPoint = new Vector2(regularAttackPoint.position.x + offsetHit, regularAttackPoint.position.y);
             Collider2D[] hitEnemies = Physics2D.OverlapCapsuleAll(attackPoint, atkCapsuleHor, CapsuleDirection2D.Horizontal, 0, canBeAttackedLayerMask);
+           
+            if(hitEnemies.Length > 0)   // slowing when attack
+                StartCoroutine(SwithState_Attacking(0.25f));
 
-           /* if (hitEnemies.Length == 0)
-            {
-                RaycastHit2D checkIfHitWall;
-                if (facingRight)
-                    checkIfHitWall = Physics2D.Raycast(shootingPoint.position, Vector2.right, 5, whatIsGround);
-                else
-                    checkIfHitWall = Physics2D.Raycast(shootingPoint.position, Vector2.left, 5, whatIsGround);
-                if (checkIfHitWall)
-                {
-                    audioManager.PlaySound(AudioManager.SoundList.HitWall);
-                    GameObject hitVFXspawn = Instantiate(hitVFXWall, checkIfHitWall.point, transform.rotation);
-                }
-            }*/
+            /* if (hitEnemies.Length == 0)
+             {
+                 RaycastHit2D checkIfHitWall;
+                 if (facingRight)
+                     checkIfHitWall = Physics2D.Raycast(shootingPoint.position, Vector2.right, 5, whatIsGround);
+                 else
+                     checkIfHitWall = Physics2D.Raycast(shootingPoint.position, Vector2.left, 5, whatIsGround);
+                 if (checkIfHitWall)
+                 {
+                     audioManager.PlaySound(AudioManager.SoundList.HitWall);
+                     GameObject hitVFXspawn = Instantiate(hitVFXWall, checkIfHitWall.point, transform.rotation);
+                 }
+             }*/
             foreach (Collider2D enemy in hitEnemies)
             {
                 if (enemy.gameObject.layer == 12) // enemy
@@ -1182,6 +1365,7 @@ public class MovementPlatformer : MonoBehaviour
 
     public IEnumerator PauseMovement(float timeToWait)
     {
+        Debug.Log("ds");
         rb.velocity = Vector2.zero;
         rb.constraints = RigidbodyConstraints2D.FreezePosition;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -1194,6 +1378,7 @@ public class MovementPlatformer : MonoBehaviour
     }       // pause only the player's movement for float timeToWait
 
 
+
     private IEnumerator ChangeBoolAfterSeconds(float timeToWait)
     {
         thrustHappening = true;
@@ -1201,13 +1386,6 @@ public class MovementPlatformer : MonoBehaviour
         thrustHappening = false;
     }
 
-    private IEnumerator ChangeBoolAfterSecondsZeroV(float timeToWait)
-    {
-        rb.velocity = Vector2.zero;
-        thrustHappening = true;
-        yield return new WaitForSeconds(timeToWait);
-        thrustHappening = false;
-    }
 
     private IEnumerator FreezeGame()
     {
@@ -1536,6 +1714,11 @@ public class MovementPlatformer : MonoBehaviour
     {
         PlayerPrefs.DeleteKey("BeginGame");
         PlayerPrefs.DeleteKey("FirstTimePlaying");
+    }
+
+    public bool Is_Attacking_RightNow()
+    {
+        return atkAnimationStallTimer > 0;
     }
 
 }

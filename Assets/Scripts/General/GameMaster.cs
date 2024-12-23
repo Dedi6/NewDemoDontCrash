@@ -16,6 +16,7 @@ public class GameMaster : MonoBehaviour
     [HideInInspector]
     public GameObject brotherInstance, confinedCamera;
 
+    private Rigidbody2D player_Rigidbody;
 
     void Awake()
     {
@@ -28,6 +29,7 @@ public class GameMaster : MonoBehaviour
             Destroy(gameObject);
         playerInstance = GameObject.FindGameObjectWithTag("Player");
         brotherInstance = GameObject.FindGameObjectWithTag("Brother");
+        player_Rigidbody = playerInstance.GetComponent<Rigidbody2D>();
 
         Application.targetFrameRate = 60;
         //Time.timeScale = 0.9f;
@@ -85,5 +87,10 @@ public class GameMaster : MonoBehaviour
     private bool ShouldLoadPlayer()
     {
         return PlayerPrefs.HasKey("LoadPlayer");
+    }
+
+    public Rigidbody2D Get_PlayerRigidBody()
+    {
+        return player_Rigidbody;
     }
 }

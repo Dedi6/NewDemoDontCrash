@@ -4961,6 +4961,7 @@ GameObject:
   - component: {fileID: 839845105652781752}
   - component: {fileID: 839845105652781759}
   - component: {fileID: 839845105652781758}
+  - component: {fileID: 8371723709416004733}
   - component: {fileID: 839845105652781755}
   - component: {fileID: 839845105652781700}
   - component: {fileID: 1522143681}
@@ -5116,12 +5117,16 @@ MonoBehaviour:
   moveInput: 0
   moveInputVertical: 0
   groundMemoryMax: 0.1
+  stopping_Drag: 1.5
+  maxSpeed: 0
   fHorDmpBasic: 0.95
   fHorDmpStopping: 1
   fHorDmpTurning: 1
   speedMulitiplier: 1.25
   fallSpeed: 23
   groundStuckCheckHeight: 0
+  fall_Multipler_Jumping: 5
+  lowJump_Multiplyer: 10
   isGrounded: 0
   isAirborn: 0
   groundCheck: {fileID: 839845106267385419}
@@ -5166,6 +5171,7 @@ MonoBehaviour:
     type: 3}
   attackDamage: 35
   manaFillPerAttack: 7
+  atkAnimationStallTimer_Max: 0.25
   attackRate: 3
   animator: {fileID: 839845105652781700}
   dust: {fileID: 1797907190}
@@ -5187,6 +5193,29 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8371723709416004733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 839845105652781757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecc62c7389674c42967f26d7ebd29b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  holdTime: 0.2
+  pullSpeed_Side: 40
+  pullSpeed_Up: 25
+  pullDuration: 0.2
+  check_Capsule_Size_Side: {x: 5, y: 3.2}
+  check_Capsule_Size_Up: {x: 3.2, y: 5}
+  checkPos_Side: {fileID: 0}
+  checkPos_Up: {fileID: 0}
+  hookable_LayerMask:
+    serializedVersion: 2
+    m_Bits: 8425472
 --- !u!114 &839845105652781755
 MonoBehaviour:
   m_ObjectHideFlags: 0
