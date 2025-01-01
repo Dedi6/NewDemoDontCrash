@@ -15,6 +15,9 @@ public class Health : MonoBehaviour
 
     void Awake()
     {
+        Debug.Log("delete here later ");
+        PlayerPrefs.DeleteKey("HP");
+
         SetHP();
     }
 
@@ -88,11 +91,11 @@ public class Health : MonoBehaviour
 
     public void IncreaseHp()
     {
-        FullHeal();
         health++;
         numberOfHearts++;
         int newHP = numberOfHearts;
         PlayerPrefs.SetInt("HP", newHP);
+        FullHeal();
     }
 
     public void SetHpAsInt(int hp)

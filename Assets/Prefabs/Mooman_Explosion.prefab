@@ -46,7 +46,8 @@ GameObject:
   - component: {fileID: 419333446271216559}
   - component: {fileID: 8416143009178014017}
   - component: {fileID: 2618201188562667588}
-  m_Layer: 0
+  - component: {fileID: 476049753707263487}
+  m_Layer: 18
   m_Name: Mooman_Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -230,3 +231,20 @@ MonoBehaviour:
   soundToPlay: 0
   shakeTime: 0.2
   shakeForce: 2.5
+--- !u!114 &476049753707263487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6579591834640497937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 464459269f034f64a8cf62bc5ac018f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  is_SidePull: 1
+  is_UpPull: 1
+  is_Animated: 0
+  shouldStopWhenPulling: 1
+  animationType: 0

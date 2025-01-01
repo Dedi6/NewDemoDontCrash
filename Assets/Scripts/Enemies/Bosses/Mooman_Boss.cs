@@ -26,6 +26,7 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
     [SerializeField] private float melee_Collider_Radius, flySpeed, flyBombs_Interval, flyBomb_VerticalForce;
     [SerializeField] private float melee_CD, throw_CD, launch_CD, cowWalk_CD, playerCloseDistance;
     private float skillCoolDownTimer, slipBombTimer, vanish_Ypos;
+    private GameObject current_Cow_Toy;
 
 
     private int currentSkillsInt;
@@ -104,9 +105,9 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
                 {
                     ForceFlip();
                 }
-                 if (skillCoolDownTimer > 0)
+                if (skillCoolDownTimer > 0)
                      skillCoolDownTimer -= Time.deltaTime;
-                 else
+                else
                      StartAttacking();
                 break;
 
@@ -119,13 +120,14 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
         }
 
         // inputs for testing
-        if (Input.GetKeyDown(KeyCode.Y))
+      /* if (Input.GetKeyDown(KeyCode.Y))
         {
             fadeToBlack.SetActive(true);
             fadeToBlack.GetComponent<FadeIn>().Fade_SlowMo();
         }
         if (Input.GetKeyDown(KeyCode.L))
-            Time.timeScale = 1f;
+            Start_Melee();
+        //Time.timeScale = 1f;
         if (Input.GetKeyDown(KeyCode.O))
              Start_Launch();
          if (Input.GetKeyDown(KeyCode.P))
@@ -138,6 +140,8 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
              enemy.velocity = Vector2.zero;
              transform.localPosition = Vector2.zero;
          }
+        if (Input.GetKeyDown(KeyCode.M))
+            Start_CowWalk();*/
 
 
         if (turnAroundTimer > 0)
@@ -237,6 +241,11 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
         }
         else if (61 <= i && i <= 80)
         {
+            if(current_Cow_Toy != null) // if theres a cow, roll again
+            {
+                StartAttacking();
+                return;
+            }
             Start_CowWalk();
         }
         else if (81 <= i && i <= 100)
@@ -393,6 +402,11 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
         Vector3 offsetPos = new Vector3(melee_HitPos.position.x + dirOffset, melee_HitPos.position.y);
         GameObject anotherBomb2 = Instantiate(meleeVFX_Prefab, offsetPos, Quaternion.identity);
         //anotherBomb.GetComponent<Action_TriggerHitPlayer>().TriggerNow();
+        if(facingRight)
+        {
+            anotherBomb.transform.Rotate(0.0f, 180.0f, 0.0f);
+            anotherBomb2.transform.Rotate(0.0f, 180.0f, 0.0f);
+        }
 
         skillCoolDownTimer = melee_CD;
         SetStateNormal();
@@ -403,12 +417,13 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
         animator.Play("Mooman_CowWalk");
     }
 
-    private void Spawn_CowToy()
+    public void Spawn_CowToy()
     {
         
         GameObject cowToy = Instantiate(cowToy_prefab, cowSpawnPos.position, Quaternion.identity);
         //cowToy.GetComponent<CowWalk>().ForceFlip();
         cowToy.GetComponent<CowWalk>().ForceFlip(facingRight);
+        current_Cow_Toy = cowToy;
       
         skillCoolDownTimer = cowWalk_CD;
         animator.Play("Mooman_Rearming");
@@ -660,7 +675,7 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
         player.GetComponent<MovementPlatformer>().StartIgnoreInput();
         enemy.bodyType = RigidbodyType2D.Kinematic;
         transform.position = holy_AppearPos.position;
-        GameMaster.instance.ShakeCamera(4f, 1f);
+        GameMaster.instance.ShakeCamera(4f, 2f);
         animator.Play("Mooman_Holy_Appear");
         yingYang_Object.SetActive(true);
 
@@ -688,6 +703,7 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
         vanish_Ypos = transform.position.y + 30f;
         state = State.MoveUp;
         player.GetComponent<MovementPlatformer>().EndIgnoreInput();
+        GameMaster.instance.LoadSavePoint(GameMaster.instance.lastCheckPointPosition);
     }
 
     private void HandleCameraSwitch()
@@ -701,6 +717,7 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
         player.transform.position = tpPos;
         GameMaster.instance.brotherInstance.transform.position = tpPos;
         transform.position = new Vector2(tpPos.x, tpPos.y + 10f);
+        transform.SetParent(player_TP_Pos.transform.parent);
     }
     
    /* private IEnumerator WarpSpace()
@@ -731,6 +748,9 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
 
     public void PlayerHasRespawned()
     {
+        if (currentPhase == 2)
+            return;
+
         if (!playerRespawned)
         {
             playerRespawned = true;

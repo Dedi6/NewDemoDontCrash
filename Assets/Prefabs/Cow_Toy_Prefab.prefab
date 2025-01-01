@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1728731212965626472}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.048, y: -0.121, z: 0}
+  m_LocalPosition: {x: -0.048, y: -0.164, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -56,7 +56,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.48, y: 0.28}
+  m_Size: {x: 1.48, y: 0.22}
   m_EdgeRadius: 0
 --- !u!1 &3811688456571769231
 GameObject:
@@ -4929,6 +4929,7 @@ GameObject:
   - component: {fileID: 3811688456760665756}
   - component: {fileID: 3811688456760665758}
   - component: {fileID: 3811688456760665759}
+  - component: {fileID: 2580680081920447380}
   m_Layer: 12
   m_Name: Cow_Toy_Prefab
   m_TagString: EnemyAlive
@@ -5136,18 +5137,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy: {fileID: 3811688456760665757}
   rayCheckPoint: {fileID: 3811688456606458286}
-  wallCheckDistance: 1
+  wallCheckDistance: 2
   platformCheckDistance: 1
   groundCheckDistance: 1
   knockBackTime: 0.1
   fHorDmpBasic: 0
   fHorDmpTurning: 0
   speedMulitiplier: 0
-  stepTimerMax: 0.25
-  stepForce: 0.5
-  boxCheckSize: {x: 13.5, y: 2.5}
+  stepTimerMax: 0.18
+  stepForce: 0.7
+  boxCheckSize: {x: 13.5, y: 1.95}
   hitCheck_Pos: {fileID: 9077896293190026098}
   animator2: {fileID: 3811688456760665752}
+--- !u!114 &2580680081920447380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3811688456760665767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 464459269f034f64a8cf62bc5ac018f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  is_SidePull: 1
+  is_UpPull: 0
+  is_Animated: 0
+  shouldStopWhenPulling: 0
+  animationType: 0
 --- !u!1 &3811688457478561284
 GameObject:
   m_ObjectHideFlags: 0

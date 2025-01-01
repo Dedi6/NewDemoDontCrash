@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using MyBox;
+using System.Collections;
+using System.Collections.Generic;
 
 public class Action_TriggerHitPlayer : MonoBehaviour
 {
@@ -54,6 +56,23 @@ public class Action_TriggerHitPlayer : MonoBehaviour
         GetComponent<Rigidbody2D>().velocity = direction * speed;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 180f;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+    }
+
+    public void Stop_Movement_ForSeconds(float timeToStop)
+    {
+        StartCoroutine(Start_Stop_ForSeconds(timeToStop));
+    }
+
+    public IEnumerator Start_Stop_ForSeconds(float timeToStop)
+    {
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        Vector2 original_Speed = rb.velocity;
+        rb.velocity = Vector2.zero;
+
+        yield return new WaitForSeconds(timeToStop);
+
+        rb.velocity = original_Speed;
+
     }
 
     public void SetPositionAndMovement(Vector2 direction, float speed, Vector2 position)

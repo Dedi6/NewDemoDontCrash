@@ -136,7 +136,7 @@ public class Enemy : MonoBehaviour
     void BulletHitEnemy(GameObject bullet)
     {
         player.GetComponent<MovementPlatformer>().CurrentBulletGameObject = gameObject;
-        player.GetComponent<MovementPlatformer>().didHitAnEnemy = true;
+        player.GetComponent<MovementPlatformer>().orb_Hit_Enemy = true;
         Highlight();
         GetComponent<SpriteRenderer>().sortingOrder = 1;
         player.GetComponent<MovementPlatformer>().UnHightLightEnemies();

@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 4231478481980238972}
   - component: {fileID: 4231478481980238966}
   - component: {fileID: 4231478481980238973}
+  - component: {fileID: 8949033367873695969}
   m_Layer: 12
   m_Name: RegBoar
   m_TagString: EnemyAlive
@@ -262,6 +263,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &8949033367873695969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4231478481980238962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 464459269f034f64a8cf62bc5ac018f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  is_SidePull: 1
+  is_UpPull: 0
+  is_Animated: 0
+  animationType: 0
 --- !u!1 &4231478482022723776
 GameObject:
   m_ObjectHideFlags: 0

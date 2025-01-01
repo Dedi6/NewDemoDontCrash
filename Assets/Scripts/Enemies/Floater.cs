@@ -168,8 +168,8 @@ public class Floater : MonoBehaviour, ISFXResetable, IKnockbackable
         {
             moveSFXflag = true;
             AudioManager.instance.PlaySound(AudioManager.SoundList.Floater_Move);
+            animator.SetTrigger("Attack");
         }
-        animator.SetTrigger("Attack");
 
         if (Vector2.Distance(transform.position, attackPos.transform.position) > 1f)
             transform.position = Vector2.MoveTowards(transform.position, attackPos.transform.position, speedMulitiplier * Time.deltaTime);

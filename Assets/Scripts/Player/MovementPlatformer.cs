@@ -56,7 +56,7 @@ public class MovementPlatformer : MonoBehaviour
     public Transform shootingPoint;      // variables for shooting and teleporting
     public GameObject bulletPrefab;
     [HideInInspector]
-    public bool canTeleport = false, canShoot = true, shouldICheckIsGrounded = true, didHitAnEnemy = false, bulletHitDoor = false, thrustHappening = false, showPointer;
+    public bool canTeleport = false, canShoot = true, shouldICheckIsGrounded = true, orb_Hit_Enemy = false, bulletHitDoor = false, thrustHappening = false, showPointer;
     public float waitTimeShooting = 0.3f;
     [HideInInspector]
     public float canShootTimer, groundTimer;
@@ -96,14 +96,15 @@ public class MovementPlatformer : MonoBehaviour
     public GameObject hitVFX;
     public GameObject hitVFXWall;
     private int canBeAttackedLayerMask = (1 << 12) | (1 << 17) | (1 << 30) | (1 << 19) | (1 << 23);
-    public int attackDamage = 40, manaFillPerAttack = 7;
+    public int attackDamage_Regular = 40, manaFillPerAttack = 7;
     private float atkAnimationStallTimer;
     [SerializeField]
-    private float atkAnimationStallTimer_Max;
+    private float atkAnimationStallTimer_Max, atk_Combo_Reset_Time;
     public float attackRate = 2f;
-    private float nextAttackTime = 0f;
-    private float regularAttackTimer, atkAnimationCombo = 0;
-    private bool isNearWall;        //!
+    private float nextAttackTime = 0f, atk_Combo_Timer;
+    private float regularAttackTimer;
+    private int atkAnimationCombo = 0, _current_Attack_Damage;
+    private bool isNearWall, did_Hit_Enemy, can_Attack = true, did_Attack_Airborn;        //!
     private Vector2 atkCapsuleHor;
 
     [Header("General")]
@@ -125,6 +126,7 @@ public class MovementPlatformer : MonoBehaviour
     private InputManager input;
     private bool usingKeyboard = true;
     private ManaBar manaBar;
+    private Player_Pull_Handler pull_Handler;
 
 
     [Header("Events")]
@@ -137,8 +139,6 @@ public class MovementPlatformer : MonoBehaviour
 
     [System.Serializable]
     public class BoolEvent : UnityEvent<bool> { }
-
-    private bool testBool;
 
 
     private enum State              // all of the states available for the character
@@ -191,6 +191,7 @@ public class MovementPlatformer : MonoBehaviour
         currentRoom = GameMaster.instance.firstRoom;
         footsteps_Script = GetComponent<Footsteps>();
         fixJump_Script = GetComponent<FixedJump>();
+        pull_Handler = GetComponent<Player_Pull_Handler>();
 
         orbType = OrbType.Normal;
         defaultOrb = PrefabManager.instance.defaultBulletPrefab;
@@ -222,15 +223,10 @@ public class MovementPlatformer : MonoBehaviour
                 Attack_Timer_Checks(); // intiates attack
                 FlipStart(); // checks For flipping
 
-                ShootMemory();
-                if (input.KeyDown(Keybindings.KeyList.ResetBullet))
-                    BulletReset();
-                if (shootMemoryTimer > 0 && !canTeleport)
-                    ShootStart();
-                else if (input.KeyDown(Keybindings.KeyList.Shoot) && canTeleport)
-                    Teleport();
-               /* if (canHeal && input.KeyDown(Keybindings.KeyList.Heal) && manaBar.HaveEnoughMana(25) && !GetComponent<Health>().IsFullHealth())
-                    StartCoroutine(StartHeal());*/
+                //Handle_Orb_Update();
+
+                /* if (canHeal && input.KeyDown(Keybindings.KeyList.Heal) && manaBar.HaveEnoughMana(25) && !GetComponent<Health>().IsFullHealth())
+                     StartCoroutine(StartHeal());*/
                 break;
             case State.Attacking:
                 NormalState_Functions_Update();
@@ -259,6 +255,17 @@ public class MovementPlatformer : MonoBehaviour
             RotatePointer();
     }
 
+    private void Handle_Orb_Update()
+    {
+        ShootMemory();
+        if (input.KeyDown(Keybindings.KeyList.ResetBullet))
+            BulletReset();
+        if (shootMemoryTimer > 0 && !canTeleport)
+            ShootStart();
+        else if (input.KeyDown(Keybindings.KeyList.Shoot) && canTeleport)
+            Teleport();
+    }
+
     private void NormalState_Functions_Update()
     {
        // FlipStart();
@@ -272,7 +279,7 @@ public class MovementPlatformer : MonoBehaviour
 
     private void Attack_Timer_Checks()
     {
-        if (regularAttackTimer > 0 && Time.time >= nextAttackTime)
+        if (can_Attack && regularAttackTimer > 0 && Time.time >= nextAttackTime)
         {
             AttackRegular();
             nextAttackTime = Time.time + 1f / attackRate;
@@ -295,7 +302,7 @@ public class MovementPlatformer : MonoBehaviour
             case State.Attacking:
                 Move();
                 JumpNow();
-                ClampFallSpeed_Attacking();
+                ClampSpeed_Attacking();
                 Jump_Fall_Handler();
                 break;
             case State.Reaching:
@@ -324,9 +331,23 @@ public class MovementPlatformer : MonoBehaviour
 
     }
 
-    private void ClampFallSpeed_Attacking()
+    private void ClampSpeed_Attacking()
     {
-        rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.2f);
+        if(did_Hit_Enemy)
+        {
+            //  rb.velocity = new Vector2(rb.velocity.x * 0.7f, rb.velocity.y);
+            Debug.Log(did_Attack_Airborn);
+
+            if(did_Attack_Airborn)
+                rb.velocity = new Vector2(rb.velocity.x * 0.7f, 3f);
+            else
+                rb.velocity = new Vector2(rb.velocity.x * 0.7f, rb.velocity.y);
+                //rb.velocity = new Vector2(rb.velocity.x * 0.7f, 3f);
+        }
+        else if(isGrounded)
+            rb.velocity = new Vector2(rb.velocity.x * 0.7f, rb.velocity.y);
+
+        //   rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.2f);
     }
 
     public void SetStateNormal()
@@ -442,8 +463,11 @@ public class MovementPlatformer : MonoBehaviour
             atkAnimationStallTimer -= Time.deltaTime;
           //  atkAnimationStallTimer -= 1;
 
-        if (atkAnimationCombo > 0)
-            atkAnimationCombo -= Time.deltaTime;
+     //   if (atkAnimationCombo > 0)
+        //    atkAnimationCombo -= Time.deltaTime;
+
+        if(atk_Combo_Timer > 0)
+            atk_Combo_Timer -= Time.deltaTime;
 
     }
 
@@ -461,6 +485,7 @@ public class MovementPlatformer : MonoBehaviour
             audioManager.PlaySound(AudioManager.SoundList.PlayerHit);
             StartCoroutine(FreezeGameForTime(0.3f));
             GetComponent<Health>().DealDamage(damage);
+            pull_Handler.Player_GotHit_Check();
         }
     }
 
@@ -602,13 +627,14 @@ public class MovementPlatformer : MonoBehaviour
             jumpMemory = 0.2f;
 
             CellOrganizer cellO = CellOrganizer.instance;   // handle jump orbs
-            if (isAirborn && cellO.HaveOrbs() && !IsNearGround())
+            if (isAirborn && cellO.HaveOrbs() && !IsNearGround() && Does_State_AllowingJumpstone())
             {
                 cellO.ReleaseLatest();
                 groundedMemory = groundMemoryMax;
                 Vector2 vfxPos = new Vector2(transform.position.x, transform.position.y - 1f);
                 PrefabManager.instance.PlayVFX(PrefabManager.ListOfVFX.VFX_Jumpstone, vfxPos);
                 Set_Jump_Multiply_Equal();
+                pull_Handler.Set_FallBool_False();
             }
         }
         if (isGrounded)
@@ -627,9 +653,14 @@ public class MovementPlatformer : MonoBehaviour
 
     }       // preparing the conditions to the jump
 
+    private bool Does_State_AllowingJumpstone()
+    {
+        return state != State.Reaching && state != State.IgnorePlayerInput;
+    }
+
     private bool IsNearGround()
     {
-        return Physics2D.Raycast(transform.position, Vector2.down, 2, whatIsGround);
+        return Physics2D.Raycast(transform.position, Vector2.down, 3, whatIsGround);
     }
 
     public void FallingGroundCheck()
@@ -650,7 +681,7 @@ public class MovementPlatformer : MonoBehaviour
         OnLandEvent.Invoke();
         Reset_Jump_Multiplyer();
         landedNow.Invoke();
-        testBool = false;
+        did_Attack_Airborn = false;
     }
 
     public void JumpNow()  // the action of jumping
@@ -671,10 +702,6 @@ public class MovementPlatformer : MonoBehaviour
         }
     } 
 
-    public void ChangeTestBool()
-    {
-        testBool = true;
-    }
 
     private void Jump_Fall_Handler()
     {
@@ -696,7 +723,7 @@ public class MovementPlatformer : MonoBehaviour
         }*/
 
         
-        if (rb.velocity.y > 0 && !InputManager.instance.GetKey(Keybindings.KeyList.Jump) || rb.GetComponent<MovementPlatformer>().thrustHappening)
+        if (rb.velocity.y > 0 && !InputManager.instance.GetKey(Keybindings.KeyList.Jump) || thrustHappening)
         {
             rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJump_Multiplyer - 3) * Time.deltaTime;
         }
@@ -712,7 +739,7 @@ public class MovementPlatformer : MonoBehaviour
         lowJump_Multiplyer = fall_Multipler_Jumping;
     }
 
-    private void Reset_Jump_Multiplyer()
+    public void Reset_Jump_Multiplyer()
     {
         lowJump_Multiplyer = lowJumpBase;
     }
@@ -826,7 +853,7 @@ public class MovementPlatformer : MonoBehaviour
             canShoot = false;
         CreateDust();
 
-        if (!didHitAnEnemy && CurrentBulletGameObject != null)
+        if (!orb_Hit_Enemy && CurrentBulletGameObject != null)
         {
             StartCoroutine(FreezeGame());
             if (orbType == OrbType.Normal)
@@ -841,7 +868,7 @@ public class MovementPlatformer : MonoBehaviour
 
         KillBulletObject();
 
-        if (didHitAnEnemy)
+        if (orb_Hit_Enemy)
         {
             StartCoroutine(FreezeGame());
             StartCoroutine(MakePlayerInvincible(0.15f));
@@ -857,7 +884,7 @@ public class MovementPlatformer : MonoBehaviour
                 CurrentBulletGameObject.gameObject.GetComponent<DoorDashThrough>().Highlight();
             }
             canShoot = true;
-            didHitAnEnemy = false;
+            orb_Hit_Enemy = false;
             canShootTimer = 0;
         }
         if(transform.rotation.z != 0)
@@ -1074,13 +1101,13 @@ public class MovementPlatformer : MonoBehaviour
 
     public void BulletReset()
     {
-        if(!didHitAnEnemy)
+        if(!orb_Hit_Enemy)
             KillBulletObject();
         else
         {
             canTeleport = false;
             canShoot = true;
-            didHitAnEnemy = false;
+            orb_Hit_Enemy = false;
             canShootTimer = 0;
             shouldCheckForShootMemory = true;
 
@@ -1100,17 +1127,17 @@ public class MovementPlatformer : MonoBehaviour
     {
         canTeleport = false;
         canShoot = true;
-        didHitAnEnemy = false;
+        orb_Hit_Enemy = false;
         canShootTimer = 0;
         shouldICheckIsGrounded = false;
         shouldCheckForShootMemory = true;
-        if (!didHitAnEnemy)
+        if (!orb_Hit_Enemy)
             Destroy(CurrentBulletGameObject);
     }
 
     public void KillBulletObject()
     {
-        if (!didHitAnEnemy)
+        if (!orb_Hit_Enemy)
         {
             if (CurrentBulletGameObject != null)
                 PrefabManager.instance.PlayVFX(PrefabManager.ListOfVFX.BulletDissapear, CurrentBulletGameObject.transform.position);
@@ -1136,17 +1163,6 @@ public class MovementPlatformer : MonoBehaviour
             regularAttackTimer = 0.1f;
     }       // attacking functions
 
-    public void Start_Pull()
-    {
-
-        // need a timer instead
-        if (!InputManager.instance.GetKey(Keybindings.KeyList.Attack))
-            return;
-
-        animator.Play("Player_Pull_Side");
-
-
-    }
 
     private void CheckIfHitWall()
     {
@@ -1193,6 +1209,51 @@ public class MovementPlatformer : MonoBehaviour
         state = State.Normal;
     }
 
+    private void Attack_Combo_Handler()
+    {
+        if (atk_Combo_Timer <= 0)
+        {
+            atkAnimationCombo = 0;
+            atk_Combo_Timer = atk_Combo_Reset_Time;
+        }
+
+        did_Attack_Airborn = !isGrounded; // have no idea why it's reversed
+        float swith_State_Time = atkAnimationCombo == 2 ? 0.4f : 0.25f;
+        StartCoroutine(SwithState_Attacking(swith_State_Time));
+        //Debug.Log(atk_Combo_Timer + "  " + atkAnimationCombo);
+
+        if (atkAnimationCombo == 0)
+        {
+            animator.SetTrigger("AttackingRegular");
+            atkAnimationCombo++;
+            _current_Attack_Damage = attackDamage_Regular;
+        }
+        else if (atkAnimationCombo == 1)
+        {
+            atkAnimationCombo++;
+            animator.SetTrigger("AttackingRegularCombo");
+            _current_Attack_Damage = attackDamage_Regular;
+        }
+        else if (atkAnimationCombo == 2)
+        {
+            animator.Play("Player_Attack_Combo_Final");
+            atkAnimationCombo = 0;
+            _current_Attack_Damage = Mathf.RoundToInt(attackDamage_Regular * 1.5f);
+            StartCoroutine(Can_Attack_Cooldown_Coroutine());
+         //   StartCoroutine(SwitchStateIgnore(0.5f)); // float and do it after check
+        }
+    }
+
+    private IEnumerator Can_Attack_Cooldown_Coroutine()
+    {
+        can_Attack = false;
+
+        yield return new WaitForSeconds(0.8f);
+
+        can_Attack = true;
+    }
+
+
     public void AttackRegular()
     {
         // added changes in velocity
@@ -1204,7 +1265,8 @@ public class MovementPlatformer : MonoBehaviour
         atkAnimationStallTimer = atkAnimationStallTimer_Max;
         if (moveInputVertical != 1)
         {
-            if (atkAnimationCombo <= 0)
+            Attack_Combo_Handler();
+           /* if (atkAnimationCombo <= 0)
             {
                 atkAnimationCombo = 1f;
                 animator.SetTrigger("AttackingRegular");
@@ -1213,35 +1275,36 @@ public class MovementPlatformer : MonoBehaviour
             {
                 animator.SetTrigger("AttackingRegularCombo");
                 atkAnimationCombo = 0;
-            }
+            }*/
 
             CheckIfHitWall();
             //Detect all the enemies hit and puts the data in a collider array, allowing to affect each enemy hit.
             float offsetHit = isNearWall ? -1.1f : 0;
             Vector2 attackPoint = new Vector2(regularAttackPoint.position.x + offsetHit, regularAttackPoint.position.y);
             Collider2D[] hitEnemies = Physics2D.OverlapCapsuleAll(attackPoint, atkCapsuleHor, CapsuleDirection2D.Horizontal, 0, canBeAttackedLayerMask);
-           
-            if(hitEnemies.Length > 0)   // slowing when attack
-                StartCoroutine(SwithState_Attacking(0.25f));
 
-            /* if (hitEnemies.Length == 0)
-             {
-                 RaycastHit2D checkIfHitWall;
-                 if (facingRight)
-                     checkIfHitWall = Physics2D.Raycast(shootingPoint.position, Vector2.right, 5, whatIsGround);
-                 else
-                     checkIfHitWall = Physics2D.Raycast(shootingPoint.position, Vector2.left, 5, whatIsGround);
-                 if (checkIfHitWall)
+            if (hitEnemies.Length > 0)   // slowing when attack
+                StartCoroutine(Attack_Movement_Switch_Coroutine());
+               // StartCoroutine(SwithState_Attacking(0.25f));
+
+                /* if (hitEnemies.Length == 0)
                  {
-                     audioManager.PlaySound(AudioManager.SoundList.HitWall);
-                     GameObject hitVFXspawn = Instantiate(hitVFXWall, checkIfHitWall.point, transform.rotation);
-                 }
-             }*/
+                     RaycastHit2D checkIfHitWall;
+                     if (facingRight)
+                         checkIfHitWall = Physics2D.Raycast(shootingPoint.position, Vector2.right, 5, whatIsGround);
+                     else
+                         checkIfHitWall = Physics2D.Raycast(shootingPoint.position, Vector2.left, 5, whatIsGround);
+                     if (checkIfHitWall)
+                     {
+                         audioManager.PlaySound(AudioManager.SoundList.HitWall);
+                         GameObject hitVFXspawn = Instantiate(hitVFXWall, checkIfHitWall.point, transform.rotation);
+                     }
+                 }*/
             foreach (Collider2D enemy in hitEnemies)
             {
                 if (enemy.gameObject.layer == 12) // enemy
                 {
-                    enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+                    enemy.GetComponent<Enemy>().TakeDamage(_current_Attack_Damage);
                     GetComponent<ManaBar>().FillUpMana(manaFillPerAttack);
                     float y = facingRight ? 0f : 180f;
                     GameObject hitVFXspawn = Instantiate(hitVFX, enemy.transform.position, Quaternion.Euler(0, y, Random.Range(-20, 20)));
@@ -1280,7 +1343,7 @@ public class MovementPlatformer : MonoBehaviour
             {
                 if (enemy.gameObject.layer == 12) // enemy
                 {
-                    enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+                    enemy.GetComponent<Enemy>().TakeDamage(attackDamage_Regular);
                     GameObject hitVFXspawn = Instantiate(hitVFX, enemy.transform.position, Quaternion.Euler(0, 0, 90));
                 }
                 if (enemy.gameObject.layer == 17) //crank
@@ -1302,6 +1365,20 @@ public class MovementPlatformer : MonoBehaviour
     }       // .
 
 
+    private IEnumerator Attack_Movement_Switch_Coroutine()
+    {
+        did_Hit_Enemy = true;
+
+        yield return new WaitForSeconds(0.2f);
+
+        did_Hit_Enemy = false;
+
+        /*if (hitEnemies.Length > 0)   // slowing when attack
+                did_Hit_Enemy = true;
+            else
+                did_Hit_Enemy = false;*/
+    }
+
 
 
     public void HealNow()
@@ -1322,6 +1399,17 @@ public class MovementPlatformer : MonoBehaviour
 
 
     // coroutines are confusing :)
+
+    public void Set_Player_Invincible()
+    {
+        gameObject.layer = 6; // layermask which enemies dont collide with
+        playerIsInvulnerable = true;
+    }
+
+    public void Set_Player_Invincible_ForTime(float _Inivcible_Time)
+    {
+        StartCoroutine(MakePlayerInvincible(_Inivcible_Time));
+    }
 
     private IEnumerator MakePlayerInvincible(float time)
     {
@@ -1365,7 +1453,6 @@ public class MovementPlatformer : MonoBehaviour
 
     public IEnumerator PauseMovement(float timeToWait)
     {
-        Debug.Log("ds");
         rb.velocity = Vector2.zero;
         rb.constraints = RigidbodyConstraints2D.FreezePosition;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -1397,16 +1484,37 @@ public class MovementPlatformer : MonoBehaviour
         Time.timeScale = original;
     }           // Freeze the game, for a frame currently.
 
-    private IEnumerator FreezeGameForTime(float time)
+    public void Freeze_Game_ForSeconds(float freezeTime, float freeze_Speed)
+    {
+        StartCoroutine(SlowGame_For_Time(freezeTime, freeze_Speed));
+    }
+
+    private IEnumerator SlowGame_For_Time(float time, float speed)
     {
         var original = Time.timeScale;
+        Time.timeScale = speed;
+
+        //yield return new WaitForSecondsRealtime(time);
+        yield return new WaitForSeconds(time * speed);
+
+        Time.timeScale = original;
+    }
+
+    private IEnumerator FreezeGameForTime(float time)
+    {
+        //var original = Time.timeScale;
         Time.timeScale = 0.1f;
 
         //yield return new WaitForSecondsRealtime(time);
         yield return new WaitForSeconds(time * 0.1f);
 
-        Time.timeScale = original;
+        Time.timeScale = 1f;
     }       // Freeze the game for float time
+
+    public bool Is_State_Ignore_Inputs()
+    {
+        return state == State.IgnorePlayerInput;
+    }
 
     private IEnumerator StartSwitchStateToIgnoreInputs(float time, bool isPlayerHurt)
     {
@@ -1691,7 +1799,7 @@ public class MovementPlatformer : MonoBehaviour
 
     public void SetBulletSpeedNormal()
     {
-        if (CurrentBulletGameObject != null && !didHitAnEnemy && !bulletHitDoor)
+        if (CurrentBulletGameObject != null && !orb_Hit_Enemy && !bulletHitDoor)
             CurrentBulletGameObject.GetComponent<bullet>().SetSpeedNormal();
     }
 
@@ -1710,7 +1818,7 @@ public class MovementPlatformer : MonoBehaviour
         return i == 1 ? true : false;
     } */ // save pointer
 
-    void SetForBuilding()
+        void SetForBuilding()
     {
         PlayerPrefs.DeleteKey("BeginGame");
         PlayerPrefs.DeleteKey("FirstTimePlaying");

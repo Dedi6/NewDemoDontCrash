@@ -43,10 +43,12 @@ public class EditorRoomSpawner : EditorWindow
             SpawnRoom();
 
         GUILayout.Space(40);
-        roomToMove = EditorGUILayout.ObjectField("Room To Move", previousRoom, typeof(GameObject), true) as GameObject;
+        roomToMove = EditorGUILayout.ObjectField("Room To Move", roomToMove, typeof(GameObject), true) as GameObject;
         if (GUILayout.Button("Move Room", GUILayout.Height(30)))
             SetRoomPosition(roomToMove);
+
     }
+
 
     private void SpawnRoom()
     {

@@ -8,6 +8,8 @@ public class Collectible_Comic : MonoBehaviour
     [SerializeField] Image comicImage;
     [SerializeField] private float fadeT;
     private bool isActive;
+    [SerializeField]
+    private bool isHpUp;
 
     private void Update()
     {
@@ -25,7 +27,10 @@ public class Collectible_Comic : MonoBehaviour
             GetComponent<CircleCollider2D>().enabled = false;
             StartCoroutine(Fade(true));
 
-          
+            if(isHpUp)
+            {
+                GetComponent<Hp_Pickable>().HpPickUp();
+            }
             /*if (shouldDisableTrigger)
                 gameObject.SetActive(false);*/
         }

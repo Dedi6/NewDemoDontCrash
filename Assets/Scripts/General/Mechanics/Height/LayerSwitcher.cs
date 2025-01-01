@@ -17,7 +17,7 @@ public class LayerSwitcher : MonoBehaviour
     private Color colorClose, colorFar;
 
     [SerializeField]
-    private float switchDelay, height, speedFar, speedClose, jumpFar, jumpClose;
+    private float switchDelay, height, speedFar, speedClose, jumpFar, jumpClose, playerSize_Close = 12f, playerSize_Far = 8f;
 
     [SerializeField]
     private Transform[] roomsFar, roomsClose;
@@ -41,12 +41,12 @@ public class LayerSwitcher : MonoBehaviour
         }
     }
 
-   /*    private void Update()
+       private void Update()
        {
           if (Input.GetKeyDown(KeyCode.L))
                SwitchLayer();
 
-       }*/
+       }
 
     private IEnumerator StartSwitching()
     {
@@ -62,12 +62,12 @@ public class LayerSwitcher : MonoBehaviour
 
         if (switchToFar)
         {
-            SwitchData(true, 8f, speedFar, colorFar);
+            SwitchData(true, playerSize_Far, speedFar, colorFar);
 
         }
         else
         {
-            SwitchData(false, 12f, speedClose, colorClose);
+            SwitchData(false, playerSize_Close, speedClose, colorClose);
         }
 
 

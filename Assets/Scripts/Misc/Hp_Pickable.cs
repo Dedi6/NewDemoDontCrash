@@ -6,6 +6,9 @@ public class Hp_Pickable : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log("delete here later ");
+        PlayerPrefs.DeleteKey(nameForSave);
+
         if (PlayerPrefs.HasKey(nameForSave))
             gameObject.SetActive(false);
     }

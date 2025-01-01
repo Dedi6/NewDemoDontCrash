@@ -6,7 +6,7 @@ public class SignPopUp : MonoBehaviour
 {
 
     private Animator animator, textAnimator;
-    private bool signActive, textActive;
+    private bool signActive, textActive, axis_Pressed;
     private MovementPlatformer player;
     [SerializeField]
     private GameObject text, background;
@@ -27,12 +27,17 @@ public class SignPopUp : MonoBehaviour
         if (IsPressingUp() && signActive && !textActive)
         {
             ShowText();
-
         }
+
         if(InputManager.instance.KeyDown(Keybindings.KeyList.Jump) && textActive)
             StartCoroutine(FadeText());
+
         if(!signActive && textActive)
             StartCoroutine(FadeText());
+
+        if (axis_Pressed && Input.GetAxisRaw("Vertical") == 0)
+            axis_Pressed = false;
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -41,6 +46,8 @@ public class SignPopUp : MonoBehaviour
         {
             animator.SetTrigger("Pop");
             signActive = true;
+            if (IsPressingUp())
+                axis_Pressed = true;
         }
     }
 
@@ -64,6 +71,7 @@ public class SignPopUp : MonoBehaviour
 
     private IEnumerator FadeText()
     {
+        axis_Pressed = true;
         StartCoroutine(FadeImage(true));
         textAnimator.SetTrigger("FadeOut");
 
@@ -102,6 +110,8 @@ public class SignPopUp : MonoBehaviour
 
     private bool IsPressingUp()
     {
-        return player.directionPressedNow == MovementPlatformer.DirectionPressed.Up;
+        if (axis_Pressed == true) return false;
+
+        return Input.GetAxisRaw("Vertical") > 0;
     }
 }

@@ -225,8 +225,6 @@ public class CowWalk : MonoBehaviour, ISFXResetable, IKnockbackable
     public void CheckForHit_Explode()
     {
         Collider2D _player_Hit = Physics2D.OverlapBox(hitCheck_Pos.position, boxCheckSize, 0f ,  1 << 11);
-        Debug.DrawLine(hitCheck_Pos.position, new Vector3(hitCheck_Pos.position.x + boxCheckSize.x / 2, hitCheck_Pos.position.y, hitCheck_Pos.position.z));
-        Debug.Log(_player_Hit);
         if (_player_Hit != null)
             GetComponent<Enemy>().PlayerKnockBackAndDamage();
     }

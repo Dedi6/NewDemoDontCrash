@@ -28,7 +28,7 @@ public class DoorDashThrough : MonoBehaviour
     void ResetTeleport()
     {
         player.GetComponent<MovementPlatformer>().CurrentBulletGameObject = gameObject;
-        player.GetComponent<MovementPlatformer>().didHitAnEnemy = true;
+        player.GetComponent<MovementPlatformer>().orb_Hit_Enemy = true;
         player.GetComponent<MovementPlatformer>().bulletHitDoor = true;
     }
 
