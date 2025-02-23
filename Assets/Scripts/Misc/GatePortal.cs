@@ -33,7 +33,7 @@ public class GatePortal : MonoBehaviour
 
     private void Update()
     {
-        if (isActive && InputManager.instance.KeyDown(Keybindings.KeyList.Up))
+        if (isActive && Input.GetAxisRaw("Vertical") > 0)
         {
             isActive = false;
             StartCoroutine(SwitchScenes());

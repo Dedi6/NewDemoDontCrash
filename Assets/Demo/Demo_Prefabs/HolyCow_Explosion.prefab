@@ -146,10 +146,10 @@ MonoBehaviour:
   damage: 4
   useHitEffect: 0
   destroyWhenHit: 0
-  useHitSFX: 0
+  useHitSFX: 1
   useUniqueGroundHitEffect: 0
   useScreenShake: 1
-  hitSound: 0
+  hitSound: 103
   shakeTime: 0.2
   shakeForce: 2.5
 --- !u!114 &9080522616935084118

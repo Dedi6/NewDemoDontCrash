@@ -31,6 +31,7 @@ public class MovementPlatformer : MonoBehaviour
     [SerializeField]
     private float fall_Multipler_Jumping = 5f, lowJump_Multiplyer = 10f;
     private float lowJumpBase;
+    private float invincible_Timer, invincible_Timer_Max = 1.5f;
 
 
     private Footsteps footsteps_Script;
@@ -336,8 +337,6 @@ public class MovementPlatformer : MonoBehaviour
         if(did_Hit_Enemy)
         {
             //  rb.velocity = new Vector2(rb.velocity.x * 0.7f, rb.velocity.y);
-            Debug.Log(did_Attack_Airborn);
-
             if(did_Attack_Airborn)
                 rb.velocity = new Vector2(rb.velocity.x * 0.7f, 3f);
             else
@@ -469,7 +468,18 @@ public class MovementPlatformer : MonoBehaviour
         if(atk_Combo_Timer > 0)
             atk_Combo_Timer -= Time.deltaTime;
 
+        if (invincible_Timer > 0)
+            invincible_Timer -= Time.deltaTime;
+       // else if (playerIsInvulnerable)
+        //    Handle_Invincibility();
+
     }
+
+   /* private void Handle_Invincibility()
+    {
+        playerIsInvulnerable = false;
+        gameObject.layer = 11;
+    }*/
 
 
     public void GotHitByAnEnemy(int damage)
@@ -481,6 +491,7 @@ public class MovementPlatformer : MonoBehaviour
         if (!playerIsInvulnerable)
         {
             StartCoroutine(MakePlayerInvincible(1.5f));
+            invincible_Timer = 1.5f;
             StartCoroutine(PlayerBlinkingAnimation());
             audioManager.PlaySound(AudioManager.SoundList.PlayerHit);
             StartCoroutine(FreezeGameForTime(0.3f));
@@ -633,6 +644,7 @@ public class MovementPlatformer : MonoBehaviour
                 groundedMemory = groundMemoryMax;
                 Vector2 vfxPos = new Vector2(transform.position.x, transform.position.y - 1f);
                 PrefabManager.instance.PlayVFX(PrefabManager.ListOfVFX.VFX_Jumpstone, vfxPos);
+                audioManager.PlaySound(AudioManager.SoundList.JumpStone);
                 Set_Jump_Multiply_Equal();
                 pull_Handler.Set_FallBool_False();
             }
@@ -1408,7 +1420,10 @@ public class MovementPlatformer : MonoBehaviour
 
     public void Set_Player_Invincible_ForTime(float _Inivcible_Time)
     {
-        StartCoroutine(MakePlayerInvincible(_Inivcible_Time));
+      //  if(gameObject.layer != 6)   // if not invincible already
+        if(_Inivcible_Time > invincible_Timer)
+            StartCoroutine(MakePlayerInvincible(_Inivcible_Time));
+
     }
 
     private IEnumerator MakePlayerInvincible(float time)

@@ -21,6 +21,7 @@ public class WavesDoor : MonoBehaviour, IRespawnResetable
         AudioManager.instance.PlaySound(AudioManager.SoundList.DoorClose);
         GetComponent<BoxCollider2D>().enabled = true;
         animator.SetBool("IsOpen", false);
+        animator.Play("Door_close");
         shouldOpen = false;
     }
 
@@ -52,15 +53,16 @@ public class WavesDoor : MonoBehaviour, IRespawnResetable
         }
     }
 
-    public void PlayerHasRespawned(bool b)
+  /*  public void PlayerHasRespawned(bool b)
     {
         shouldOpen = b;  
-    }
+    }*/
 
     public void PlayerHasRespawned()
     {
         if(shouldOpenWhenRespawn)
         {
+            Debug.Log("???");
             GetComponent<BoxCollider2D>().enabled = false;
             animator.SetBool("IsOpen", true);
             shouldOpen = true;

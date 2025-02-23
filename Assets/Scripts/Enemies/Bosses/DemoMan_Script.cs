@@ -206,6 +206,7 @@ public class DemoMan_Script : MonoBehaviour, ISFXResetable, IPhaseable<float>, I
         StartFight();
 
         PlayerPrefs.SetInt("Demoman_FirstTime", 2);
+        audio_M.PlaySound(AudioManager.SoundList.DemoMan_BushAppear);
     }
 
     public void TriggeredCollider()
@@ -218,6 +219,7 @@ public class DemoMan_Script : MonoBehaviour, ISFXResetable, IPhaseable<float>, I
         {
             PlayerPrefs.SetInt("Demoman_FirstTime", 1);
             bushAnimator.GetComponent<Animator>().Play("Demoman_Bush_Appear");
+            audio_M.PlaySound(AudioManager.SoundList.DemoMan_BushAppear);
 
             StartFight();
         }
@@ -255,6 +257,7 @@ public class DemoMan_Script : MonoBehaviour, ISFXResetable, IPhaseable<float>, I
         yield return new WaitForSeconds(0.8f);
 
         videoPlayer.Play();
+        audio_M.PlaySound(AudioManager.SoundList.Boss_Intro);
 
         float waitReduction = 1f;
         yield return new WaitForSeconds((float)videoPlayer.length - waitReduction);
@@ -356,11 +359,13 @@ public class DemoMan_Script : MonoBehaviour, ISFXResetable, IPhaseable<float>, I
 
         skillCoolDownTimer = melee_CD;
         SetStateNormal();
+        audio_M.PlaySound(AudioManager.SoundList.DemoMan_Bomb_Explode);
     }
 
     private void Start_Launch()
     {
         animator.Play("Demoman_Launch");
+        audio_M.PlaySound(AudioManager.SoundList.DemoMan_Dash_Prepare_);
     }
 
     public void HoldBeforeFlying()
@@ -378,6 +383,9 @@ public class DemoMan_Script : MonoBehaviour, ISFXResetable, IPhaseable<float>, I
         flyDirection = Is_PlayerToTheRight() ? Vector2.right : Vector2.left;
         SwitchColliders_Flying(true);
         ForceFlip();
+
+        audio_M.PlaySound(AudioManager.SoundList.DemoMan_Bomb_Explode);
+        audio_M.PlaySound(AudioManager.SoundList.DemoMan_Smear_OnGround);
     }
 
     private void SwitchColliders_Flying(bool isFlyingRightNow)
@@ -398,6 +406,7 @@ public class DemoMan_Script : MonoBehaviour, ISFXResetable, IPhaseable<float>, I
 
             float angle = facingRight ? 270f : 90f;
             PrefabManager.instance.Play_VFX_Complex(PrefabManager.ListOfVFX.SmokeBomb, transform.position, angle, "Tilemap", 0.5f);
+            audio_M.PlaySound(AudioManager.SoundList.PlayerTossedIntoWall);
             skillCoolDownTimer = launch_CD;
         }
 
@@ -409,7 +418,10 @@ public class DemoMan_Script : MonoBehaviour, ISFXResetable, IPhaseable<float>, I
     {
         state = State.Attack;
         animator.Play("Demoman_Throw");
+        audio_M.PlaySound(AudioManager.SoundList.DemoMan_Dash_Prepare_);
         ForceFlip();
+        if (wallCheckRaycast)
+            Flip();
         Switch_LayerMask(true);
         //  Invoke("Set_GetUP_Position", animator.GetCurrentAnimatorStateInfo(0).length);
     }
@@ -428,12 +440,15 @@ public class DemoMan_Script : MonoBehaviour, ISFXResetable, IPhaseable<float>, I
         Collider2D _player_Hit = Physics2D.OverlapCircle(bombInHand_HitPos.position, melee_Collider_Radius, 1 << 11);
         if (_player_Hit != null)
             GetComponent<Enemy>().PlayerKnockBackAndDamage();
+        audio_M.PlaySound(AudioManager.SoundList.DemoMan_Bomb_Explode);
     }
 
     private void Start_SmokeBomb()
     {
         animator.Play("Demoman_Smoke");
         bossDied.Invoke();
+        audio_M.PlaySound(AudioManager.SoundList.DemoMan_Dash_Prepare_);
+        audio_M.FadeOutCurrent(2f);
     }
 
     public void Play_smokeBomb_VFX()
@@ -446,6 +461,7 @@ public class DemoMan_Script : MonoBehaviour, ISFXResetable, IPhaseable<float>, I
             Flip();
 
         StartCoroutine(DelaySprint());
+        audio_M.PlaySound(AudioManager.SoundList.DemoMan_SmokeBomb);
     }
 
     private IEnumerator DelaySprint()

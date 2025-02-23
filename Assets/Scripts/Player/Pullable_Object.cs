@@ -45,9 +45,11 @@ public class Pullable_Object : MonoBehaviour
         {
             case Object_Animation_Type.Branch:
                 GetComponent<Animator>().SetTrigger("AnimateNow");
+                AudioManager.instance.PlaySound(AudioManager.SoundList.Grab_Branch);
                 break;
             case Object_Animation_Type.Lantern:
                 GetComponent<Lantern_Swing>().SwingLantern();
+                AudioManager.instance.PlaySound(AudioManager.SoundList.Grab_Lantern);
                 break;
         }
     }

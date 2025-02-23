@@ -145,6 +145,26 @@ public class AudioManager : MonoBehaviour
         DrillBoss_bg_ending,
         Demoman_BG,
         Rotem_Song,
+        DemoMan_Bomb_Explode,
+        DemoMan_Smear_OnGround,
+        DemoMan_Dash_Prepare_,
+        DemoMan_SmokeBomb,
+        MooMan_CowToy_Prepare,
+        MooMan_CowToy_Active,
+        MooMan_CowToy_Explode,
+        HolyCow_Bomb_Appear,
+        HolyCow_Moo,
+        HolyCow_Appear,
+        HolyCow_Warp,
+        Boss_Intro,
+        DemoMan_BushAppear,
+        JumpStone,
+        Player_Reach,
+        Player_Grabbing,
+        Player_Dashing,
+        Grab_Lantern,
+        Grab_Branch,
+
     }
 
     public enum AudioManagerList

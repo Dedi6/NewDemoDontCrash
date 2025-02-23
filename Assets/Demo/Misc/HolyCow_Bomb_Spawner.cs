@@ -42,6 +42,7 @@ public class HolyCow_Bomb_Spawner : MonoBehaviour, IRespawnResetable
         {
             // Instantiate the bomb prefab at the player's position with no rotation.
             Instantiate(bombPrefab, playerTransform.position, Quaternion.identity);
+            AudioManager.instance.PlaySound(AudioManager.SoundList.HolyCow_Bomb_Appear);
         }
         else
         {
@@ -52,5 +53,10 @@ public class HolyCow_Bomb_Spawner : MonoBehaviour, IRespawnResetable
     public void PlayerHasRespawned()
     {
         spawnTimer = spawnInterval * 3f;
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
     }
 }

@@ -142,8 +142,8 @@ public class KeybindsSetter : MonoBehaviour
                                    //  Also, for the script to work, the button's parent need to be the same name as the string.
     public void SetStartKeys()
     {
-        SetStartingButtons_Helper(menuPanel);
-        SetStartingButtons_Helper(menuPanel2);
+        //SetStartingButtons_Helper(menuPanel);
+     //   SetStartingButtons_Helper(menuPanel2);
     }
 
     private void SetStartingButtons_Helper(Transform _menuPanel)

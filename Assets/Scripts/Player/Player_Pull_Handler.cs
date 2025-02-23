@@ -32,6 +32,7 @@ public class Player_Pull_Handler : MonoBehaviour
     [SerializeField]
     private float fallSpeed, fallSpeedHigh, cooldown;
     private Coroutine _coroutine_FallSpeed;
+    private AudioManager _audio_Manager;
 
 
     private enum PullState
@@ -47,6 +48,7 @@ public class Player_Pull_Handler : MonoBehaviour
         player_Script = GetComponent<MovementPlatformer>();
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        _audio_Manager = AudioManager.instance;
 
         player_Script.landedNow += Player_Landed;
     }
@@ -155,6 +157,8 @@ public class Player_Pull_Handler : MonoBehaviour
         if(_coroutine_FallSpeed != null) 
             StopCoroutine(_coroutine_FallSpeed);
 
+        _audio_Manager.PlaySound(AudioManager.SoundList.Player_Reach);
+
     }
 
     private void Reaching_Check()
@@ -182,6 +186,7 @@ public class Player_Pull_Handler : MonoBehaviour
                 player_Script.Set_Player_Invincible();
                 x_Velocity_Modifier = 0.8f;
 
+                _audio_Manager.PlaySound(AudioManager.SoundList.Player_Grabbing);
                 return;
             }
         }
@@ -246,6 +251,8 @@ public class Player_Pull_Handler : MonoBehaviour
         GameMaster.instance.ShakeCamera(0.1f, 1f);
         if(should_Animate_OnPull)
             _current_Object_Pulled.GetComponent<Pullable_Object>().Animate_Now();
+
+        _audio_Manager.PlaySound(AudioManager.SoundList.Player_Dashing);
     }
 
     private void RevertBack()
@@ -338,4 +345,5 @@ public class Player_Pull_Handler : MonoBehaviour
             //player_Script.SetStateNormal();
     //    }
     }
+
 }

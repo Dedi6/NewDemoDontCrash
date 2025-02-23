@@ -328,6 +328,7 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
     {
         yield return new WaitForSeconds(0.8f);
 
+        audio_M.PlaySound(AudioManager.SoundList.Boss_Intro);
         videoPlayer.Play();
 
         float waitReduction = 1f;
@@ -408,6 +409,7 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
             anotherBomb2.transform.Rotate(0.0f, 180.0f, 0.0f);
         }
 
+        audio_M.PlaySound(AudioManager.SoundList.DemoMan_Bomb_Explode);
         skillCoolDownTimer = melee_CD;
         SetStateNormal();
     }
@@ -415,6 +417,8 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
     private void Start_CowWalk()
     {
         animator.Play("Mooman_CowWalk");
+        if (wallCheckRaycast)
+            Flip();
     }
 
     public void Spawn_CowToy()
@@ -428,11 +432,13 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
         skillCoolDownTimer = cowWalk_CD;
         animator.Play("Mooman_Rearming");
         SetStateNormal();
+        audio_M.PlaySound(AudioManager.SoundList.MooMan_CowToy_Prepare);
     }
 
     private void Start_Launch()
     {
         animator.Play("Mooman_Launching");
+        audio_M.PlaySound(AudioManager.SoundList.DemoMan_Dash_Prepare_);
     }
 
     public void HoldBeforeFlying()
@@ -451,6 +457,9 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
         SwitchColliders_Flying(true);
         ForceFlip();
         GetComponent<AfterImage>().enabled = true;
+
+        audio_M.PlaySound(AudioManager.SoundList.DemoMan_Bomb_Explode);
+        audio_M.PlaySound(AudioManager.SoundList.DemoMan_Smear_OnGround);
     }
 
     private void SlipBomb_Spawn()
@@ -482,6 +491,7 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
             float angle = facingRight ? 270f : 90f;
             PrefabManager.instance.Play_VFX_Complex(PrefabManager.ListOfVFX.SmokeBomb, transform.position, angle, "Tilemap", 0.5f);
             skillCoolDownTimer = launch_CD;
+            audio_M.PlaySound(AudioManager.SoundList.PlayerTossedIntoWall);
         }
 
         enemy.velocity = flyDirection * flySpeed;
@@ -492,7 +502,10 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
     {
         state = State.Attack;
         animator.Play("Mooman_Throw");
+        audio_M.PlaySound(AudioManager.SoundList.DemoMan_Dash_Prepare_);
         ForceFlip();
+        if (wallCheckRaycast)
+            Flip();
         Switch_LayerMask(true);
         //  Invoke("Set_GetUP_Position", animator.GetCurrentAnimatorStateInfo(0).length);
     }
@@ -511,6 +524,7 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
         Collider2D _player_Hit = Physics2D.OverlapCircle(bombInHand_HitPos.position, melee_Collider_Radius, 1 << 11);
         if (_player_Hit != null)
             GetComponent<Enemy>().PlayerKnockBackAndDamage();
+        audio_M.PlaySound(AudioManager.SoundList.DemoMan_Bomb_Explode);
     }
 
     private void Start_SmokeBomb()
@@ -669,6 +683,7 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
         yield return new WaitForSeconds(5f);
 
         animator.Play("Mooman_Holy_Vanish");
+        audio_M.PlaySound(AudioManager.SoundList.Tp_Switch);
 
         yield return new WaitForSeconds(2f);
 
@@ -678,6 +693,7 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
         GameMaster.instance.ShakeCamera(4f, 2f);
         animator.Play("Mooman_Holy_Appear");
         yingYang_Object.SetActive(true);
+        audio_M.PlaySound(AudioManager.SoundList.HolyCow_Appear);
 
         yield return new WaitForSeconds(1f);
 
@@ -690,6 +706,7 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
 
         warpObject.SetActive(true);
         warpObject.GetComponent<Warp_Distortion_Shader>().CallShockWave(0f, 5f, 0.8f);
+        audio_M.PlaySound(AudioManager.SoundList.HolyCow_Warp);
         //triggerHolder.GetComponent<ConfineCamera>().RevertConfiners();
 
         yield return new WaitForSeconds(2f);
@@ -736,7 +753,6 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
     {
         if (PlayerPrefs.HasKey("Mooman_FirstTime"))
             transform.position = respawnPosition.position;
-
     }
 
     private void OnDisable()
@@ -750,6 +766,7 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
     {
         if (currentPhase == 2)
             return;
+
 
         if (!playerRespawned)
         {
@@ -775,6 +792,10 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
 
         yield return new WaitForSeconds(.35f);
 
+
+        if (current_Cow_Toy != null)
+            Destroy(current_Cow_Toy);
+
         shouldMovePhase = false;
         bossDied.Invoke();
         animator.Play("Mooman_Idle");
@@ -783,6 +804,10 @@ public class Mooman_Boss : MonoBehaviour, ISFXResetable, IPhaseable<float>, IRes
         audio_M.FadeOutCurrent(0.3f);
         GetComponent<Enemy>().SetHpMax();
         startFightTrigger.GetComponent<BoxCollider2D>().enabled = true;
+
+        yield return new WaitForSeconds(1f);
+
+        transform.position = respawnPosition.position;
     }
 
     private bool Is_PlayerToTheRight()

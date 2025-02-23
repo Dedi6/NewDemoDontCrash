@@ -102,7 +102,7 @@ public class InputManager : MonoBehaviour
         {
             { "JoystickButton0", "■" }, // triangle
             { "JoystickButton1", "X" }, //O
-            { "JoystickButton2", "X" }, // X
+            { "JoystickButton2", "○" }, // X
             { "JoystickButton3", "■" }, // square
             { "JoystickButton4", "L1" },
             { "JoystickButton5", "R1" },
@@ -113,7 +113,8 @@ public class InputManager : MonoBehaviour
             { "JoystickButton10", "L3" },
             { "JoystickButton11", "R3" },
             { "JoystickButton12", "PS" },
-            { "JoystickButton13", "PadPress" }
+            { "JoystickButton13", "PadPress" },
+            { "JoystickButton15", "'Down'" }
         };
     }
 
