@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SwordDrake : MonoBehaviour, ISFXResetable, IKnockbackable
+public class SwordDrake : MonoBehaviour, ISFXResetable, IKnockbackable, IParriable
 {
 
     [Header("General")]
@@ -217,6 +217,7 @@ public class SwordDrake : MonoBehaviour, ISFXResetable, IKnockbackable
         yield return new WaitForSeconds(pauseBeforeAttack);
 
         animator.speed = 1;
+        GetComponent<EnemyAttacks_Manager>().StartAttack("SwordAttack");
         AudioManager.instance.PlaySound(AudioManager.SoundList.RageBossPrep);
 
         yield return new WaitForSeconds(0.3f);
@@ -248,6 +249,7 @@ public class SwordDrake : MonoBehaviour, ISFXResetable, IKnockbackable
         if(state != State.Dead)
             state = State.Normal;
         GetComponent<Enemy>().canBeInterrupted = true;
+        GetComponent<EnemyAttacks_Manager>().EndAttack();
     }
 
     public void SetStateAttacking()
@@ -302,5 +304,28 @@ public class SwordDrake : MonoBehaviour, ISFXResetable, IKnockbackable
         }
         else
             ResetSFXCues();
+    }
+
+    public void Got_Parried(float parryTime)
+    {
+        StartCoroutine(Start_Parry_Animation(parryTime));
+
+
+    }
+
+    private IEnumerator Start_Parry_Animation(float parryTime)
+    {
+
+        state = State.Stunned;
+        animator.Play("SwordDrake_Hurt"); // special parried state?
+        animator.speed = 0f;
+        StopCoroutine(attackCorou);
+        enemy.velocity = Vector2.zero;
+
+        yield return new WaitForSeconds(parryTime); // change to parry time
+
+        animator.speed = 1f;
+        SetStateNormal();
+
     }
 }

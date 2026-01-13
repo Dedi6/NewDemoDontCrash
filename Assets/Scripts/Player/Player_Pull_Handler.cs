@@ -34,6 +34,12 @@ public class Player_Pull_Handler : MonoBehaviour
     private Coroutine _coroutine_FallSpeed;
     private AudioManager _audio_Manager;
 
+    [Header("Parrying")]
+    [SerializeField]
+    private float perfect_Parry_Time;
+    [SerializeField]
+    private float imperfect_Parry_Time;
+
 
     private enum PullState
     {
@@ -41,6 +47,17 @@ public class Player_Pull_Handler : MonoBehaviour
         Reaching,
         Pulling,
     }
+
+    private Parry_State _parry_State;
+
+    public enum Parry_State
+    {
+        Waiting,
+        Normal,
+        Perfect,
+    }
+
+
 
     private void Start()
     {
@@ -51,6 +68,8 @@ public class Player_Pull_Handler : MonoBehaviour
         _audio_Manager = AudioManager.instance;
 
         player_Script.landedNow += Player_Landed;
+
+        _parry_State = Parry_State.Waiting;
     }
 
     /*void Update()
@@ -346,4 +365,43 @@ public class Player_Pull_Handler : MonoBehaviour
     //    }
     }
 
+    public void Parry_Start()
+    {
+        checkPos_Side.gameObject.SetActive(true);
+        _parry_State = Parry_State.Perfect;
+
+        Invoke("Parry_Normal_Start", perfect_Parry_Time); 
+    }
+
+    public void Parry_Normal_Start()
+    {
+        _parry_State = Parry_State.Normal;
+
+        Invoke("Parry_End", imperfect_Parry_Time);
+    }
+
+    public void Parry_End()
+    {
+        _parry_State = Parry_State.Waiting;
+        checkPos_Side.gameObject.SetActive(false);
+    }
+
+    public Parry_State Get_ParryState()
+    {
+        Debug.Log(_parry_State);
+        return _parry_State;
+    }
+
+    public void Succesful_Parry()
+    {
+        Debug.Log("Parry successful!");
+
+
+        StartCoroutine(Pull_SwitchState_Coroutine());
+        GameMaster.instance.ShakeCamera(0.1f, 1f);
+        if (should_Animate_OnPull)
+            _current_Object_Pulled.GetComponent<Pullable_Object>().Animate_Now();
+
+        _audio_Manager.PlaySound(AudioManager.SoundList.Player_Dashing);
+    }
 }

@@ -93,4 +93,16 @@ public class GameMaster : MonoBehaviour
     {
         return player_Rigidbody;
     }
+
+    public Player_Pull_Handler.Parry_State Get_ParryState()
+    {
+        return playerInstance.GetComponent<Player_Pull_Handler>().Get_ParryState();
+    }
+
+    public static void Succesful_Parry()
+    {
+        Debug.Log("Parry successful!");
+
+        GameMaster.instance.playerInstance.GetComponent<Player_Pull_Handler>().Succesful_Parry();
+    }
 }

@@ -111,7 +111,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter2D(Collider2D col)
+   /* void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.layer == LayerMask.NameToLayer("bullet"))
         {
@@ -127,11 +127,19 @@ public class Enemy : MonoBehaviour
             PlayerKnockBackAndDamage();
     }
 
+    private void OnTriggerStay2D(Collider2D col)
+    {
+        if (col.gameObject.layer == LayerMask.NameToLayer("player"))
+        {
+            PlayerKnockBackAndDamage();
+        }
+    }
+
     private void OnCollisionStay2D(Collision2D col)
     {
         if (col.gameObject.layer == LayerMask.NameToLayer("player"))
             PlayerKnockBackAndDamage();
-    }
+    }*/
 
     void BulletHitEnemy(GameObject bullet)
     {
@@ -153,13 +161,6 @@ public class Enemy : MonoBehaviour
         player.GetComponent<MovementPlatformer>().GotHitByAnEnemy(4);
     }
 
-    private void OnTriggerStay2D(Collider2D col)
-    {
-        if (col.gameObject.layer == LayerMask.NameToLayer("player"))
-        {
-            PlayerKnockBackAndDamage();
-        }
-    }
 
     public void PlayerRespawned()
     {

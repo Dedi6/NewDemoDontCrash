@@ -39,7 +39,7 @@ TagManager:
   - BulletGoThrough
   - Hittable
   - DistortionEffect
-  - 
+  - ParryLayer
   - 
   - black
   - Mask
