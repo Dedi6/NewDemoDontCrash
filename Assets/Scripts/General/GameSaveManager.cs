@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 using Newtonsoft.Json;
 
 public class GameSaveManager : MonoBehaviour
@@ -107,6 +108,10 @@ public class GameSaveManager : MonoBehaviour
             File.WriteAllText(savePath, ecnryptedJson);
             stream.Close();
         }
+        
+        // Save new Input System rebindings
+        SaveInputSystemRebindings();
+        
         SavePLayerData();
     }
 
@@ -141,6 +146,10 @@ public class GameSaveManager : MonoBehaviour
             stream.Close();
 
         }
+        
+        // Save new Input System rebindings
+        SaveInputSystemRebindings();
+        
         // SavePLayerData();
     }
 
@@ -182,6 +191,8 @@ public class GameSaveManager : MonoBehaviour
         {
             Directory.CreateDirectory(Application.persistentDataPath + "/game_save/keybindings");
         }
+        
+        // Load old keybindings system (for backward compatibility)
         foreach (KeybindForPlatforms binding in arrayOfBindings)
         {
             if (File.Exists(Application.persistentDataPath + binding.path))
@@ -195,6 +206,60 @@ public class GameSaveManager : MonoBehaviour
                 stream.Close();
 
                 binding.keybindings.Load_DictToBinds(loaded_Data);
+            }
+        }
+        
+        // Load new Input System rebindings
+        LoadInputSystemRebindings();
+    }
+    
+    public void SaveInputSystemRebindings()
+    {
+        if (InputManager.instance == null) return;
+        
+        Controls controls = InputManager.instance.GetControlsAsset();
+        if (controls == null || controls.asset == null) return;
+        
+        // Use extension method from InputActionRebindingExtensions
+        string rebindingsJson = InputActionRebindingExtensions.SaveBindingOverridesAsJson(controls.asset);
+        if (string.IsNullOrEmpty(rebindingsJson)) return;
+        
+        string savePath = Application.persistentDataPath + "/game_save/keybindings/inputSystemRebindings.txt";
+        
+        if (!Directory.Exists(Application.persistentDataPath + "/game_save/keybindings"))
+        {
+            Directory.CreateDirectory(Application.persistentDataPath + "/game_save/keybindings");
+        }
+        
+        var encryptedJson = EncryptDecrypt(rebindingsJson);
+        File.WriteAllText(savePath, encryptedJson);
+    }
+    
+    public void LoadInputSystemRebindings()
+    {
+        if (InputManager.instance == null) return;
+        
+        Controls controls = InputManager.instance.GetControlsAsset();
+        if (controls == null) return;
+        
+        string savePath = Application.persistentDataPath + "/game_save/keybindings/inputSystemRebindings.txt";
+        
+        if (File.Exists(savePath))
+        {
+            try
+            {
+                string encryptedJson = File.ReadAllText(savePath);
+                string rebindingsJson = EncryptDecrypt(encryptedJson);
+                
+                if (!string.IsNullOrEmpty(rebindingsJson))
+                {
+                    // Use extension method from InputActionRebindingExtensions
+                    InputActionRebindingExtensions.LoadBindingOverridesFromJson(controls.asset, rebindingsJson);
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"Failed to load Input System rebindings: {e.Message}");
             }
         }
     }

@@ -22,7 +22,13 @@ public class bullet : MonoBehaviour
     
     void Start()
     {
-        player = GameObject.Find("Dirt");
+        if (GameMaster.instance != null && GameMaster.instance.playerInstance != null)
+            player = GameMaster.instance.playerInstance;
+        else
+        {
+            Debug.LogError("bullet: GameMaster.instance or playerInstance is null!");
+            return;
+        }
         direction = player.GetComponent<MovementPlatformer>().directionPressed;
         
         if (direction.Equals(new Vector2(0, 0)))

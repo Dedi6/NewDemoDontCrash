@@ -222,7 +222,11 @@ public class Player_Pull_Handler : MonoBehaviour
 
     private string Get_AnimationString()
     {
-        if (Input.GetAxisRaw("Vertical") > 0)
+        InputManager inputM = InputManager.instance;
+        // Check move input vertical component instead of discrete Up key
+        // The Up key is part of the Move composite, so GetKey(Up) doesn't work reliably
+        Vector2 moveInput = inputM.GetMoveInput();
+        if (moveInput.y > 0)
         {
             isPulling_Side = false;
             return "Up";
@@ -396,6 +400,9 @@ public class Player_Pull_Handler : MonoBehaviour
     {
         Debug.Log("Parry successful!");
 
+        // Award chakra on successful parry
+        if (ChakraSystem.instance != null)
+            ChakraSystem.instance.AddChakra();
 
         StartCoroutine(Pull_SwitchState_Coroutine());
         GameMaster.instance.ShakeCamera(0.1f, 1f);

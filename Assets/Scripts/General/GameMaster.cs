@@ -29,7 +29,11 @@ public class GameMaster : MonoBehaviour
             Destroy(gameObject);
         playerInstance = GameObject.FindGameObjectWithTag("Player");
         brotherInstance = GameObject.FindGameObjectWithTag("Brother");
-        player_Rigidbody = playerInstance.GetComponent<Rigidbody2D>();
+        
+        if (playerInstance != null)
+            player_Rigidbody = playerInstance.GetComponent<Rigidbody2D>();
+        else
+            Debug.LogWarning("GameMaster: Player GameObject not found with tag 'Player'");
 
         Application.targetFrameRate = 60;
         //Time.timeScale = 0.9f;

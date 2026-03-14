@@ -43,7 +43,10 @@ public class RegularBoar : MonoBehaviour, ISFXResetable, IKnockbackable
         enemy = GetComponent<Rigidbody2D>();
         raycastDirection = new Vector2(-1, 0);
         boxCollider = GetComponent<BoxCollider2D>();
-        player = GameObject.Find("Dirt");
+        if (GameMaster.instance != null && GameMaster.instance.playerInstance != null)
+            player = GameMaster.instance.playerInstance;
+        else
+            player = GameObject.FindGameObjectWithTag("Player"); // Fallback if GameMaster not ready
         bool goRight = GetComponent<Enemy>().goRight;
         if ((goRight && !facingRight2) || (!goRight && facingRight2))
             Flip();

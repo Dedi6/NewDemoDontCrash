@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using MyBox;
+
 public class PreventDeselectionGroup : MonoBehaviour
 {
     EventSystem evt;
@@ -46,7 +47,10 @@ public class PreventDeselectionGroup : MonoBehaviour
                 pointer.position = new Vector3(pointer.position.x, buttonY, pointer.position.x);
         }
         
-        if (InputManager.instance.KeyDown(Keybindings.KeyList.Jump))
+        // Check for selection input: Jump key
+        // Note: Players can also use Enter key to select (handled by EventSystem)
+        // Enter/Escape won't switch to keyboard mode, so joystick players can use them for menu navigation
+        if (InputManager.instance.KeyDown(Keybindings.KeyList.Jump) && evt.currentSelectedGameObject != null)
         {
             Button b = evt.currentSelectedGameObject.GetComponent<Button>();
             Toggle t = evt.currentSelectedGameObject.GetComponent<Toggle>();

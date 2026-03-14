@@ -16,9 +16,10 @@ public class ScrollBarKeysMovement : MonoBehaviour
     }
     private void OnGUI()
     {
-        if (Input.GetAxisRaw("Vertical") > 0 && scrollBar.value != 1 && !checkIfButtonIsInMask())
+        float verticalInput = InputManager.instance.GetMoveInput().y;
+        if (verticalInput > 0 && scrollBar.value != 1 && !checkIfButtonIsInMask())
             MoveScrollBar(moveStep);
-        else if (Input.GetAxisRaw("Vertical") < 0 && scrollBar.value != 0 && !checkIfButtonIsInMask())
+        else if (verticalInput < 0 && scrollBar.value != 0 && !checkIfButtonIsInMask())
             MoveScrollBar(-moveStep);
     }
     private void MoveScrollBar(float step)

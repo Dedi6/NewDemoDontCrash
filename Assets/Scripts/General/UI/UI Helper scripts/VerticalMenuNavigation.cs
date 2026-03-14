@@ -17,9 +17,10 @@ public class VerticalMenuNavigation : MonoBehaviour
     }
     private void OnGUI()
     {
-        if (Input.GetAxisRaw("Vertical") > 0  && !checkIfButtonIsInMask())
+        float verticalInput = InputManager.instance.GetMoveInput().y;
+        if (verticalInput > 0  && !checkIfButtonIsInMask())
             MoveUI(-moveStep);
-        else if (Input.GetAxisRaw("Vertical") < 0  && !checkIfButtonIsInMask())
+        else if (verticalInput < 0  && !checkIfButtonIsInMask())
             MoveUI(moveStep);
 
         HandleTopAndBottomArrows();

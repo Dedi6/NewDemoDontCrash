@@ -49,7 +49,10 @@ public class BigFrog : MonoBehaviour, ISFXResetable, IKnockbackable
         enemy = GetComponent<Rigidbody2D>();
         raycastDirection = new Vector2(1, 0);
         boxCollider = GetComponent<BoxCollider2D>();
-        player = GameObject.Find("Dirt");
+        if (GameMaster.instance != null && GameMaster.instance.playerInstance != null)
+            player = GameMaster.instance.playerInstance;
+        else
+            player = GameObject.FindGameObjectWithTag("Player"); // Fallback if GameMaster not ready
         speedMulitiplier += Random.Range(-1f, 1f);
         bool goRight = GetComponent<Enemy>().goRight;
         if ((goRight && !facingRight) || (!goRight && facingRight))

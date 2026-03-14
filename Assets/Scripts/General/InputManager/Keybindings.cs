@@ -42,6 +42,11 @@ public class Keybindings : ScriptableObject
     public KeyCode CheckKey(KeyList key)
     {
         KeysArray k = GetKeyPressed(key);
+        if (k == null)
+        {
+            Debug.LogError($"Keybinding for {key} not found in arrayOfKeys!");
+            return KeyCode.None;
+        }
         return k.keyBinding;
     }
 
@@ -72,6 +77,11 @@ public class Keybindings : ScriptableObject
 
     public void HandleKeyWords()
     {
+        if (controllerKeys == null)
+            controllerKeys = new Dictionary<string, string>();
+        
+        // Clear and rebuild to avoid duplicates
+        controllerKeys.Clear();
         controllerKeys.Add("JoystickButton0", "Square");
         controllerKeys.Add("JoystickButton1", "X");
         controllerKeys.Add("JoystickButton2", "Circle");
@@ -113,6 +123,12 @@ public class Keybindings : ScriptableObject
         int pointer = 0;
         foreach (var Keys in _dict)
         {
+            // Bounds check to prevent IndexOutOfRangeException
+            if (pointer >= arrayOfKeys.Length)
+            {
+                Debug.LogWarning($"Load_DictToBinds: Dictionary has more entries ({_dict.Count}) than arrayOfKeys ({arrayOfKeys.Length}). Stopping load.");
+                break;
+            }
 
             KeyList binding_Key = (KeyList)System.Enum.Parse(typeof(KeyList), Keys.Key);
             KeyCode keyfor_Value = (KeyCode)System.Enum.Parse(typeof(KeyCode), Keys.Value);

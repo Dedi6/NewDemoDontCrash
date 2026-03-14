@@ -35,7 +35,7 @@ public class SignPopUp : MonoBehaviour
         if(!signActive && textActive)
             StartCoroutine(FadeText());
 
-        if (axis_Pressed && Input.GetAxisRaw("Vertical") == 0)
+        if (axis_Pressed && InputManager.instance.GetMoveInput().y == 0)
             axis_Pressed = false;
         
     }
@@ -112,6 +112,6 @@ public class SignPopUp : MonoBehaviour
     {
         if (axis_Pressed == true) return false;
 
-        return Input.GetAxisRaw("Vertical") > 0;
+        return InputManager.instance.GetMoveInput().y > 0;
     }
 }

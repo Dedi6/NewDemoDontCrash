@@ -45,7 +45,10 @@ public class RedDrake : MonoBehaviour, ISFXResetable, IKnockbackable
         enemy = GetComponent<Rigidbody2D>();
         raycastDirection = new Vector2(-1, 0);
         boxCollider = GetComponent<BoxCollider2D>();
-        player = GameObject.Find("Dirt");
+        if (GameMaster.instance != null && GameMaster.instance.playerInstance != null)
+            player = GameMaster.instance.playerInstance;
+        else
+            player = GameObject.FindGameObjectWithTag("Player"); // Fallback if GameMaster not ready
         InvokeRepeating("StateHandler", 0, 0.2f);
         speedMulitiplier += Random.Range(-1f, 1f);
         bool goRight = GetComponent<Enemy>().goRight;

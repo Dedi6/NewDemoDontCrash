@@ -11,7 +11,7 @@ public class TopDownMovement : MonoBehaviour
     private float idleTimer, aimAngle, startParticleV;
     private Rigidbody2D rb;
     private State state;
-    private bool usingKeyboard, facingRight = true, isShooting, isCurouRunning;
+    private bool facingRight = true, isShooting, isCurouRunning;
     private int lastDirection;
     private Vector2 dirPressedAbs, mousePos;
 
@@ -43,7 +43,6 @@ public class TopDownMovement : MonoBehaviour
         state = State.Normal;
         animator = GetComponent<Animator>();
         input = InputManager.instance;
-        usingKeyboard = input.IsUsingKeyboard();
         GetCurrentClip(Vector2.down);
         SetDirection(Vector2.down);
         manaBar = GetComponent<ManaBar>();
@@ -104,22 +103,20 @@ public class TopDownMovement : MonoBehaviour
 
     private void HandleCursorInput()
     {
-        if (usingKeyboard)
-            mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
-        else
-        {
-            Vector2 inputDir = new Vector2(Input.GetAxis("rightStickHor"), Input.GetAxis("rightStickVert"));
-            mousePos = inputDir;
-        }
+        // Use new Input System for cursor position
+        mousePos = InputManager.instance.GetCursorPosition();
     }
 
     private void HandleMoveInputs()
     {
-        if (usingKeyboard)
+        // Use new Input System - GetMoveInput() handles both keyboard and gamepad
+        Vector2 moveVector = InputManager.instance.GetMoveInput();
+        moveX = moveVector.x;
+        moveY = moveVector.y;
+        
+        // For keyboard, maintain discrete key tracking for precise control
+        if (InputManager.instance.IsUsingKeyboard())
         {
-            moveX = Input.GetAxisRaw("Horizontal");
-            moveY = Input.GetAxisRaw("Vertical");
-
             if (input.GetKey(Keybindings.KeyList.Up))
             {
                 moveY = 1;
@@ -157,20 +154,7 @@ public class TopDownMovement : MonoBehaviour
                 idleTimer = idleTimerMax;
             }
         }
-        else
-        {
-            moveX = Input.GetAxisRaw("Horizontal");
-            moveY = Input.GetAxisRaw("Vertical");
-
-            if (moveX > 0) moveX = 1;
-            else if (moveX < 0) moveX = -1;
-
-            if (moveY > 0) moveY = 1;
-            else if (moveY < 0) moveY = -1;
-        }
-
-        
-
+        // For gamepad, GetMoveInput() already returns normalized values
     }
 
     private void FlipStart()
@@ -288,7 +272,7 @@ public class TopDownMovement : MonoBehaviour
     private void ShootStart()
     {
 
-        if(usingKeyboard)
+        if(InputManager.instance.IsUsingKeyboard())
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -340,7 +324,7 @@ public class TopDownMovement : MonoBehaviour
 
     void ShootDirectKeyOrController()
     {
-        if (usingKeyboard)
+        if (InputManager.instance.IsUsingKeyboard())
             Shoot();
         else
             ShootController();
@@ -428,12 +412,12 @@ public class TopDownMovement : MonoBehaviour
 
     public void SwitchToOrFromJoystick()
     {
-        usingKeyboard = !usingKeyboard;
+        // No longer needed - InputManager auto-detects device
     }
 
     private void AimCursor()
     {
-         if (usingKeyboard)
+         if (InputManager.instance.IsUsingKeyboard())
         {
             Vector2 lookDir = mousePos - rb.position;
             aimAngle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg + 180f;

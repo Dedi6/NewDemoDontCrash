@@ -39,12 +39,12 @@ public class SavePoint : MonoBehaviour
 
     private bool IsPressingDown()
     {
-        return InputManager.instance.KeyDown(Keybindings.KeyList.Down) || Input.GetAxisRaw("Vertical") < 0;
+        return InputManager.instance.KeyDown(Keybindings.KeyList.Down) || InputManager.instance.GetMoveInput().y < 0;
     }
 
     private bool IsPressingUp()
     {
-        return InputManager.instance.KeyDown(Keybindings.KeyList.Up) || Input.GetAxisRaw("Vertical") > 0;
+        return InputManager.instance.KeyDown(Keybindings.KeyList.Up) || InputManager.instance.GetMoveInput().y > 0;
     }
 
     private void OnTriggerEnter2D(Collider2D col)

@@ -193,13 +193,15 @@ public class AudioManager : MonoBehaviour
 
         foreach (Sounds currentSound in ListOfSounds)
         {
-            for (int i = 0; i < currentSound.arrayOfClips.Length; i++)
+            // Create one AudioSource per sound entry (not per clip)
+            // PlaySound() will swap clips on this single source
+            currentSound.source = gameObject.AddComponent<AudioSource>();
+            if (currentSound.arrayOfClips.Length > 0)
             {
-                currentSound.source = gameObject.AddComponent<AudioSource>();
-                currentSound.source.clip = currentSound.arrayOfClips[i].audioClip;
-                currentSound.source.loop = currentSound.loop;
-                currentSound.source.outputAudioMixerGroup = GetAudioMixerGroup(currentSound.AudioManagerType);
+                currentSound.source.clip = currentSound.arrayOfClips[0].audioClip; // Set first clip as default
             }
+            currentSound.source.loop = currentSound.loop;
+            currentSound.source.outputAudioMixerGroup = GetAudioMixerGroup(currentSound.AudioManagerType);
             //currentSound.source.volume = currentSound.volume;
             //currentSound.source.pitch = currentSound.pitch;
         }

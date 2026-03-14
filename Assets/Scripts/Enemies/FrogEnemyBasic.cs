@@ -34,7 +34,10 @@ public class FrogEnemyBasic : MonoBehaviour, ISFXResetable
     void Start()
     {
         enemy = GetComponent<Rigidbody2D>();
-        player = GameObject.Find("Dirt");
+        if (GameMaster.instance != null && GameMaster.instance.playerInstance != null)
+            player = GameMaster.instance.playerInstance;
+        else
+            player = GameObject.FindGameObjectWithTag("Player"); // Fallback if GameMaster not ready
         amountOfJumpsCurrent = amountOfJumpsBeforeTurningMax;
         raycastDirection = new Vector2(1, 0);
         boxCollider = GetComponent<BoxCollider2D>();

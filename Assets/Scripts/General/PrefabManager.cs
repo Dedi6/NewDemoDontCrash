@@ -85,30 +85,66 @@ public class PrefabManager : MonoBehaviour
 
     public void PlayVFX(ListOfVFX name, Vector2 position)
     {
-        GameObject vfx = Instantiate(FindVFX(name), position, Quaternion.identity);
+        GameObject prefab = FindVFX(name);
+        if (prefab == null)
+        {
+            Debug.LogError($"PrefabManager: VFX '{name}' not found in arrayOfVFX!");
+            return;
+        }
+        GameObject vfx = Instantiate(prefab, position, Quaternion.identity);
     }
 
     public void VFXAngle(ListOfVFX name, Vector2 position, float angle)
     {
-        GameObject vfx = Instantiate(FindVFX(name), position, Quaternion.Euler(0, 0, angle));
+        GameObject prefab = FindVFX(name);
+        if (prefab == null)
+        {
+            Debug.LogError($"PrefabManager: VFX '{name}' not found in arrayOfVFX!");
+            return;
+        }
+        GameObject vfx = Instantiate(prefab, position, Quaternion.Euler(0, 0, angle));
     }
 
     public void Play_VFX_Angle_AndSortingLayer(ListOfVFX name, Vector2 position, float angle, string layerName)
     {
-        GameObject vfx = Instantiate(FindVFX(name), position, Quaternion.Euler(0, 0, angle));
-        vfx.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID(layerName);
+        GameObject prefab = FindVFX(name);
+        if (prefab == null)
+        {
+            Debug.LogError($"PrefabManager: VFX '{name}' not found in arrayOfVFX!");
+            return;
+        }
+        GameObject vfx = Instantiate(prefab, position, Quaternion.Euler(0, 0, angle));
+        if (vfx.TryGetComponent<SpriteRenderer>(out SpriteRenderer sr))
+            sr.sortingLayerID = SortingLayer.NameToID(layerName);
+        else
+            Debug.LogWarning($"PrefabManager: VFX '{name}' prefab doesn't have a SpriteRenderer component!");
     }
 
     public void Play_VFX_Complex(ListOfVFX name, Vector2 position, float angle, string layerName, float _scale)
     {
-        GameObject vfx = Instantiate(FindVFX(name), position, Quaternion.Euler(0, 0, angle));
-        vfx.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID(layerName);
+        GameObject prefab = FindVFX(name);
+        if (prefab == null)
+        {
+            Debug.LogError($"PrefabManager: VFX '{name}' not found in arrayOfVFX!");
+            return;
+        }
+        GameObject vfx = Instantiate(prefab, position, Quaternion.Euler(0, 0, angle));
+        if (vfx.TryGetComponent<SpriteRenderer>(out SpriteRenderer sr))
+            sr.sortingLayerID = SortingLayer.NameToID(layerName);
+        else
+            Debug.LogWarning($"PrefabManager: VFX '{name}' prefab doesn't have a SpriteRenderer component!");
         vfx.transform.localScale = new Vector3(_scale, _scale, 1f);
     }
 
     public GameObject CreatePrefabAndReturnObject(ListOfVFX name, Vector2 position, float angle)
     {
-        GameObject vfx = Instantiate(FindVFX(name), position, Quaternion.Euler(0, 0, angle));
+        GameObject prefab = FindVFX(name);
+        if (prefab == null)
+        {
+            Debug.LogError($"PrefabManager: VFX '{name}' not found in arrayOfVFX!");
+            return null;
+        }
+        GameObject vfx = Instantiate(prefab, position, Quaternion.Euler(0, 0, angle));
         return vfx;
     }
 

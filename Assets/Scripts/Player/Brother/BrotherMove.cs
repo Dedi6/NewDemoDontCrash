@@ -70,6 +70,12 @@ public class BrotherMove : MonoBehaviour
     
    private void HandleMoveInput()
    {
+        // Use new Input System - GetMoveInput() handles both keyboard and gamepad
+        Vector2 moveVector = InputManager.instance.GetMoveInput();
+        axisHori = moveVector.x;
+        axisVert = moveVector.y;
+        
+        // For keyboard, maintain discrete key tracking for precise control
         if (usingKeyboard)
         {
             if (inputM.KeyDown(Keybindings.KeyList.Up))
@@ -89,17 +95,7 @@ public class BrotherMove : MonoBehaviour
             if (inputM.KeyUp(Keybindings.KeyList.Left))
                 axisHori = 0;
         }
-        else
-        {
-            axisHori = Input.GetAxisRaw("Horizontal");
-            axisVert = Input.GetAxisRaw("Vertical");
-
-            if (axisHori > 0) axisHori = 1;
-            else if (axisHori < 0) axisHori = -1;
-
-            if (axisVert > 0) axisVert = 1;
-            else if (axisVert < 0) axisVert = -1;
-        }
+        // For gamepad, GetMoveInput() already returns normalized values
     }
 
     private void ResetAxis()

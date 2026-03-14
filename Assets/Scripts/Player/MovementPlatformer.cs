@@ -125,7 +125,6 @@ public class MovementPlatformer : MonoBehaviour
     private GameMaster gm;
     private AudioManager audioManager;
     private InputManager input;
-    private bool usingKeyboard = true;
     private ManaBar manaBar;
     private Player_Pull_Handler pull_Handler;
 
@@ -408,8 +407,15 @@ public class MovementPlatformer : MonoBehaviour
 
     private void HandleMoveInput()
     {
-        if (usingKeyboard)
+        // Use new Input System - GetMoveInput() handles both keyboard and gamepad
+        Vector2 moveVector = InputManager.instance.GetMoveInput();
+        moveInput = moveVector.x;
+        moveInputVertical = moveVector.y;
+        
+        // For keyboard, maintain discrete key tracking for precise control
+        if (InputManager.instance.IsUsingKeyboard())
         {
+            // Use discrete actions for individual key tracking
             if (input.GetKey(Keybindings.KeyList.Up))
                 moveInputVertical = 1;
             if (input.GetKey(Keybindings.KeyList.Down))
@@ -427,22 +433,12 @@ public class MovementPlatformer : MonoBehaviour
             if (input.KeyUp(Keybindings.KeyList.Left))
                 moveInput = 0;
         }
-        else
-        {
-            moveInput = Input.GetAxisRaw("Horizontal");
-            moveInputVertical = Input.GetAxisRaw("Vertical");
-
-            if (moveInput > 0) moveInput = 1;
-            else if (moveInput < 0) moveInput = -1;
-
-            if (moveInputVertical > 0) moveInputVertical = 1;
-            else if (moveInputVertical < 0) moveInputVertical = -1;
-        }
+        // For gamepad, GetMoveInput() already returns normalized values
     }
 
     public void SwitchToOrFromJoystick()
     {
-        usingKeyboard = !usingKeyboard;
+        // No longer needed - InputManager auto-detects device
     }
 
     

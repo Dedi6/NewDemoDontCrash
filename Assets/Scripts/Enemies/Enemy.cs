@@ -29,7 +29,10 @@ public class Enemy : MonoBehaviour
     {
         audioManager = AudioManager.instance;
         currentHealth = maxHealth;
-        player = GameObject.Find("Dirt");
+        if (GameMaster.instance != null && GameMaster.instance.playerInstance != null)
+            player = GameMaster.instance.playerInstance;
+        else
+            player = GameObject.FindGameObjectWithTag("Player"); // Fallback if GameMaster not ready
         enemy = GetComponent<Rigidbody2D>();
         originalPos = transform.position;
         SetParticleSystem();

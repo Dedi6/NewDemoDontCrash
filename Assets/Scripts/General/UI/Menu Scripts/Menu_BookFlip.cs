@@ -408,7 +408,8 @@ public class Menu_BookFlip : MonoBehaviour
                  pointer.position = new Vector3(pointer.position.x, buttonY, pointer.position.x);
                  */
 
-            if(Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
+            Vector2 moveInput = InputManager.instance.GetMoveInput();
+            if(moveInput.x != 0 || moveInput.y != 0)
             {
                 Vector3 buttonPos = currentSelectedObject.GetComponent<RectTransform>().position;
                 if (pointer.position.y != buttonPos.y)

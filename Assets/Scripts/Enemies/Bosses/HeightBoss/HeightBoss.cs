@@ -543,7 +543,15 @@ public class HeightBoss : MonoBehaviour, ISFXResetable, IKnockbackable, IPhaseab
         Vector2 posToSpawn = cannon.GetComponent<TriggerAction>().spawnPos.position;
         Vector2 dir = cannon.rotation.y == 0 ? Vector2.right : Vector2.left;
         GameObject cannonB = Instantiate(cannonBallPrefab, cannon.position, Quaternion.identity);
-        layerSwitcher = GameObject.Find("Grid").GetComponent<LayerSwitcher>();
+        GameObject gridObj = GameObject.FindGameObjectWithTag("Grid");
+        if (gridObj != null)
+            layerSwitcher = gridObj.GetComponent<LayerSwitcher>();
+        else
+        {
+            GameObject gridFind = GameObject.Find("Grid");
+            if (gridFind != null)
+                layerSwitcher = gridFind.GetComponent<LayerSwitcher>();
+        }
         bool isPlayerOnFar = cannon.localScale.x > 1 ? false : true;
         layerSwitcher.HandleBoss(1f, 1.4f, isPlayerOnFar, cannonB.transform);
         cannonB.GetComponent<CircleCollider2D>().enabled = layerSwitcher.ShouldDisableCollider(isPlayerOnFar);
