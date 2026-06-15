@@ -41,12 +41,6 @@ public class LayerSwitcher : MonoBehaviour
         }
     }
 
-       private void Update()
-       {
-          if (Input.GetKeyDown(KeyCode.L))
-               SwitchLayer();
-
-       }
 
     private IEnumerator StartSwitching()
     {

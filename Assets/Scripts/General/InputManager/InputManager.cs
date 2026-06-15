@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -37,10 +37,6 @@ public class InputManager : MonoBehaviour
     private bool usingKeyboard = true;
     private string currentControlScheme = "Keyboard";
 
-    // For backward compatibility - keep old Keybindings reference for UI
-    [HideInInspector]
-    public Keybindings currentKeybindings;
-    public Keybindings keyboardKeybinds, joyStickKeybind, defaultKeyboard;
     public Dictionary<string, string> joyStickNames;
 
     void Awake()
@@ -116,7 +112,6 @@ public class InputManager : MonoBehaviour
             GameSaveManager.instance.LoadInputSystemRebindings();
         }
         
-        ChangeMovementInScript();
     }
 
     private void Update()
@@ -181,13 +176,11 @@ public class InputManager : MonoBehaviour
             {
                 usingKeyboard = false;
                 currentControlScheme = "GamePad";
-                ChangeMovementInScript();
             }
             else if (!isGamepadInput && !usingKeyboard)
             {
                 usingKeyboard = true;
                 currentControlScheme = "Keyboard";
-                ChangeMovementInScript();
             }
         }
         
@@ -201,26 +194,21 @@ public class InputManager : MonoBehaviour
             {
                 usingKeyboard = false;
                 currentControlScheme = "GamePad";
-                ChangeMovementInScript();
             }
             else if (!isGamepadInput && !usingKeyboard)
             {
                 usingKeyboard = true;
                 currentControlScheme = "Keyboard";
-                ChangeMovementInScript();
             }
         }
         
         // Fallback: check keyboard directly for switching back
-        // EXCLUDE Enter and Space - these are used for menu navigation and shouldn't switch input mode
-        // This allows players to use Enter/Space to navigate menus while staying in joystick mode
         if (Keyboard.current != null && IsGameplayKeyPressed())
         {
             if (!usingKeyboard)
             {
                 usingKeyboard = true;
                 currentControlScheme = "Keyboard";
-                ChangeMovementInScript();
             }
         }
     }
@@ -357,26 +345,6 @@ public class InputManager : MonoBehaviour
         else if (PlayerPrefs.HasKey("UsingJoystick") && usingKeyboard)
             PlayerPrefs.DeleteKey("UsingJoystick");
         PlayerPrefs.Save();
-        
-        ChangeMovementInScript();
-    }
-
-    void ChangeMovementInScript()
-    {
-        if (GameMaster.instance == null || GameMaster.instance.playerInstance == null) return;
-
-        if (!isTopDown)
-        {
-            MovementPlatformer mp = GameMaster.instance.playerInstance.GetComponent<MovementPlatformer>();
-            if (mp != null)
-                mp.SwitchToOrFromJoystick();
-        }
-        else
-        {
-            TopDownMovement tdm = GameMaster.instance.playerInstance.GetComponent<TopDownMovement>();
-            if (tdm != null)
-                tdm.SwitchToOrFromJoystick();
-        }
     }
 
     public bool IsUsingKeyboard()
@@ -386,7 +354,7 @@ public class InputManager : MonoBehaviour
 
     public void HandleKeyWords()
     {
-        joyStickNames = new Dictionary<string, string>
+        joyStickNames = new Dictionary<string, string>  //○ ↑ ↓ → ← ■ ▲ ◯ ⚪ ⚫
         {
             { "JoystickButton0", "■" },
             { "JoystickButton1", "X" },
@@ -425,10 +393,40 @@ public class InputManager : MonoBehaviour
         return controls;
     }
 
-    // For compatibility - these methods may be called but don't do anything in new system
     public void SetKeyBindingsDefault()
     {
-        // Input System handles defaults through the .inputactions file
-        Debug.Log("SetKeyBindingsDefault: Defaults are handled by Input System asset");
+        if (controls == null || controls.asset == null) return;
+
+        controls.asset.RemoveAllBindingOverrides();
+
+        if (GameSaveManager.instance != null)
+            GameSaveManager.instance.SaveInputSystemRebindings();
+    }
+
+    /// <summary>
+    /// Get the display name of the current binding for a given key (respects current device).
+    /// </summary>
+    public string GetBindingDisplayName(Keybindings.KeyList key)
+    {
+        InputAction action = GetActionForKey(key);
+        if (action == null) return "???";
+
+        string targetGroup = usingKeyboard ? "Keyboard" : "GamePad";
+
+        for (int i = 0; i < action.bindings.Count; i++)
+        {
+            InputBinding binding = action.bindings[i];
+            if (binding.isComposite || binding.isPartOfComposite)
+                continue;
+
+            if (binding.groups.Contains(targetGroup))
+            {
+                string displayName = action.GetBindingDisplayString(i);
+                if (!string.IsNullOrEmpty(displayName))
+                    return displayName;
+            }
+        }
+
+        return action.GetBindingDisplayString(0);
     }
 }

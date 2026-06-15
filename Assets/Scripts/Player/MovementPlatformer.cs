@@ -253,6 +253,10 @@ public class MovementPlatformer : MonoBehaviour
         
         if (showPointer)
             RotatePointer();
+            
+
+            if(Input.GetKeyDown(KeyCode.L))
+                ChakraSystem.instance.DebugSpawnOrb();
     }
 
     private void Handle_Orb_Update()
@@ -436,10 +440,6 @@ public class MovementPlatformer : MonoBehaviour
         // For gamepad, GetMoveInput() already returns normalized values
     }
 
-    public void SwitchToOrFromJoystick()
-    {
-        // No longer needed - InputManager auto-detects device
-    }
 
     
     private void Timers()

@@ -255,7 +255,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""GamePad"",
@@ -321,7 +321,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""5e6f7a8b-9c0d-1e2f-3a4b-5c6d7e8f9a0b"",
-                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""GamePad"",
@@ -354,7 +354,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""GamePad"",
@@ -376,7 +376,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e"",
-                    ""path"": ""<Keyboard>/1"",
+                    ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
@@ -409,7 +409,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a"",
-                    ""path"": ""<Keyboard>/2"",
+                    ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
@@ -442,7 +442,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""2f3a4b5c-6d7e-8f9a-0b1c-2d3e4f5a6b7c"",
-                    ""path"": ""<Keyboard>/tab"",
+                    ""path"": ""<Keyboard>/k"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
@@ -607,7 +607,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""4f5a6b7c-8d9e-0f1a-2b3c-4d5e6f7a8b9c"",
-                    ""path"": ""<Keyboard>/h"",
+                    ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
@@ -618,7 +618,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""5a6b7c8d-9e0f-1a2b-3c4d-5e6f7a8b9c0d"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""GamePad"",

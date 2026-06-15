@@ -107,7 +107,10 @@ public class Keybindings : ScriptableObject
             string keyfor_Enum = arrayOfKeys[i].KeyFor.ToString();
             string binding_Enum = arrayOfKeys[i].keyBinding.ToString();
 
-            _dict.Add(keyfor_Enum, binding_Enum);
+            if (_dict.ContainsKey(keyfor_Enum))
+                Debug.LogWarning($"[Keybindings] Duplicate key found in arrayOfKeys: {keyfor_Enum} (index {i}). Overwriting.");
+
+            _dict[keyfor_Enum] = binding_Enum;
         }
 
         return _dict;

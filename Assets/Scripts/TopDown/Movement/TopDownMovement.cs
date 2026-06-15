@@ -23,7 +23,7 @@ public class TopDownMovement : MonoBehaviour
     public Camera cam;
     private Animator animator;
     private InputManager input;
-    private ManaBar manaBar;
+    private ManaBar manaBar;    
     public ParticleSystem particles;
     public GameObject waterGunObject;
     Coroutine waterGunCorou;
@@ -410,10 +410,7 @@ public class TopDownMovement : MonoBehaviour
         state = State.NormalButCanShoot;
     }
 
-    public void SwitchToOrFromJoystick()
-    {
-        // No longer needed - InputManager auto-detects device
-    }
+ 
 
     private void AimCursor()
     {

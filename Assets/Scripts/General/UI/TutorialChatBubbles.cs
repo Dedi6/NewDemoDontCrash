@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,18 +13,9 @@ public class TutorialChatBubbles : MonoBehaviour
     {
         if (col.gameObject.layer == 11)
         {
-            InputManager im = InputManager.instance;
-            if(im.IsUsingKeyboard())
-            {
-                string t = "Press '" + im.currentKeybindings.CheckKey(key).ToString() + "' " + text;
-                TextBubble.Create(parent, new Vector3(-1, 2), t, appearTime);
-            }
-            else
-            {
-                string name = im.currentKeybindings.CheckKey(key).ToString();
-                string t = "Press '" + im.GetControllerKeyWord(name) + "' " + text;
-                TextBubble.Create(parent, new Vector3(-1, 2), t, appearTime);
-            }
+            string displayName = InputManager.instance.GetBindingDisplayName(key);
+            string t = "Press '" + displayName + "' " + text;
+            TextBubble.Create(parent, new Vector3(-1, 2), t, appearTime);
 
             Destroy(gameObject);
         }

@@ -16,6 +16,7 @@ public class ChakraSystem : MonoBehaviour
     [Header("Orb Visuals")]
     public GameObject orbPrefab;               // The orb prefab with OrbDepthOrbit component
     public Transform playerTransform;          // Reference to player (can also use GameMaster)
+    [SerializeField] private Transform orbParent; // Empty GameObject to hold pooled orbs (assign in Inspector)
     public int maxPoolSize = 5;                // Pool size (match max possible chakra upgrades)
 
     private int currentChakra = 0;
@@ -72,7 +73,8 @@ public class ChakraSystem : MonoBehaviour
 
         for (int i = 0; i < maxPoolSize; i++)
         {
-            GameObject orbObj = Instantiate(orbPrefab, transform);
+            Transform parent = orbParent != null ? orbParent : transform;
+            GameObject orbObj = Instantiate(orbPrefab, parent);
             orbObj.SetActive(false);
             orbPool[i] = orbObj.GetComponent<OrbDepthOrbit>();
             
@@ -105,12 +107,13 @@ public class ChakraSystem : MonoBehaviour
     /// </summary>
     private void SpawnOrb(int chakraIndex)
     {
-        if (playerTransform == null) return;
+        Transform center = orbParent != null ? orbParent : playerTransform;
+        if (center == null) return;
 
         OrbDepthOrbit orb = GetOrbFromPool();
         if (orb != null)
         {
-            orb.Initialize(playerTransform);
+            orb.Initialize(center);
             activeOrbs[chakraIndex] = orb;
         }
     }
@@ -129,6 +132,43 @@ public class ChakraSystem : MonoBehaviour
             orb.TriggerDestroy();
             activeOrbs[chakraIndex] = null;
         }
+    }
+
+    /// <summary>
+    /// Debug: deactivates all orbs in the pool. Hook to a UI button for tweaking.
+    /// </summary>
+    public void DebugClearOrbs()
+    {
+        if (orbPool == null) return;
+
+        foreach (var orb in orbPool)
+        {
+            if (orb != null && orb.IsActive)
+                orb.ForceDeactivate();
+        }
+    }
+
+    /// <summary>
+    /// Debug: spawns a test orb without affecting chakra state. Hook to a UI button for tweaking.
+    /// </summary>
+    public void DebugSpawnOrb()
+    {
+        if (playerTransform == null)
+        {
+            playerTransform = GameMaster.instance?.playerInstance?.transform;
+            if (playerTransform == null)
+            {
+                Debug.LogWarning("[ChakraSystem] No player transform found.");
+                return;
+            }
+        }
+
+        Transform center = orbParent != null ? orbParent : playerTransform;
+        OrbDepthOrbit orb = GetOrbFromPool();
+        if (orb != null)
+            orb.Initialize(center);
+        else
+            Debug.LogWarning("[ChakraSystem] No available orbs in pool.");
     }
 
     // Call this when player successfully parries

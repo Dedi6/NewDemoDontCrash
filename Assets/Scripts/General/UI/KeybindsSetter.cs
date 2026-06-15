@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,8 +13,6 @@ public class KeybindsSetter : MonoBehaviour
     public Transform menuPanel;
     [SerializeField] private Transform menuPanel2;
     TextMeshProUGUI buttonText;
-    [SerializeField]
-    private Keybindings keys; // Keep for UI compatibility
     private EventSystem evt;
     Coroutine lastCoroutine;
 
@@ -33,7 +31,6 @@ public class KeybindsSetter : MonoBehaviour
     void Start()
     {
         waitingForKey = false;
-        keys = InputManager.instance.currentKeybindings; // Keep for compatibility
         evt = EventSystem.current;
         
         // Detect control scheme and populate UI

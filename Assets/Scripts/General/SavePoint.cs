@@ -47,7 +47,9 @@ public class SavePoint : MonoBehaviour
         return InputManager.instance.KeyDown(Keybindings.KeyList.Up) || InputManager.instance.GetMoveInput().y > 0;
     }
 
-    private void OnTriggerEnter2D(Collider2D col)
+
+
+    private void OnTriggerStay2D(Collider2D col)
     {
         if(col.gameObject.layer == 11)
             canSave = true;

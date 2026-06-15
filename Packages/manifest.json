@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.coplaydev.unity-mcp": "https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity#main",
     "com.cratesmith.assetui": "https://github.com/Cratesmith/Cratesmith.AssetUI.git",
     "com.unity.2d.animation": "7.0.8",
     "com.unity.2d.pixel-perfect": "5.0.1",

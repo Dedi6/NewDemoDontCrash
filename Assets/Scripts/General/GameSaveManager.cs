@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -12,14 +12,6 @@ public class GameSaveManager : MonoBehaviour
     public static GameSaveManager instance;
     private static readonly string keyword = "p";
     
-    [System.Serializable]
-    public class KeybindForPlatforms
-    {
-        public Keybindings keybindings;
-        public string path;
-    }
-
-    public KeybindForPlatforms[] arrayOfBindings;
     [HideInInspector]
     public Slot[] playerInventoryHolder;
 
@@ -87,31 +79,16 @@ public class GameSaveManager : MonoBehaviour
         {
             Directory.CreateDirectory(Application.persistentDataPath + "/game_save");
         }
-        if(!Directory.Exists(Application.persistentDataPath + "/game_save/keybindings")) // create a keybindigs directory
+        if(!Directory.Exists(Application.persistentDataPath + "/game_save/keybindings"))
         {
             Directory.CreateDirectory(Application.persistentDataPath + "/game_save/keybindings");
         }
-        if (!Directory.Exists(Application.persistentDataPath + "/game_save/playerData")) // create a playerData directory
+        if (!Directory.Exists(Application.persistentDataPath + "/game_save/playerData"))
         {
             Directory.CreateDirectory(Application.persistentDataPath + "/game_save/playerData");
         }
-        foreach (KeybindForPlatforms binding in arrayOfBindings)
-        {
-            string savePath = Application.persistentDataPath + binding.path;
-            var saveObject = binding.keybindings.Get_KeybindsDict();
 
-
-            FileStream stream = File.Create(savePath);
-            stream.Dispose();
-            var json = JsonConvert.SerializeObject(saveObject);
-            var ecnryptedJson = EncryptDecrypt(json);
-            File.WriteAllText(savePath, ecnryptedJson);
-            stream.Close();
-        }
-        
-        // Save new Input System rebindings
         SaveInputSystemRebindings();
-        
         SavePLayerData();
     }
 
@@ -122,35 +99,7 @@ public class GameSaveManager : MonoBehaviour
 
     public void SaveKeybindings()
     {
-        if (!IsSaveFile())
-        {
-            Directory.CreateDirectory(Application.persistentDataPath + "/game_save");
-        }
-        if (!Directory.Exists(Application.persistentDataPath + "/game_save/keybindings")) // create a keybindigs directory
-        {
-            Directory.CreateDirectory(Application.persistentDataPath + "/game_save/keybindings");
-        }
-        
-        foreach (KeybindForPlatforms binding in arrayOfBindings)
-        {
-
-            string savePath = Application.persistentDataPath + binding.path;
-            var saveObject = binding.keybindings.Get_KeybindsDict();
-
-
-            FileStream stream = File.Create(savePath);
-            stream.Dispose();
-            var json = JsonConvert.SerializeObject(saveObject);
-            var ecnryptedJson = EncryptDecrypt(json);
-            File.WriteAllText(savePath, ecnryptedJson);
-            stream.Close();
-
-        }
-        
-        // Save new Input System rebindings
         SaveInputSystemRebindings();
-        
-        // SavePLayerData();
     }
 
     public void SavePLayerData()
@@ -191,25 +140,7 @@ public class GameSaveManager : MonoBehaviour
         {
             Directory.CreateDirectory(Application.persistentDataPath + "/game_save/keybindings");
         }
-        
-        // Load old keybindings system (for backward compatibility)
-        foreach (KeybindForPlatforms binding in arrayOfBindings)
-        {
-            if (File.Exists(Application.persistentDataPath + binding.path))
-            {
-                string savePath = Application.persistentDataPath + binding.path;
 
-                FileStream stream = File.Open(savePath, FileMode.Open);
-                stream.Dispose();
-                string json = EncryptDecrypt(File.ReadAllText(savePath));
-                Dictionary<string, string> loaded_Data = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-                stream.Close();
-
-                binding.keybindings.Load_DictToBinds(loaded_Data);
-            }
-        }
-        
-        // Load new Input System rebindings
         LoadInputSystemRebindings();
     }
     
