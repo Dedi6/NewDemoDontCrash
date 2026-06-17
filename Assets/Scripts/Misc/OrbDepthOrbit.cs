@@ -49,7 +49,6 @@ public class OrbDepthOrbit : MonoBehaviour
     {
         if (!isActive || orbitCenter == null) return;
 
-        UpdateOrbPosition();
 
         if (trailRenderer == null) return;
 

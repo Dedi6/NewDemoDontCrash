@@ -56,12 +56,15 @@ public class RoomManagerOne : MonoBehaviour
                 bullet.GetComponent<bullet>().SetSpeedNormal();
 
             ChangeRendererIndex();      // set the correct renderer data index
+            Debug.Log($"instance={PrefabManager.instance}, roomNumber={(PrefabManager.instance != null ? PrefabManager.instance.roomNumber : null)}");
                         
             MovementPlatformer playerScript = player.GetComponent<MovementPlatformer>();
             playerScript.currentRoom = this.gameObject;
             playerScript.SetBulletSpeedNormal();
             GameMaster.instance.currentRoom = gameObject;
-            PrefabManager.instance.roomNumber.GetComponent<UnityEngine.UI.Text>().text = roomNumber.ToString();
+            if(PrefabManager.instance.roomNumber.TryGetComponent<TMPro.TMP_Text>(out TMPro.TMP_Text textComponent))
+                textComponent.text = roomNumber.ToString();
+            
         }
 
     }

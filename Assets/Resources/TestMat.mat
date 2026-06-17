@@ -61,10 +61,10 @@ Material:
     m_Floats:
     - _Cutoff: 0
     - _EnableExternalAlpha: 0
-    - _NoiseScale: 1.19
+    - _NoiseScale: 1.94
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DistortionPower: {r: 0.008, g: 0.005, b: 0, a: 0}
+    - _DistortionPower: {r: 0.008, g: 0.01, b: 0, a: 0}
     - _DistortionSpeed: {r: 2, g: 1, b: 0, a: 0}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
